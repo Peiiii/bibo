@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/Peiiii/nextclaw",
-  "commit": "2b913205dcf958d3d852106d665c16a7a01a4943",
+  "commit": "3c0f24630c323312a4d7fec42f723864d68ed0af",
   "dirty": false,
   "exporter": "scripts/bibo/export-bibo.controller.mjs"
 }
