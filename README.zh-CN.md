@@ -1,12 +1,12 @@
 # Bibo
 
-**开源个人 AI 工作空间，带真正能跑代码的 Linux 沙箱。**
+**开源 personal agent，内置笔记、文件、任务和日历，按需启动 Linux 沙箱。**
 
 [English](README.md) · [在线体验](https://app.bibo.bot) · [官网](https://bibo.bot) · [版本发布](https://github.com/Peiiii/bibo/releases)
 
 让 Bibo 处理一份表，留下报告，再把后续行动存成待办。对话、笔记、任务、日程和文件都在同一个空间里。
 
-![在对话旁打开保存的咖啡店销售报告，报告清楚标明示例数据](images/screenshots/bibo-chat-report.png)
+![在对话旁打开保存的咖啡店销售报告，报告清楚标明示例数据](images/screenshots/v2ex-2026-10-04/bibo-chat.jpg)
 
 - **能执行：** 按需启动隔离的 Linux 沙箱，运行 Python、Shell 和命令行工具。
 - **能留下成果：** 文件保存在 R2，同一份文件可供沙箱处理、网页打开和编辑。
@@ -14,7 +14,43 @@
 
 ## 看看实际使用
 
-以下都是线上真实截图。销售和订单数字为示例数据，代码执行、文件保存和待办创建来自真实运行。
+以下都是线上真实截图。销售、订单和日程内容为示例数据，代码执行、文件保存、待办和日程创建来自真实运行。
+
+### 概览
+
+打开就能看到笔记、任务、日程和待处理信息。
+
+![Bibo 概览，展示已保存的笔记、日程、任务和收件箱内容](images/screenshots/v2ex-2026-10-04/bibo-overview.jpg)
+
+### 笔记
+
+笔记是可以直接编辑的 Markdown 文档，可以自己写，也可以让 Bibo 帮忙整理。
+
+![Bibo 笔记编辑器中的咖啡店销售报告，清楚标明示例数据](images/screenshots/v2ex-2026-10-04/bibo-notes.jpg)
+
+### 文件
+
+有独立的文件目录，可以搜索、打开和编辑。这里展示的是整理好的订单 CSV。
+
+![Bibo 文件目录与打开的已保存订单 CSV](images/screenshots/v2ex-2026-10-04/bibo-files.jpg)
+
+### 任务
+
+任务有独立列表和详情，可以管理完成状态、优先级、描述和时间。
+
+![Bibo 任务列表，以及周末备货任务的可编辑详情](images/screenshots/v2ex-2026-10-04/bibo-tasks.jpg)
+
+### 日历
+
+日程直接显示在日历里，可以自己添加，也可以让 Bibo 帮忙安排。
+
+![Bibo 月历中的示例日程，以及右侧的近期安排](images/screenshots/v2ex-2026-10-04/bibo-calendar.jpg)
+
+### 收件箱
+
+需要关注和确认的内容放在这里，可以查看并标记处理。
+
+![Bibo 收件箱中打开的销售分析待确认示例](images/screenshots/v2ex-2026-10-04/bibo-inbox.jpg)
 
 ### 用 Python 整理订单
 
@@ -22,31 +58,12 @@
 
 ![真实订单清洗对话与打开的说明，包含计算结果和 Linux、Python 环境信息](images/screenshots/bibo-sandbox-execution.png)
 
-### 文件可以重新打开、继续编辑
-
-原表、清理后的 CSV 和 Markdown 说明保存在个人文件空间，可以搜索、打开和编辑。
-
-![搜索订单整理文件夹并打开实际保存的清理后 CSV](images/screenshots/bibo-file-workspace.png)
-
-### 把后续行动留下来
-
-销售分析后的备货、检查低谷原因和下周复盘，保存为可编辑的任务。
-
-![三个已保存的后续待办，以及周末备货任务的编辑详情](images/screenshots/bibo-tasks.png)
-
 ### 手机也能接着用
 
 <p>
   <img src="images/screenshots/bibo-mobile-chat.png" alt="手机上的 Bibo 对话与报告摘要" width="280" />
   <img src="images/screenshots/bibo-mobile-tasks.png" alt="手机上的已保存任务列表" width="280" />
 </p>
-
-<details>
-<summary>查看保存后的完整销售报告</summary>
-
-![文件编辑器中的销售报告，包含示例数据说明和计算结果](images/screenshots/bibo-sandbox-analysis.png)
-
-</details>
 
 ## 本地看看
 

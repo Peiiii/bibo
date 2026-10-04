@@ -1,12 +1,12 @@
 # Bibo
 
-**An open-source personal AI workspace with a real Linux sandbox.**
+**An open-source personal agent with built-in notes, files, tasks, a calendar and an on-demand Linux sandbox.**
 
 [中文](README.zh-CN.md) · [Try hosted Bibo](https://app.bibo.bot) · [Website](https://bibo.bot) · [Releases](https://github.com/Peiiii/bibo/releases)
 
 Ask Bibo to process a spreadsheet, keep the report, and save the next steps as tasks. Conversations, notes, tasks, a calendar and files share one workspace.
 
-![Bibo conversation beside a saved coffee-shop sales report, using clearly labelled example data](images/screenshots/bibo-chat-report.png)
+![Bibo conversation beside a saved coffee-shop sales report, using clearly labelled example data](images/screenshots/v2ex-2026-10-04/bibo-chat.jpg)
 
 - **Execute work:** start an isolated Linux sandbox on demand for Python, shell commands and CLI tools.
 - **Keep the result:** R2 files can be mounted in the sandbox, reopened in the web app and edited.
@@ -14,7 +14,43 @@ Ask Bibo to process a spreadsheet, keep the report, and save the next steps as t
 
 ## See it in use
 
-These are real screenshots of hosted Bibo. Sales and order figures are example data; code execution, saved files and tasks are real.
+These are real screenshots of hosted Bibo. Sales, orders and calendar entries are example data; code execution, saved files, tasks and events are real.
+
+### Overview
+
+See your notes, tasks, calendar and items that need attention.
+
+![Bibo overview with saved notes, upcoming events, tasks and inbox items](images/screenshots/v2ex-2026-10-04/bibo-overview.jpg)
+
+### Notes
+
+Write and edit Markdown notes yourself, or ask Bibo to organize them for you.
+
+![Bibo notes editor with a saved coffee-shop sales report and example-data notice](images/screenshots/v2ex-2026-10-04/bibo-notes.jpg)
+
+### Files
+
+Search your personal file space, then open and edit saved files. Here is the cleaned order CSV.
+
+![Bibo file browser with a saved cleaned order CSV open in the editor](images/screenshots/v2ex-2026-10-04/bibo-files.jpg)
+
+### Tasks
+
+Keep follow-up actions in a dedicated task list. Edit their status, priority, description and dates.
+
+![Bibo task list and the editable details of a weekend preparation task](images/screenshots/v2ex-2026-10-04/bibo-tasks.jpg)
+
+### Calendar
+
+View and manage events in a calendar, or ask Bibo to add an event.
+
+![Bibo monthly calendar with saved example events and an upcoming-events panel](images/screenshots/v2ex-2026-10-04/bibo-calendar.jpg)
+
+### Inbox
+
+Read items that need your attention or confirmation, then mark them as handled.
+
+![Bibo inbox with an example sales-analysis item open for review](images/screenshots/v2ex-2026-10-04/bibo-inbox.jpg)
 
 ### Clean orders with Python
 
@@ -22,31 +58,12 @@ Read a CSV, remove two duplicate rows and add an amount column. The result is fi
 
 ![Real order-cleaning conversation beside a saved report with calculated results and Linux/Python environment details](images/screenshots/bibo-sandbox-execution.png)
 
-### Reopen and edit your files
-
-The original CSV, cleaned CSV and Markdown report remain in your personal file space. Search, open and edit them in the workspace.
-
-![Search results for the order-cleaning folder with the saved cleaned CSV open](images/screenshots/bibo-file-workspace.png)
-
-### Save the next steps
-
-The sales example produced editable tasks for weekend preparation, investigating slow days and a review next week.
-
-![Three saved follow-up tasks with an editable weekend preparation task and its description](images/screenshots/bibo-tasks.png)
-
 ### Continue on your phone
 
 <p>
   <img src="images/screenshots/bibo-mobile-chat.png" alt="Bibo conversation and report summary on a phone" width="280" />
   <img src="images/screenshots/bibo-mobile-tasks.png" alt="Saved Bibo tasks on a phone" width="280" />
 </p>
-
-<details>
-<summary>See the saved sales report</summary>
-
-![Saved sales report with example-data notice and calculated totals, opened in Bibo's file editor](images/screenshots/bibo-sandbox-analysis.png)
-
-</details>
 
 ## Get started locally
 
