@@ -79,3 +79,21 @@ Skill 唯一源码 `skills/bibo-space/`，遵循标准 SKILL.md 与 agents/opena
 ## 抽象与方案审查
 
 保留现有空间/资产 owner 和账户 DO 队列；新增 key 存储是授权状态，SDK 是网络合同，CLI 是用户入口，各有实际消费者。删除类型重复、避免多套 replay 和存储。没有提前建设插件总线或多层转发。方案 Review 以用户原始要求、三条黄金链路、旧能力双向对账审查：公开入口、使用文档、Skill、NPM CI 和生产验证均包含；机密不进入记录。结论：design-review: passed（本方案 r1，单代理独立审查，无未关闭 finding）。
+
+
+## r2：独立文档站与功能目录（2026-10-22 22:12）
+
+来源：用户指出文档不应部署到 App，要求专用 docs 子域；随后要求像 Vue/Vite 一样按功能明确展开笔记、文件、待办等。现有正式主域是 bibo.bot，采用 docs.bibo.bot。原 API/AUTH/对象模型继续复用，不改变业务协议。
+
+- 冻结方案：沿用 VitePress；独立静态 Worker bibo-docs/custom_domain=docs.bibo.bot，base=/；无业务绑定、无账户数据。构建仅产出 apps/bibo-docs/.vitepress/dist，App 构建不再打包文档。旧 App /docs 与所有后代 308 到新域同路径，保留 query。
+- 信息架构：首页呈现八类功能；侧栏分「开始接入」「空间功能」「工具与参考」。八类为笔记、文件与目录、待办与任务、项目、日程、收件箱、图片资产、空间概览。每类独立可搜索页面，包含用途、支持操作、CLI、HTTP 示例、输入字段、返回语义与限制。note 是 file kind 别名，不能虚构 note API。
+- 单一事实 owner：领域动作及字段仍由 BiboSpaceService.listActions() 生成总表与各领域表。手写文档拥有任务说明/正确示例/边界，不复制另一份动作注册树。图片为 /assets 端点，任务是空间任务 CRUD，不声称执行调度或 Agent 通信。
+- 用户链路：匿名进入新域首页→直接看见功能→点击笔记/任务→CLI 或 HTTP 保存→读取并在 App 核验；侧栏可切换功能；搜索 task.create 或文件能找到对应内容；手机菜单可展开所有功能。
+- 候选：只扩展原动作表仍缺任务学习路径；把指南移到 App 下不满足域名隔离；新建文档框架无收益。选择独立部署现有 VitePress，并补功能指南。
+- 链接迁移：App/README/CLI help/Skill/NPM homepage 都指向新域，API origin 保持 app.bibo.bot。已有 npm0.1.0 不覆盖，发布0.1.1 修正文档入口。文档发布与应用发布脚本独立；CI 显式验证两份部署产物。
+- 验证：类型检查、路由重定向测试、完整测试/Worker dry-run；文档构建校验全部内部链接；八类页面字段源自运行目录；本地与生产桌面/390/320 手机导航/搜索/代码块/下载/404；新域 TLS、旧址308路径query、App无文档资产；新发布CLI+Skill链接及生产黄金链路。
+- 目录 preflight：无项目 planned-path 脚本；新页面只在 apps/bibo-docs/features，新部署配置在 apps/bibo-docs，生成目录仍 .generated，构建逻辑仍 scripts/docs，不另建治理/业务 owner。
+
+### r2 方案 Review
+
+mode=design；按用户两条原始纠正核对独立域名、功能可发现性及真实使用链路；未知域名/DNS状态留给部署前只读检查，失败时保留现有站可用。独立 Worker 不带业务绑定，旧 URL 保留兼容，参数来自现有 owner。无未关闭 finding；design-review: passed；适用本节 r2；plan: required，沿原计划增加修正批次。

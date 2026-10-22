@@ -6,6 +6,7 @@ import { spawn } from "node:child_process";
 import { chromium } from "playwright";
 
 const origin = "https://app.bibo.bot";
+const docsOrigin = "https://docs.bibo.bot";
 const cliPath = process.env.BIBO_LIVE_CLI;
 if (!cliPath || !resolve(cliPath).includes("node_modules/@nextclaw/bibo/dist/bin.js")) throw new Error("Set BIBO_LIVE_CLI to a freshly registry-installed CLI binary.");
 const accountPath = join(homedir(), ".config/bibo-hosted/smoke-account.json");
@@ -50,16 +51,18 @@ const run = (args: string[], stdin = "", expected = 0) => new Promise<Record<str
 });
 const result = async (args: string[]): Promise<Record<string, unknown>> => (await run(args)).result as Record<string, unknown>;
 try {
-  for (const path of ["/docs/", "/docs/guide/quickstart", "/docs/api/reference", "/docs/cli/reference", "/docs/guide/skill"]) {
-    const response = await fetch(origin + path, { signal: AbortSignal.timeout(30_000) });
+  for (const path of ["/", "/guide/quickstart", "/api/reference", "/cli/reference", "/guide/skill", ...["notes", "files", "tasks", "projects", "events", "inbox", "assets", "overview"].map((name) => `/features/${name}`)]) {
+    const response = await fetch(docsOrigin + path, { signal: AbortSignal.timeout(30_000) });
     assert.equal(response.status, 200, path); assert.match(await response.text(), /name="generator" content="VitePress/);
   }
-  assert.equal((await fetch(`${origin}/docs/`, { method: "HEAD" })).status, 200);
-  assert.equal((await fetch(`${origin}/docs/does-not-exist-${prefix}`)).status, 404);
-  assert.match(await (await fetch(`${origin}/docs/downloads/bibo-space/SKILL.md`)).text(), /name: bibo-space/);
-  const openapi = await (await fetch(`${origin}/docs/openapi.json`)).json() as { paths: Record<string, unknown> };
+  assert.equal((await fetch(`${docsOrigin}/`, { method: "HEAD" })).status, 200);
+  assert.equal((await fetch(`${docsOrigin}/does-not-exist-${prefix}`)).status, 404);
+  assert.match(await (await fetch(`${docsOrigin}/downloads/bibo-space/SKILL.md`)).text(), /name: bibo-space/);
+  const openapi = await (await fetch(`${docsOrigin}/openapi.json`)).json() as { paths: Record<string, unknown> };
   assert.ok(openapi.paths["/space"]); checkpoints.push("anonymous docs, clean URLs, downloads and OpenAPI");
 
+  const redirect = await fetch(`${origin}/docs/features/notes?source=old-link`, { redirect: "manual" });
+  assert.equal(redirect.status, 308); assert.equal(redirect.headers.get("location"), `${docsOrigin}/features/notes?source=old-link`);
   const page = await context.newPage();
   await page.goto(`${origin}/integrations`);
   await page.getByLabel("授权给谁").fill(prefix);

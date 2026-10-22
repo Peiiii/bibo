@@ -54,17 +54,5 @@ try {
     assert.deepEqual(errors, []);
     await context.close();
   }
-  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
-  await page.goto(`${base}/docs/`); await page.getByRole("heading", { name: "从一条命令开始" }).waitFor();
-  await page.screenshot({ path: new URL("docs-desktop.png", artifacts).pathname, fullPage: true });
-  // Vite preview is a static fixture server; clean URLs are verified on the deployed Worker.
-  await page.goto(`${base}/docs/guide/quickstart.html`); await page.getByRole("heading", { name: /^五分钟接入/ }).waitFor();
-  const mobileDocs = await browser.newPage({ viewport: { width: 390, height: 844 } });
-  await mobileDocs.goto(`${base}/docs/guide/quickstart.html`);
-  await mobileDocs.getByRole("heading", { name: /^五分钟接入/ }).waitFor();
-  await mobileDocs.screenshot({ path: new URL("docs-mobile.png", artifacts).pathname, fullPage: true, animations: "disabled" });
-  assert.equal(await mobileDocs.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
-  const openapi = await fetch(`${base}/docs/openapi.json`); assert.equal(openapi.status, 200); assert.ok((await openapi.json() as { paths: unknown }).paths);
-  const skill = await fetch(`${base}/docs/downloads/bibo-space/SKILL.md`); assert.match(await skill.text(), /name: bibo-space/);
-  console.log(JSON.stringify({ integrations: "passed", widths: [1440, 390, 320], docs: "passed", artifacts: artifacts.pathname }));
+  console.log(JSON.stringify({ integrations: "passed", widths: [1440, 390, 320], artifacts: artifacts.pathname }));
 } finally { await browser.close(); server.kill("SIGTERM"); }

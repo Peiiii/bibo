@@ -37,7 +37,7 @@ bibo auth login --endpoint https://your-bibo.example
 bibo auth status
 ```
 
-公共 API 本身不依赖模型额度或 Linux 沙箱。文档构建到同一 Worker 的 `/docs/`，可以匿名访问。
+公共 API 本身不依赖模型额度或 Linux 沙箱。文档站独立部署在 [docs.bibo.bot](https://docs.bibo.bot/)，与 App 的资源和账户数据隔离。`pnpm build:docs` 只生成 `apps/bibo-docs/.vitepress/dist`；自部署者可将该目录交给静态站点服务，并自行调整域名。官方文档用 `apps/bibo-docs/wrangler.toml` 的独立 Worker，通过 `pnpm deploy:docs` 发布。
 
 ## NPM 发布
 

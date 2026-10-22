@@ -1,7 +1,7 @@
 {
   "name": "@nextclaw/bibo",
-  "version": "0.1.0",
-  "description": "Bibo CLI \u2014 shared personal context for every authorized agent",
+  "version": "0.1.1",
+  "description": "Bibo CLI — shared personal context for every authorized agent",
   "type": "module",
   "license": "MIT",
   "bin": {
@@ -21,7 +21,7 @@
     "url": "git+https://github.com/Peiiii/bibo.git",
     "directory": "packages/bibo-cli"
   },
-  "homepage": "https://app.bibo.bot/docs/",
+  "homepage": "https://docs.bibo.bot/",
   "publishConfig": {
     "access": "public"
   },

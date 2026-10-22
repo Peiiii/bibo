@@ -54,3 +54,18 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - 范围限制已在公开文档说明：全空间级 read/write PAT；文本上限/大文件预览、图片格式与 10 MiB、60 请求/分钟、有限幂等窗口；不开放聊天模型执行、OAuth、Agent 通信或任意二进制上传。没有把长期愿景冒充本批实现。
 - `retrospective_decision: updated-existing-owners`：NPM 接收与可见性区分落实到原 release utility/回归/accepted artifact；Git 传输与仓库身份分离落实到原 deployment preflight/反例测试；弹窗结束状态落实到原 smoke harness。维护者恢复入口追加 CONTRIBUTING；没有为单次事件新增全局提示词或改造共享框架。Qingtian 使用权威安装、check/readiness 通过，开发流程入口之外未人为复制规则；真实标记响应已在本会话应用，不宣称历史或未来宿主自动加载已验证。
 - `parent_status=ready-for-completion-check`；原合同全部 Required 已验证，交回 lifecycle 完成最终主线/入口核对。用户主观偏好仍由用户判断，不代指用户已验收。
+
+
+## 用户纠正（2026-10-22 22:07–22:10）
+- 原话：「你应该用一个专门的域名……为什么不用 docs.bibo.io 呢？呃，不，docs.bibo.boot……为什么要直接部署到我的 APP 上面。」现有已验证正式域为 bibo.bot，按 docs.bibo.bot 执行；App /docs 改跳转。
+- 原话：「比如说 Vue 或者 Vite……它会把功能……有非常清晰的目录结构……咱们的这个 API 里面有哪些功能……笔记的……文件的……代班啊之类的……做好点。」按任务语境将「代班」理解为待办，补齐八类已实现能力的指南、字段与 CLI/API 用法。
+- r1 DOCS 证据对新要求失效，合同升 r2；原 API 等未变化证据保留。
+
+
+### r2 实现与本地验收（22:22）
+- 应用移除 docs 资源装配，仅保留固定专用域名的308；单元覆盖 GET/HEAD、路径/query及双斜线不改变目标域。文档独立 Worker 无账户/存储绑定。
+- 首页八类能力卡片、功能总览、侧栏三级分组与八类独立指南；操作/参数表由原领域目录按 domain 生成，图片为单独字节端点。API/CLI 参考相互链接。文档搜索/手机目录汉化，操作表自动换行。
+- 完整 tsc 和测试通过（沿原217项）；真实 Worker API 定向1项通过。应用与文档构建/dry-run通过；App dist/public/docs 不存在。SDK/CLI0.1.1 tarball 独立安装通过。
+- 七个文档 HTTP JSON 示例交给实际 BiboSpaceService 执行通过；不将此误称生产HTTP验证。授权浏览器1440/390/320通过；独立文档浏览器爬取19页、八功能代码/结果说明、task.create 搜索、390/320目录跳转、OpenAPI与Skill下载通过；截图已人工查看。
+- 证据：.local/docs-r2-{types,tests,worker,app-build,app-dry,build,dry,pack,examples,navigation}.log，.local/docs-r2-local/。
+- mode=implementation Review：项目没有 diff-only maintainability/lint 入口，git diff --check通过；按用户两条纠正反查全部入口、部署边界、API参数和发布版本。功能知识归手写指南，动作事实归原领域目录，移除应用混装与重复文档冒烟 owner；无无消费者抽象。完整 subjective review 无未关闭 finding。审查适用 r2 当前代码，生产结果待交付验证。

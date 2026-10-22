@@ -24,6 +24,8 @@ jobs:
       - run: pnpm test
       - run: pnpm -C apps/bibo-hosted test:worker
       - run: pnpm build:hosted
+      - run: pnpm build:docs
+      - run: pnpm check:docs
       - run: pnpm check:hosted
       - run: pnpm pack:release
       - name: Publish SDK then CLI

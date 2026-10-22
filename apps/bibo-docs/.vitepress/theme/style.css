@@ -1,3 +1,14 @@
 :root { --vp-c-brand-1: #2f6b47; --vp-c-brand-2: #3b8057; --vp-c-brand-3: #2f6b47; --vp-c-brand-soft: #2f6b4714; --vp-home-hero-name-color: #2f6b47; --vp-font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif; }
 .dark { --vp-c-brand-1: #82c49a; --vp-c-brand-2: #98d6ae; --vp-c-brand-3: #3b8057; --vp-home-hero-name-color: #98d6ae; }
 .VPHomeHero .text { max-width: 700px; }
+.bibo-action-table table { display: table; width: 100%; table-layout: fixed; }
+.bibo-action-table th:first-child { width: 126px; }
+.bibo-action-table th:nth-child(2) { width: 64px; }
+.bibo-action-table td { vertical-align: top; }
+.bibo-action-table td code { white-space: normal; overflow-wrap: anywhere; }
+.bibo-action-table td:first-child code { white-space: nowrap; overflow-wrap: normal; }
+@media (max-width: 640px) {
+  .bibo-action-table th:first-child { width: 116px; }
+  .bibo-action-table th:nth-child(2) { width: 52px; }
+  .bibo-action-table th, .bibo-action-table td { padding: 10px 8px; }
+}

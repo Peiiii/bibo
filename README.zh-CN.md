@@ -2,7 +2,7 @@
 
 **面向所有获授权 AI 的个人上下文与资产空间，内置助手帮助你管理和使用。**
 
-[English](README.md) · [在线体验](https://app.bibo.bot) · [开发者文档](https://app.bibo.bot/docs/) · [官网](https://bibo.bot) · [版本发布](https://github.com/Peiiii/bibo/releases)
+[English](README.md) · [在线体验](https://app.bibo.bot) · [开发者文档](https://docs.bibo.bot/) · [官网](https://bibo.bot) · [版本发布](https://github.com/Peiiii/bibo/releases)
 
 ## 独立开发与产品方向
 
@@ -19,7 +19,7 @@ bibo overview
 bibo skill install --path ~/.codex/skills
 ```
 
-需要 Node 22+。先在 [Bibo → 接入与授权](https://app.bibo.bot/integrations)创建具名、有限期的只读或读写令牌，按 CLI 提示安全输入。不要把令牌粘进聊天或源码。也可使用 `@nextclaw/bibo-api` SDK 和版本化 HTTP API。[快速开始](https://app.bibo.bot/docs/guide/quickstart) · [API](https://app.bibo.bot/docs/api/reference) · [CLI](https://app.bibo.bot/docs/cli/reference) · [Skill](skills/bibo-space/SKILL.md)。
+需要 Node 22+。先在 [Bibo → 接入与授权](https://app.bibo.bot/integrations)创建具名、有限期的只读或读写令牌，按 CLI 提示安全输入。不要把令牌粘进聊天或源码。也可使用 `@nextclaw/bibo-api` SDK 和版本化 HTTP API。[快速开始](https://docs.bibo.bot/guide/quickstart) · [API](https://docs.bibo.bot/api/reference) · [CLI](https://docs.bibo.bot/cli/reference) · [Skill](skills/bibo-space/SKILL.md)。
 
 开发：`pnpm install --frozen-lockfile` 后运行 `pnpm dev`，在 `http://127.0.0.1:5188/` 打开无需凭据的预览。验证使用 `pnpm typecheck`、`pnpm test`、`pnpm build` 和 `pnpm check:worker`。默认构建/部署为自部署；官方应用使用显式 `build:hosted` / `deploy:hosted`，官网使用 `build:site` / `deploy:site`。详见[应用说明](apps/bibo-hosted/README.md)。
 

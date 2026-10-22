@@ -28,7 +28,7 @@ Options: --endpoint <origin> --input <JSON|@file> --content-file <file>
 
 Updates read the current version first unless --version is supplied.
 Writes print their requestId; reuse it with identical input for safe retries.
-Docs: https://app.bibo.bot/docs/
+Docs: https://docs.bibo.bot/
 `;
 const stringOptions = ["endpoint", "input", "content-file", "title", "name", "content", "path", "kind", "description", "status", "priority", "project-id", "start-at", "due-at", "end-at", "from", "to", "due-before", "due-from", "id", "version", "request-id", "query", "parent-path", "limit", "cursor", "body", "sort", "ancestor-of", "out"];
 const booleanOptions = ["help", "token-stdin", "raw", "local-only", "force", "open", "unread", "unresolved"];

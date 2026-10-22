@@ -10,4 +10,4 @@ console.log(await bibo.call('task.list', { open: true }));
 ```
 
 Create a scoped token in Bibo → account menu → 接入与授权. Keep tokens private.
-[Documentation](https://app.bibo.bot/docs/) · [Source](https://github.com/Peiiii/bibo)
+[Documentation](https://docs.bibo.bot/) · [Source](https://github.com/Peiiii/bibo)

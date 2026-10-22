@@ -23,9 +23,12 @@ bibo overview
 
 | 对象 | 操作 |
 | --- | --- |
-| project / task / event | list、get、create、update、delete |
-| inbox | list、get、create、read、resolve |
-| file / note | list、get、create、update、move、delete |
+| [note · 笔记](../features/notes) | list、get、create、update、move、delete |
+| [file · 文件与目录](../features/files) | list、get、create、update、move、delete |
+| [task · 待办与任务](../features/tasks) | list、get、create、update、delete |
+| [project · 项目](../features/projects) | list、get、create、update、delete |
+| [event · 日程](../features/events) | list、get、create、update、delete |
+| [inbox · 收件箱](../features/inbox) | list、get、create、read、resolve |
 
 `note` 复用 file 动作，list/create 自动指定 kind=note；file create 默认 document，创建目录使用 `--kind folder`。对象 ID 放在操作后，文件的 get 接受路径；写操作可以将路径作为文件 ID。
 
@@ -53,7 +56,8 @@ bibo file get research/final.md --raw
 
 ```sh
 bibo task list --open --due-before 2026-11-01T00:00:00Z --limit 100
-bibo file list --parent-path research --query plan
+bibo file list --parent-path research
+bibo file list --query plan
 bibo note list --sort recent
 bibo task create --input '{"title":"发布","subtasks":[{"title":"验证","done":false}]}'
 bibo call task.update --input @./update.json

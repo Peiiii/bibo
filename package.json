@@ -10,13 +10,13 @@
   },
   "scripts": {
     "dev": "pnpm -C apps/bibo-hosted dev",
-    "build": "pnpm build:packages && pnpm -C apps/bibo-hosted build && pnpm build:docs",
+    "build": "pnpm build:packages && pnpm -C apps/bibo-hosted build",
     "typecheck": "pnpm build:packages && pnpm -r tsc",
     "test": "pnpm -C packages/bibo-api test && pnpm -C packages/bibo-cli test && pnpm -C packages/bibo-client test && pnpm -C packages/personal-agent-ui exec vitest run && pnpm -C apps/bibo-hosted test && pnpm -C apps/bibo-hosted test:self-hosted && node --test scripts/release/registry.test.mjs",
     "deploy": "pnpm build && pnpm -C apps/bibo-hosted deploy",
     "dev:worker": "pnpm -C apps/bibo-hosted dev:worker",
     "dev:proxy": "pnpm -C apps/bibo-hosted dev:proxy",
-    "build:hosted": "pnpm build:packages && pnpm -C apps/bibo-hosted build:hosted && pnpm build:docs",
+    "build:hosted": "pnpm build:packages && pnpm -C apps/bibo-hosted build:hosted",
     "build:site": "node apps/bibo-camera-site/site-build.controller.mjs",
     "smoke:client": "pnpm build:hosted && pnpm -C apps/bibo-hosted exec tsx scripts/bibo-product.smoke.ts",
     "check:worker": "pnpm -C apps/bibo-hosted exec wrangler deploy --dry-run",
@@ -25,7 +25,10 @@
     "deploy:site": "pnpm -C apps/bibo-hosted preflight:deploy && pnpm build:site && pnpm -C apps/bibo-hosted exec wrangler deploy --config ../bibo-camera-site/wrangler.toml",
     "build:packages": "pnpm -C packages/bibo-api build && pnpm -C packages/bibo-cli build",
     "build:docs": "pnpm -C apps/bibo-hosted exec tsx ../../scripts/docs/build-docs.ts",
-    "pack:release": "node scripts/release/pack.mjs"
+    "pack:release": "node scripts/release/pack.mjs",
+    "check:docs": "pnpm -C apps/bibo-hosted exec wrangler deploy --config ../bibo-docs/wrangler.toml --dry-run",
+    "deploy:docs": "pnpm -C apps/bibo-hosted preflight:deploy && pnpm build:docs && pnpm -C apps/bibo-hosted preflight:deploy && pnpm -C apps/bibo-hosted exec wrangler deploy --config ../bibo-docs/wrangler.toml",
+    "smoke:docs": "pnpm -C apps/bibo-hosted exec tsx scripts/docs.smoke.ts"
   },
   "pnpm": {
     "overrides": {

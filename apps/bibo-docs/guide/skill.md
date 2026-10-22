@@ -20,7 +20,7 @@ bibo skill path
 
 ## 手动安装
 
-下载 <a href="/docs/downloads/bibo-space/SKILL.md" download>SKILL.md</a> 和 <a href="/docs/downloads/bibo-space/agents/openai.yaml" download>openai.yaml</a>，按下列结构放到 Agent 支持的 Skill 目录：
+下载 <a href="/downloads/bibo-space/SKILL.md" download>SKILL.md</a> 和 <a href="/downloads/bibo-space/agents/openai.yaml" download>openai.yaml</a>，按下列结构放到 Agent 支持的 Skill 目录：
 
 ```text
 bibo-space/

@@ -12,7 +12,7 @@ Use the user's Bibo space as persistent personal context. Work only within the u
 1. Check `bibo --version` (Node 22+). If absent, install `npm install -g @nextclaw/bibo`.
 2. Run `bibo auth status`. If unauthenticated, direct the user to https://app.bibo.bot/integrations (or their self-hosted origin). They create a named read-only or read/write token with an expiry. Use `bibo auth login` in their terminal, hidden input, or `--token-stdin` from a protected source. Automation may use `BIBO_API_TOKEN` and `BIBO_ENDPOINT`.
 3. Never ask the user to paste a token into chat. Never place it in a command argument, URL, document, screenshot or log. Do not read unrelated credential files. Tokens are bound to the chosen endpoint.
-4. Run `bibo actions` to discover the live catalog and input contracts. Full docs: https://app.bibo.bot/docs/ . Self-hosted installations may have a different version.
+4. Run `bibo actions` to discover the live catalog and input contracts. Full docs: https://docs.bibo.bot/ . Self-hosted installations may have a different version.
 
 ## Read context
 

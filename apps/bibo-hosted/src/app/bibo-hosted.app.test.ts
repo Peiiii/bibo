@@ -204,14 +204,21 @@ class PersonalSpaceFixture {
 
 const personalSpace = (initial?: BiboSpaceState) => new PersonalSpaceFixture(initial);
 
-test("public docs preserve anonymous pages and HEAD while missing pages cannot return the app shell", async () => {
-  const env = { ASSETS: { fetch: async (request: Request) => new Response(new URL(request.url).pathname === "/docs/"
-    ? '<meta name="generator" content="VitePress v1.6.4"><h1>Docs</h1>' : '<div id="root">app</div>', { headers: { "content-type": "text/html" } }) } };
-  assert.equal((await worker.default.fetch(new Request("https://app.bibo.bot/docs"), env)).status, 308);
-  assert.equal((await worker.default.fetch(new Request("https://app.bibo.bot/docs/"), env)).status, 200);
-  const head = await worker.default.fetch(new Request("https://app.bibo.bot/docs/", { method: "HEAD" }), env);
-  assert.equal(head.status, 200); assert.equal(await head.text(), "");
-  assert.equal((await worker.default.fetch(new Request("https://app.bibo.bot/docs/missing"), env)).status, 404);
+test("legacy docs redirect anonymously to the dedicated site with path and query preserved", async () => {
+  const env = { ASSETS: { fetch: async () => { throw new Error("Docs must not use app assets"); } } };
+  for (const method of ["GET", "HEAD"]) {
+    for (const [path, target] of [
+      ["/docs", "/"], ["/docs/", "/"],
+      ["/docs/features/notes?source=cli", "/features/notes?source=cli"],
+      ["/docs/downloads/bibo-space/SKILL.md", "/downloads/bibo-space/SKILL.md"],
+      ["/docs//example.org/path", "//example.org/path"],
+    ]) {
+      const result = await worker.default.fetch(new Request(`https://app.bibo.bot${path}`, { method }), env);
+      assert.equal(result.status, 308);
+      assert.equal(result.headers.get("location"), `https://docs.bibo.bot${target}`);
+      assert.equal(await result.text(), "");
+    }
+  }
 });
 
 test("reset fences concurrent token revocation so deleted keys cannot be resurrected", async (t) => {

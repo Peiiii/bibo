@@ -17,6 +17,21 @@ Base URL：`https://app.bibo.bot/api/v1`。自部署替换 origin，路径相同
 
 ## 空间动作
 
+### 按功能查 API
+
+| 你要操作的内容 | 动作前缀 | 功能说明、字段与示例 |
+| --- | --- | --- |
+| 笔记 | `file.*` + `kind=note` | [笔记](../features/notes) |
+| 文件与目录 | `file.*` | [文件](../features/files) |
+| 待办与子任务 | `task.*` | [任务](../features/tasks) |
+| 项目与任务归属 | `project.*` | [项目](../features/projects) |
+| 起止时间与日程 | `event.*` | [日程](../features/events) |
+| 提醒、待决与已读状态 | `inbox.*` | [收件箱](../features/inbox) |
+| 当前工作上下文 | `overview.get` | [概览](../features/overview) |
+| 图片字节 | `/assets` 端点 | [图片资产](../features/assets) |
+
+### 请求与响应
+
 ```json
 {
   "action": "task.create",

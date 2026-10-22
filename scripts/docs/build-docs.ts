@@ -8,7 +8,13 @@ const docs = new URL("apps/bibo-docs/", root);
 const actions = new BiboSpaceService("/unused-docs-catalog").listActions().map((action) => ({ ...action, readOnly: /\.(get|list)$/.test(action.action) }));
 await mkdir(new URL(".generated/", docs), { recursive: true });
 await mkdir(new URL("public/downloads/", docs), { recursive: true });
-await writeFile(new URL(".generated/actions.md", docs), `| 动作 | 权限 | 说明与输入 |\n| --- | --- | --- |\n${actions.map((item) => `| \`${item.action}\` | ${item.readOnly ? "只读" : "读写"} | ${item.description.replaceAll("|", "\\|")}<br>\`${item.input.replaceAll("|", "\\|")}\` |`).join("\n")}\n`);
+function actionTable(items: typeof actions): string {
+  return `<div class="bibo-action-table">\n\n| 动作 | 权限 | 说明与输入 |\n| --- | --- | --- |\n${items.map((item) => `| \`${item.action}\` | ${item.readOnly ? "只读" : "读写"} | ${item.description.replaceAll("|", "\\|")}<br>\`${item.input.replaceAll("|", "\\|")}\` |`).join("\n")}\n\n</div>\n`;
+}
+await writeFile(new URL(".generated/actions.md", docs), actionTable(actions));
+for (const domain of new Set(actions.map((action) => action.domain))) {
+  await writeFile(new URL(`.generated/${domain}.md`, docs), actionTable(actions.filter((action) => action.domain === domain)));
+}
 await cp(new URL("skills/bibo-space/", root), new URL("public/downloads/bibo-space/", docs), { recursive: true });
 const jsonResponse = { description: "JSON result envelope", content: { "application/json": { schema: { type: "object", required: ["result", "requestId"], properties: { result: {}, requestId: { type: "string" } } } } } };
 const errors = Object.fromEntries([400, 401, 403, 404, 409, 413, 415, 429, 503].map((status) => [status, { description: `Error ${status}`, content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } }]));
@@ -32,5 +38,3 @@ const schema = {
 };
 await writeFile(new URL("public/openapi.json", docs), `${JSON.stringify(schema, null, 2)}\n`);
 execFileSync("pnpm", ["-C", fileURLToPath(docs), "build"], { cwd: fileURLToPath(root), stdio: "inherit" });
-await mkdir(new URL("apps/bibo-hosted/dist/public/docs/", root), { recursive: true });
-await cp(new URL(".vitepress/dist/", docs), new URL("apps/bibo-hosted/dist/public/docs/", root), { recursive: true });

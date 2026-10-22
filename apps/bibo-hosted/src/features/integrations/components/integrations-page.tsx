@@ -32,7 +32,7 @@ export function IntegrationsPage() {
   return <section className="bibo-integrations" aria-labelledby="integrations-title">
     <div className="bibo-integrations__intro"><span className="bibo-integrations__mark"><KeyRound size={24} /></span>
       <div><h2 id="integrations-title">让你信任的 AI 接入空间</h2><p>笔记、任务和资料，交给你选择的工具继续使用。每个授权都可以随时撤销。</p></div>
-      <a href="/docs/" target="_blank" rel="noopener noreferrer">接入文档 <ArrowUpRight size={16} /></a>
+      <a href="https://docs.bibo.bot/" target="_blank" rel="noopener noreferrer">接入文档 <ArrowUpRight size={16} /></a>
     </div>
     <div className="bibo-integrations__grid">
       <form className="bibo-integrations__panel" onSubmit={(event) => { event.preventDefault(); void create(); }}>
@@ -46,7 +46,7 @@ export function IntegrationsPage() {
       <div className="bibo-integrations__panel bibo-integrations__quickstart"><h3>三步开始使用</h3>
         <ol><li>创建令牌，复制并妥善保存。</li><li>在终端安装 CLI：<code>npm install -g @nextclaw/bibo</code></li><li>运行 <code>bibo auth login</code>，按提示粘贴令牌。</li></ol>
         <p>给 AI 安装 Skill：</p><code>bibo skill install --path ~/.codex/skills</code>
-        <a href="/docs/guide/quickstart">查看完整使用说明 →</a>
+        <a href="https://docs.bibo.bot/guide/quickstart">查看完整使用说明 →</a>
       </div>
     </div>
     {store.error && <div className="bibo-integrations__error" role="alert">{store.error}<Button tone="text" disabled={store.busy} onClick={() => void store.load(accountId)}>重新加载</Button></div>}

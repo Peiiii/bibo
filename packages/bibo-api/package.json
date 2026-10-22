@@ -1,6 +1,6 @@
 {
   "name": "@nextclaw/bibo-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Bibo public space API client and shared types",
   "type": "module",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "url": "git+https://github.com/Peiiii/bibo.git",
     "directory": "packages/bibo-api"
   },
-  "homepage": "https://app.bibo.bot/docs/",
+  "homepage": "https://docs.bibo.bot/",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

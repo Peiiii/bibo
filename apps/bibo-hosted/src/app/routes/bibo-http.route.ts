@@ -143,16 +143,11 @@ export const biboFetch = async (request: Request, env: Env): Promise<Response> =
         return publicError("Bibo 暂时无法连接，请稍后重试。", 503);
       }
     }
-    if (path === "/docs") return Response.redirect(`${url.origin}/docs/`, 308);
-    if (path.startsWith("/docs/")) {
-      const response = await env.ASSETS.fetch(request.method === "HEAD" ? new Request(request, { method: "GET" }) : request);
-      // The application uses SPA fallback. Missing docs must never silently serve the app shell.
-      if (response.headers.get("content-type")?.includes("text/html")) {
-        const html = await response.text();
-        if (!html.includes('name="generator" content="VitePress')) return new Response("Documentation page not found", { status: 404 });
-        return new Response(request.method === "HEAD" ? null : html, response);
-      }
-      return request.method === "HEAD" ? new Response(null, response) : response;
+    if (path === "/docs" || path.startsWith("/docs/")) {
+      const destination = new URL("https://docs.bibo.bot/");
+      destination.pathname = path.slice(5) || "/";
+      destination.search = url.search;
+      return Response.redirect(destination.toString(), 308);
     }
     return await env.ASSETS.fetch(request);
 };

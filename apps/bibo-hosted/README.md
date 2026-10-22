@@ -4,7 +4,7 @@
 
 公共入口是 `/api/v1/`；网页「接入与授权」创建具名、有限期的只读/读写令牌。外部工具通过 `@nextclaw/bibo` CLI、`@nextclaw/bibo-api` SDK 或 HTTP 调用与网页相同的空间 owner，不需要模型或沙箱。
 
-[公开文档](https://app.bibo.bot/docs/)包含快速开始、CLI/API、授权/幂等/限流、SDK、Skill 和自部署说明。源码文档位于 `apps/bibo-docs`，由根 `build` / `build:hosted` 构建到应用 `/docs/`；不要仅用应用内部 `vite build` 发布，否则会漏掉文档。公共包构建入口 `pnpm build:packages`，打包安装验收 `pnpm pack:release`，独立 NPM CI 在 `.github/workflows/release.yml`。
+[公开文档](https://docs.bibo.bot/)包含快速开始、CLI/API、授权/幂等/限流、SDK、Skill 和自部署说明。源码文档位于 `apps/bibo-docs`，由 `pnpm build:docs` 独立构建，`pnpm deploy:docs` 发布到 docs.bibo.bot；应用构建不包含文档。旧 `/docs/` 地址只保留 308 跳转。公共包构建入口 `pnpm build:packages`，打包安装验收 `pnpm pack:release`，独立 NPM CI 在 `.github/workflows/release.yml`。
 
 ## 独立开源与自部署
 
