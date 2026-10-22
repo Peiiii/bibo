@@ -76,6 +76,13 @@ try {
       assert.equal(await page.locator(".bibo-session-nav").count(), 0, "Settings never displays recent chats");
       assert.equal(await page.getByRole("link", { name: "返回空间", exact: true }).count(), 0, "Settings is a peer workspace page, not a nested flow with an extra back action");
       assert.equal(await page.getByRole("button", { name: "返回空间", exact: true }).count(), 0);
+      if (width > 760) {
+        const navigationTop = await page.locator(".bibo-navigation-rail").evaluate((rail) => {
+          const firstLink = rail.querySelector(".bibo-primary-nav a")!;
+          return firstLink.getBoundingClientRect().top - rail.getBoundingClientRect().top - parseFloat(getComputedStyle(rail).paddingTop);
+        });
+        assert.ok(navigationTop >= -1 && navigationTop <= 1, "Settings navigation starts at the rail's normal inset, with no placeholder for removed controls");
+      }
       assert.equal(await page.locator('.bibo-primary-nav a[aria-current="page"]').count(), 0);
       if (!production) {
         const row = page.getByRole("table", { name: "有效授权", exact: true }).locator(".bibo-integration-row").first();

@@ -149,3 +149,8 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - 01:26生产闭环：源f351a5c推送后，干净冻结main两次preflight发布Worker380158d4-1d4e-472a-a3e8-9e0251dcde51，容器rollout=none；settings生产脚本exit0，1440/390/320线上产物实际metadata hover无整行背景，真实创建/读取200/详情撤销401、旧路由与导航无状态点通过，生产reset请求0，临时测试授权清理。线上桌面hover截图已实际查看；手机本地画面和两主题恢复画面已查看。证据.local/settings-hover-production-{deploy,browser}.log、settings-production/integrations-*.png。
 - 收尾Review修正live烟测等待条件：服务器权威返回时允许「停止生成」或「发送消息」，兼容任务已自然完成；避免退场状态点的查询条件成为空通过。只改测试等待，scripts tsc再次通过；该真实模型脚本本轮未运行，不冒报。源码CI39822502271仍运行，未计入已通过证据；无SDK/NPM/DB/独立docs变化，不重复发布。
 - retrospective_state=completed，retrospective_decision=updated-existing-owners：原UI规范补可点击性与反馈范围边界、AGENTS增加发现链接，原settings与恢复smoke落实交互反例；没有新Skill或检查框架。01:20开始、01:26线上验证完成，早于01:30预计；无未关闭实质finding，审美偏好交由用户实际使用判断。
+
+### 设置导航顶部占位纠正（2026-10-23 01:42）
+
+- 用户截图指出左上空洞，随后要求「好好考虑再优化」。根因是01:11为维持原图标坐标新增的50px padding；该取舍被撤销。删除这一条设置专用补偿，让导航从共享rail的正常顶边距自然排列，不用新按钮/标志填空，不修改设置分类或工作区导航行为。
+- flow=bugfix，L1；skip-design与skip-reproduction：截图、精确CSS及计算布局直接锁定单owner问题；替代验证为实际渲染测量首个导航链接与rail内容顶边一致。原settings.smoke补断言，scripts tsc、hosted构建、1440/390/320全流程通过，实际查看最终桌面画面确认无顶部空槽；证据.local/settings-inset-{types,build,browser}.log。git diff --check和定向Review无未关闭finding；原设计已同步撤销「保持图标位置」的过时取舍。

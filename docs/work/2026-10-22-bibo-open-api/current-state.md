@@ -1,5 +1,7 @@
 # 当前执行状态
 
+- 2026-10-23 01:43 Asia/Shanghai；flow=bugfix；phase=delivery；retrospective_state=pending。01:42开始，预计01:47完成。删除设置rail中50px历史补偿，首个导航从共享正常顶边距排列；原设计更新并补实际布局断言，scripts tsc、hosted构建、1440/390/320原设置烟测通过，实际桌面画面已查看，Review无finding。准备发布，不涉及路由/账号/授权数据或组件变化。
+
 - 2026-10-23 01:26 Asia/Shanghai；flow=bugfix；phase=delivery；retrospective_state=completed；retrospective_decision=updated-existing-owners；delivered。01:20开始、01:26线上验证完成，早于01:30预计。源f351a5c部署Worker380158d4-1d4e-472a-a3e8-9e0251dcde51；删除非交互授权行hover与全部全局状态点，保留Composer反馈。完整tsc、构建、桌面/手机运行恢复、本地三宽settings和生产三宽hover/授权操作通过，线上画面已查看，临时授权清理。原UI规范/AGENTS入口/既有烟测已更新，Review无未关闭finding；CI39822502271仍运行，不计入通过证据；live模型脚本仅更新等待条件并经scripts tsc，未执行。无NPM/DB/运行协议或容器变化。
 
 - 2026-10-23 01:17 Asia/Shanghai；flow=bugfix；phase=delivery；retrospective_state=completed；retrospective_decision=updated-existing-owners；delivered。01:11开始、01:17上线并验证，早于01:21预计检查点。源be17dc8推送并经干净冻结main部署Worker437c8d50-5a16-461b-97d3-ad0d729bfc7d；设置页删除「返回空间」并保持全局图标位置。client/scripts tsc、构建、本地与生产1440/390/320实际导航通过，线上画面已查看，Review无未关闭finding；CI39821102518仍运行，不冒报通过。不涉及账号/授权数据修改、NPM、DB或容器发布。
