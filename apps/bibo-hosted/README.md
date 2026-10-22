@@ -4,7 +4,7 @@
 
 [Bibo 开源仓库](https://github.com/Peiiii/bibo)提供完整应用、UI/client 源码、锁定的公共 NextClaw 依赖、MIT 许可证与独立 Cloudflare 部署说明。日常 Agent/文件操作在边缘运行，真实 Linux 沙箱按需获取；个人文件保存在 R2 并可挂载进沙箱。运行成本取决于实际用量、模型和沙箱驻留，不承诺完全免费。
 
-自部署配置使用 `wrangler.self-hosted.toml`；设置 `BIBO_AUTH_MODE=self-hosted`、`BIBO_OWNER_EMAIL` 和强密码 Secret `BIBO_OWNER_PASSWORD`（至少 16 位），模型使用部署者自己的 `BIBO_DEEPSEEK_API_KEY`。用 `vite build --mode self-hosted` 构建独立登录界面；官方托管部署仍使用原配置与平台账号。密码轮换使旧会话失效，cookie 最长一天，来源 IP 每分钟最多 10 次登录尝试。注册在自部署模式禁用。
+自部署默认配置使用 `wrangler.toml`；设置 `BIBO_AUTH_MODE=self-hosted`、`BIBO_OWNER_EMAIL` 和强密码 Secret `BIBO_OWNER_PASSWORD`（至少 16 位），模型使用部署者自己的 `BIBO_DEEPSEEK_API_KEY`。用 `vite build --mode self-hosted` 构建独立登录界面；官方托管部署使用单独的 `wrangler.hosted.toml` 与平台账号。密码轮换使旧会话失效，cookie 最长一天，来源 IP 每分钟最多 10 次登录尝试。注册在自部署模式禁用。
 
 `Peiiii/bibo` 是唯一开发主仓；产品源码直接在本仓维护，公共内核从 NPM 使用精确版本。`SOURCE.json` 只保留历史导入来源，不再使用 exporter 或回流应用副本。
 
