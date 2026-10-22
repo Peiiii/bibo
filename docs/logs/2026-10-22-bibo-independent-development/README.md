@@ -40,3 +40,5 @@ retrospective_decision：updated-owner。原始想法与用户确认保持同一
 本次完成独立开发项目与想法沉淀。开放 API、CLI、Skill、Agent 通信及真正的 NextClaw 接入尚未实现，仍归后续讨论。没有把源码迁移或 CI 通过写成这些产品能力已经交付。
 
 最终边界复核删除了旧 `bibo-edge-migration.controller.ts`：它仍尝试进入 NextClaw 的本地 `workers/nextclaw-provider-gateway-api` 目录读取账号，而其调用的 `/api/admin/edge/status` 与 `/migrate` 已无对应路由。该脚本不在当前 package 命令或文档入口中，不是可保留的跨仓能力；退休后本仓无本地 NextClaw checkout 依赖。官方账号仍通过既有远程认证 API 访问，属于保留的系统关联。
+
+最终源码 `ba9bfea86bd5f9a1e5193a5bcb2addc8f3ff46f3` 已推 main，补跑本地全部类型检查通过；[最新 Linux CI](https://github.com/Peiiii/bibo/actions/runs/39776652120) 全部通过。2026-10-22 20:15（Asia/Shanghai）核验完成。NextClaw 主线协调返回 `LOCAL_MAINLINE_SYNCED`，最终审计仅剩原有七份未改动 WIP；本仓干净且 main 与 origin/main 一致。随后仅提交这份证据回写，不再改变源码或重复运行相同测试。

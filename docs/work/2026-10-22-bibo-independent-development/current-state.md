@@ -13,4 +13,4 @@
 - 完整 browser smoke 通过 1440/1280/390/320px 主流程及其它窄屏、目录、文件与恢复场景。独立 `pnpm dev` 的 1440/390px 对话与笔记读回另有实际预览证据。
 - 复盘：已确认方向回写同一 thought；旧仓保留迁移指针，退出重复源码和 exporter；测试适配修在原测试 owner，没有新增通用规则或复制 Skill 系统。
 - 收尾：最终证据与默认自部署配置收敛随本记录提交；目标与产品行为不再扩张。新 API/CLI/Skill 与 Agent 协作仍需继续讨论设计。
-- 最终跨仓依赖审计：退休已经没有服务端路由、仍依赖旧 NextClaw 本地目录的历史运维迁移脚本；保留远程账号 API 与公共 NPM 依赖，补跑类型检查并核验最新 CI。
+- 最终跨仓依赖审计：退休已经没有服务端路由、仍依赖旧 NextClaw 本地目录的历史运维迁移脚本；保留远程账号 API 与公共 NPM 依赖。最终源码 `ba9bfea` 类型检查通过，[最新 Linux CI](https://github.com/Peiiii/bibo/actions/runs/39776652120) 全绿；NextClaw 主线协调返回 `LOCAL_MAINLINE_SYNCED`。

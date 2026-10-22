@@ -13,6 +13,6 @@
 | BI-03 | true | 独立安装、匹配范围类型检查、测试、构建和 Worker dry-run 成功 | passed | frozen install、全部 tsc、205 项测试和 1 项真实 SQLite DO 集成、两种构建与 dry-run 通过 |
 | BI-04 | true | 独立产物的桌面与手机真实浏览器主链路通过 | passed | 1440/390px 无凭据开发预览：发送对话、笔记自动保存、刷新读回，pageErrors=[] |
 | BI-05 | true | 两仓入口指向唯一 owner，旧 exporter 与活跃副本退出，NextClaw 无关 WIP 字节保持 | passed | NextClaw 撤掉活跃源码与导出模板，保留迁移入口及缓存 ignore；exporter 退出且不生成目录；七份 WIP 摘要一致 |
-| BI-06 | true | 两仓精确提交推送、Bibo 云端 CI 通过，最终文档与本地恢复入口一致 | passed | Bibo 源码 f2a377c 已推 main，Linux CI 39775174620 全绿；NextClaw 802b1fe0c 已推 master；最终说明随本记录同步 |
+| BI-06 | true | 两仓精确提交推送、Bibo 云端 CI 通过，最终文档与本地恢复入口一致 | passed | Bibo 最终源码 ba9bfea 已推 main，Linux CI 39776652120 全绿；NextClaw 802b1fe0c 已推 master 并返回 LOCAL_MAINLINE_SYNCED；最终说明随本记录同步 |
 
 部署边界：保留官方资源配置并验证打包，不变更生产资源和数据；没有用户可见功能改动，无需 NPM、桌面、NextClaw 文档站或产品部署。
