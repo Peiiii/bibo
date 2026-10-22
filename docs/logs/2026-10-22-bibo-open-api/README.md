@@ -125,3 +125,7 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - 独立设备链路真实本地Worker+CLI+浏览器回归通过，.local/settings-device-browser.log。保留未变协议证据，后续仅BiboApp设置布局/CSS修正未影响独立授权路由。
 - mode=implementation Review：本仓无diff-only maintainability或targeted lint入口；git diff --check通过，手工复核全部diff、原输入与两条黄金链路，按正确性/生命周期/秘密/路由/主题/可维护性审查。已删除平行表单与菜单状态，Settings feature仅承载容器和现有模块，共用原store/API。完成最后画面复核后冻结提交；无待新增的架构或功能需求，用户视觉偏好不冒报确认。
 - 最终画面复核完成：实际打开最终1440管理页、390设置分类/创建表单、320管理页/两主题。折叠分类已恢复，手机设置标题与分类明确，标准控件保持一致。最终release-browser三尺寸exit0；7个定向测试包含刷新/撤销竞争反例通过。Review无未关闭finding；剩余为用户审美偏好与无当前需求的设置扩展，不继续增加模块。准备发布App和已更新的使用说明；无NPM/SDK/数据库/容器变更。
+- 01:05生产交付：b398089已推送，[CI39819219258](https://github.com/Peiiii/bibo/actions/runs/39819219258)completed/success（含完整测试、真实Worker、两种构建与发布产物检查）。干净detached main经两次preflight发布，App Worker327d2993-709b-49d5-8230-db8ca0e01625，独立docs Worker7d5edd91-2411-43da-bf84-92401708cbd6，容器rollout=none。
+- 生产浏览器真实登录→主题切换/刷新持久化→清空确认取消→PAT表单创建→真实API读取200→详情撤销→原凭据401→旧URL兼容→返回笔记全部通过；1440/390/320截图已实际查看，证据settings-production-browser.log与settings-production/。生产reset请求数0，危险动作失败与重试只由隔离fixture证明；没有清空生产账号、重置密码或要求用户协助。
+- 同一生产版本使用正式registry CLI0.2.0完成默认预填授权、远程手输、自动轮询、拒绝、只读403、凭据0600/无回显、过期恢复和切换账号回归，settings-production-device.log exit0；所有本轮测试授权清理。两个生产脚本均exit0；OS打开器仍以截获调用URL证明，不冒称实际桌面打开验收。
+- retrospective_decision=updated-existing-owners：原设计补统一设置层级及真实实施边界；原store/烟测增加焦点刷新互斥与折叠导航反例，修正关闭动画期间的测试定位，减少默认状态漏检。没有新增全局规则或平行验收系统。收敛原因：五个必需质量维度已具当前证据、无未关闭实质finding；新增未知设置模块/设备元数据/框架将扩大范围，无当前用户收益。用户审美偏好保留给实际使用判断。
