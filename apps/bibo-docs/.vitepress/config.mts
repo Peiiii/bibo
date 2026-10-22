@@ -3,6 +3,7 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "Bibo 开放空间", description: "笔记、文件、待办、项目与日程：通过 CLI 和 API 管理你的个人空间。", lang: "zh-CN", base: "/",
   cleanUrls: true, lastUpdated: true,
+  srcExclude: ["public/**"],
   head: [["meta", { name: "theme-color", content: "#2f6b47" }]],
   themeConfig: {
     siteTitle: "Bibo · 开发者文档",
