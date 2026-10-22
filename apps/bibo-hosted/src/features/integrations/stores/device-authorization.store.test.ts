@@ -15,3 +15,12 @@ test("late account bootstrap cannot erase a manually entered remote code", async
   assert.deepEqual(requests, ["/api/auth/device?user_code=ABCD2345"]);
   assert.equal(store.getState().phase, "consent");
 });
+
+test("expired requests use an explicit terminal state and can return to code entry", async () => {
+  const store = createDeviceAuthorizationStore((async () => Response.json({ error: "expired_token", error_description: "Expired" }, { status: 400 })) as typeof fetch);
+  await store.getState().load("ABCD2345", "account");
+  assert.equal(store.getState().phase, "expired");
+  store.getState().setCode(""); await store.getState().load("", "account");
+  assert.equal(store.getState().phase, "input");
+  assert.equal(store.getState().code, "");
+});

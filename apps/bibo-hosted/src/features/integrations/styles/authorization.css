@@ -1,0 +1,84 @@
+.bibo-authorization { height: 100dvh; width: 100%; box-sizing: border-box; display: grid; align-items: center; padding: 48px 32px; color: #28342b; background: #f3f5f0; overflow-y: auto; color-scheme: light; --ui-ink: #28342b; --ui-muted: #72796c; --ui-surface: #fffefa; --ui-canvas: #fffefa; --ui-line: #e1e6dc; --ui-primary: #3e6240; --ui-primary-hover: #304f32; --ui-control-border: #d4dccd; --ui-hover: #edf2e9; }
+.bibo-authorization *, .bibo-authorization *::before, .bibo-authorization *::after { box-sizing: border-box; }
+.bibo-authorization__frame { width: min(960px, 100%); margin: auto; animation: authorization-enter .22s ease-out; }
+.bibo-authorization__brand { display: flex; justify-content: space-between; align-items: center; padding: 0 12px; margin-bottom: 22px; }
+.bibo-authorization__brand > a { color: #253c2c; text-decoration: none; font-size: 28px; font-weight: 700; letter-spacing: -.07em; }
+.bibo-authorization__brand > a > span { color: #6f8c67; }
+.bibo-authorization__brand > span { display: flex; align-items: center; gap: 7px; color: #64705f; font-size: 13px; }
+.bibo-authorization__card { display: grid; grid-template-columns: 1fr 1.1fr; gap: 56px; padding: 48px; border: 1px solid #e1e6dc; border-radius: 28px; background: #fffefa; box-shadow: 0 8px 30px #263c2a04; }
+.bibo-authorization__icon { display: grid; place-items: center; width: 52px; height: 52px; background: #edf2e9; color: #38573d; border-radius: 16px; margin-bottom: 28px; }
+.bibo-authorization__icon svg { width: 26px; height: 26px; stroke-width: 1.8; }
+.bibo-authorization h1 { font-size: clamp(27px, 3vw, 34px); font-weight: 500; letter-spacing: -.045em; line-height: 1.3; margin: 0 0 16px; text-wrap: balance; }
+.bibo-authorization h1:focus { outline: none; }
+.bibo-authorization__intro > p { color: #65705f; font-size: 15px; line-height: 1.7; margin: 0; }
+.bibo-authorization__account { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 28px; font-size: 13px; }
+.bibo-authorization__account > span:nth-child(2) { min-width: 0; overflow-wrap: anywhere; flex: 1; }
+.bibo-authorization__avatar { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: #e7edde; color: #3d5735; font-weight: 600; flex-shrink: 0; }
+.bibo-authorization__account button { border: 0; background: transparent; color: #3e6240; padding: 6px 0; cursor: pointer; font: inherit; }
+.bibo-authorization__content { min-width: 0; animation: authorization-enter .16s ease-out; }
+.bibo-authorization__request { margin: 0 0 20px; font-size: 15px; line-height: 1.7; overflow-wrap: anywhere; }
+.bibo-authorization__code-box { padding: 16px 20px; background: #f2f4ee; border-radius: 12px; }
+.bibo-authorization__code-box > span { color: #687360; font-size: 12px; }
+.bibo-authorization .bibo-device-auth__code { font: 600 28px/1.5 ui-monospace, SFMono-Regular, monospace; letter-spacing: .08em; margin: 6px 0 0; color: #31472e; }
+.bibo-authorization__permissions { list-style: none; margin: 24px 0 18px; padding: 0; display: grid; gap: 18px; }
+.bibo-authorization__permissions li { display: flex; align-items: flex-start; gap: 12px; }
+.bibo-authorization__permissions svg { color: #64745a; flex-shrink: 0; margin-top: 2px; }
+.bibo-authorization__permissions strong { display: block; font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+.bibo-authorization__permissions span { display: block; font-size: 13px; color: #72796c; line-height: 1.6; }
+.bibo-authorization__readonly { display: flex; align-items: center; gap: 9px; font-size: 13px; padding: 4px 0; cursor: pointer; }
+.bibo-authorization__readonly input { accent-color: #3e6240; width: 16px; height: 16px; }
+.bibo-authorization__trust { display: flex; gap: 7px; color: #747d6e; font-size: 12px; line-height: 1.7; margin: 24px 0; }
+.bibo-authorization__trust svg { flex-shrink: 0; margin-top: 2px; }
+.bibo-authorization__actions { display: flex; justify-content: flex-end; align-items: center; gap: 16px; margin-top: 28px; }
+.bibo-authorization .ui-button { min-height: 42px; border-radius: 22px; padding-inline: 22px; transition: background .15s, transform .12s; }
+.bibo-authorization .ui-button:active { transform: scale(.98); }
+.bibo-authorization :is(button, a, input):focus-visible { outline: 2px solid #568355; outline-offset: 4px; }
+.bibo-authorization__content form { display: grid; gap: 14px; }
+.bibo-authorization__content form label { font-size: 14px; margin-top: 4px; }
+.bibo-authorization__content form .ui-control { font-size: 24px; letter-spacing: .1em; min-height: 60px; border-radius: 10px; }
+.bibo-authorization__content form .ui-button { justify-self: end; margin-top: 16px; }
+.bibo-authorization__muted { color: #72796c; font-size: 13px; line-height: 1.7; margin: 0; }
+.bibo-authorization__loading { display: flex; align-items: center; gap: 12px; color: #6a7562; padding: 12px 0; font-size: 14px; }
+.bibo-authorization__loading > span { width: 18px; height: 18px; border: 2px solid #dbe4d4; border-top-color: #547b4a; border-radius: 50%; animation: authorization-spin .8s linear infinite; }
+.bibo-authorization__error { padding: 12px 14px; margin: 16px 0 0; background: #fbefed; border-radius: 8px; color: #92483b; font-size: 13px; line-height: 1.7; }
+.bibo-authorization__footer { display: flex; justify-content: space-between; gap: 16px; padding: 20px 12px 0; color: #7b8374; font-size: 12px; }
+.bibo-authorization__footer a { color: #607555; text-decoration: none; }
+.bibo-authorization.is-complete .bibo-authorization__frame { max-width: 560px; }
+.bibo-authorization__result { grid-template-columns: 1fr; gap: 18px; padding: 48px; text-align: center; }
+.bibo-authorization__result .bibo-authorization__icon { margin: 0 auto 24px; width: 64px; height: 64px; border-radius: 50%; }
+.bibo-authorization__result .bibo-authorization__icon.is-approved { background: #e9f1e3; }
+.bibo-authorization__result .bibo-authorization__content > p { margin: 0; color: #707a66; line-height: 1.8; font-size: 14px; }
+.bibo-authorization__manage { display: inline-block; margin-top: 26px; color: #42653c; font-size: 14px; text-decoration: none; }
+.bibo-authorization__result .ui-button { margin-top: 24px; }
+.bibo-authorization .bibo-auth-card { width: 100%; height: auto; min-height: 0; max-height: none; grid-template-columns: 1fr 1.1fr; grid-template-rows: auto; padding: 0; border: 1px solid #e1e6dc; border-radius: 28px; background: #fffefa; box-shadow: 0 8px 30px #263c2a04; overflow: hidden; }
+.bibo-authorization .bibo-auth-story { height: auto; min-height: 0; padding: 48px; background: transparent; overflow: visible; }
+.bibo-authorization .bibo-auth-wordmark { display: none; }
+.bibo-authorization .bibo-auth-story-copy { margin: 0; text-align: left; display: block; }
+.bibo-authorization .bibo-auth-story-kicker { font-size: 13px; letter-spacing: 0; color: #738068; }
+.bibo-authorization .bibo-auth-story h1 { font-size: 34px; margin-top: 18px; }
+.bibo-authorization .bibo-auth-story-copy p { display: block; font-size: 15px; }
+.bibo-authorization .bibo-auth-form-pane { padding: 48px 48px 40px 8px; overflow: visible; align-items: stretch; }
+.bibo-authorization .bibo-auth-card[data-step] .bibo-auth-form-head { margin: 0 0 22px; position: static; width: auto; height: auto; clip: auto; clip-path: none; overflow: visible; white-space: normal; }
+.bibo-authorization .bibo-auth-eyebrow { display: none; }
+.bibo-authorization .bibo-auth-form-head > p:last-child { display: block; font-size: 14px; }
+.bibo-authorization .bibo-auth-note { font-size: 12px; line-height: 1.7; color: #7b8374; }
+@keyframes authorization-enter { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+@keyframes authorization-spin { to { transform: rotate(360deg); } }
+@media (max-width: 700px) {
+  .bibo-authorization { padding: 24px 16px; align-items: start; }
+  .bibo-authorization__brand { padding: 0 8px; margin-bottom: 24px; }
+  .bibo-authorization__card { grid-template-columns: 1fr; gap: 28px; padding: 28px 24px; border-radius: 20px; }
+  .bibo-authorization__icon { margin-bottom: 20px; width: 44px; height: 44px; border-radius: 13px; }
+  .bibo-authorization__account { margin-top: 20px; }
+  .bibo-authorization h1 { font-size: 28px; }
+  .bibo-authorization__result { margin-top: 8vh; gap: 18px; padding-block: 36px; }
+  .bibo-authorization__footer { padding-inline: 6px; }
+  .bibo-authorization .bibo-auth-card { display: block; border-radius: 20px; }
+  .bibo-authorization .bibo-auth-story { padding: 28px 24px 0; }
+  .bibo-authorization .bibo-auth-story h1 { font-size: 28px; }
+  .bibo-authorization .bibo-auth-story-copy p { margin-bottom: 0; }
+  .bibo-authorization .bibo-auth-form-pane { padding: 24px; }
+  .bibo-authorization .bibo-auth-form-head h2 { font-size: 20px; }
+  .bibo-authorization .bibo-auth-form-pane .bibo-auth-form-head > p { display: block; }
+}
+@media (prefers-reduced-motion: reduce) { .bibo-authorization *, .bibo-authorization *::before, .bibo-authorization *::after { animation: none !important; transition: none !important; } }

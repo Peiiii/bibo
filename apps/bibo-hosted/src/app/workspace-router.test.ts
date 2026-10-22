@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { filePathHref, readWorkspaceRoute, resourceHref } from "@/app/workspace-router";
+import { filePathHref, isAuthorizationRoute, readWorkspaceRoute, resourceHref } from "@/app/workspace-router";
+
+test("dedicated authorization accepts canonical and trailing slash routes only", () => {
+  for (const path of ["/authorize", "/authorize/", "/authorize//"]) assert.equal(isAuthorizationRoute(path), true);
+  for (const path of ["/", "/integrations", "/authorize-other", "/authorize/nested"]) assert.equal(isAuthorizationRoute(path), false);
+});
 
 test("file routes accept complete paths after edge slash normalization and preserve reserved characters", () => {
   for (const view of ["notes", "files"] as const) {

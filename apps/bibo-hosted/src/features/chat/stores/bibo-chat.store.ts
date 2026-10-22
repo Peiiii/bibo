@@ -3,7 +3,7 @@ import { BiboClient, type BiboChatEvent, type BiboMessage, type BiboQuestion, ty
 import { BiboConversationManager, type BiboSubmission } from "@/features/chat/managers/bibo-conversation.manager";
 import { biboCopy, biboSelfHosted } from "@/shared/configs/bibo-copy.config";
 import { useBiboSpaceStore, workspaceResources } from "@/features/space";
-import { filePathHref, navigateConversation, readWorkspaceRoute, replaceConversationContext } from "@/app/workspace-router";
+import { filePathHref, isAuthorizationRoute, navigateConversation, readWorkspaceRoute, replaceConversationContext } from "@/app/workspace-router";
 import { identifyMessages, type BiboDisplayMessage } from "@/features/chat/utils/chat-message.utils";
 
 const biboClient = new BiboClient();
@@ -33,7 +33,7 @@ class BiboChatOwner {
   failedQuestionInput: { id: string; answer: string } | null = null;
   status = "";
   authFeedback: { kind: "success" | "error"; message: string } | null = null;
-  authMode: "register" | "login" | "reset" = biboSelfHosted || (typeof window !== "undefined" && window.location.pathname === "/authorize") ? "login" : "register";
+  authMode: "register" | "login" | "reset" = biboSelfHosted || (typeof window !== "undefined" && isAuthorizationRoute(window.location.pathname)) ? "login" : "register";
   following = true;
   menuOpen = false;
   readonly conversation = new BiboConversationManager(biboClient, sessionStorage, {
@@ -202,6 +202,11 @@ class BiboChatOwner {
     try {
       const user = await biboClient.account();
       if (request !== this.selectionRequest) return;
+      if (isAuthorizationRoute(window.location.pathname)) {
+        this.conversation.dispose();
+        this.set({ user, authFeedback: null });
+        return;
+      }
       this.conversation.bindAccount(user.id);
       this.set({ user, skippedQuestionIds: JSON.parse(sessionStorage.getItem(skippedKey(user.id)) ?? "[]") as string[] });
       const sessions = await biboClient.sessions();

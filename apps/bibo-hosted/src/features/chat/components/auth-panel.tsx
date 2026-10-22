@@ -5,7 +5,8 @@ import { BiboCompanion } from "@/shared/components/bibo-companion";
 import { biboCopy as copy, biboSelfHosted } from "@/shared/configs/bibo-copy.config";
 import { useBiboChatStore } from "@/features/chat/stores/bibo-chat.store";
 
-export function AuthPanel() {
+export function AuthPanel({ variant = "overlay" }: { variant?: "overlay" | "authorization" }) {
+  const standalone = variant === "authorization";
   const mode = useBiboChatStore((state) => state.authMode);
   const feedback = useBiboChatStore((state) => state.authFeedback);
   const setMode = useBiboChatStore((state) => state.setAuthMode);
@@ -14,7 +15,7 @@ export function AuthPanel() {
   const panelRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
-  const [mobile, setMobile] = useState(() => window.matchMedia("(max-width: 760px)").matches);
+  const [mobile, setMobile] = useState(() => !standalone && window.matchMedia("(max-width: 760px)").matches);
   const [mobileStep, setMobileStep] = useState<"email" | "details">("email");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,10 +26,10 @@ export function AuthPanel() {
   useEffect(() => { panelRef.current?.focus(); }, []);
   useEffect(() => {
     const media = window.matchMedia("(max-width: 760px)");
-    const update = () => setMobile(media.matches);
+    const update = () => setMobile(!standalone && media.matches);
     media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);
-  }, []);
+  }, [standalone]);
   useEffect(() => { if (mobile && mobileStep === "details") titleRef.current?.focus(); }, [mobile, mobileStep]);
 
   const changeMode = (nextMode: "register" | "login" | "reset") => {
@@ -55,18 +56,18 @@ export function AuthPanel() {
   };
 
   const mobileDetails = mobile && mobileStep === "details";
-  const title = mode === "reset" ? "重置 Bibo 密码" : mobileDetails
+  const title = mode === "reset" ? "重置 Bibo 密码" : standalone ? mode === "register" ? "创建 Bibo 账号" : "登录 Bibo" : mobileDetails
     ? mode === "register" ? "查收邮箱验证码" : "输入密码"
     : mode === "register" ? "一起，从这里开始。" : "回来啦，继续往前。";
-  const description = mode === "reset" ? "通过邮箱验证码设置新密码。你的 NextClaw 密码不会改变。" : mobileDetails
+  const description = mode === "reset" ? "通过邮箱验证码设置新密码。" : standalone ? "登录后，继续确认终端的访问权限。" : mobileDetails
     ? mode === "register" ? "输入邮件中的验证码，或重新发送。" : "继续使用你的 Bibo 空间。"
     : mode === "register" ? "创建账号，和 Bibo 开始一段属于你的协作。" : "登录后，回到你的对话与个人空间。";
-  return <div className="bibo-auth-overlay"><section ref={panelRef} className="bibo-auth-card" data-step={mobileDetails ? "details" : "email"} role="dialog" aria-modal="true" aria-labelledby="bibo-auth-title" tabIndex={-1}>
+  return <div className={standalone ? "bibo-authorization__login" : "bibo-auth-overlay"}><section ref={panelRef} className="bibo-auth-card" data-step={mobileDetails ? "details" : "email"} role={standalone ? "region" : "dialog"} aria-modal={standalone ? undefined : true} aria-labelledby="bibo-auth-title" tabIndex={-1}>
     <div className="bibo-auth-story">
       <div className="bibo-auth-wordmark">Bibo<span>.</span></div>
-      <div className="bibo-auth-scene" aria-hidden="true"><span className="bibo-auth-halo" /><BiboCompanion className="bibo-auth-companion" /><span className="bibo-auth-spark bibo-auth-spark-one">✳</span><span className="bibo-auth-spark bibo-auth-spark-two">✦</span></div>
-      <div className="bibo-auth-story-copy"><span className="bibo-auth-story-kicker">你的个人 AI 搭档</span><h1>你在意的事，<br />我陪你一起做。</h1><p>从一个想法、一项待办，或一段对话开始。</p></div>
-      <p className="bibo-auth-story-foot">想法 · 日程 · 待办 · 文件</p>
+      {!standalone && <div className="bibo-auth-scene" aria-hidden="true"><span className="bibo-auth-halo" /><BiboCompanion className="bibo-auth-companion" /><span className="bibo-auth-spark bibo-auth-spark-one">✳</span><span className="bibo-auth-spark bibo-auth-spark-two">✦</span></div>}
+      <div className="bibo-auth-story-copy"><span className="bibo-auth-story-kicker">{standalone ? "终端登录授权" : "你的个人 AI 搭档"}</span><h1>{standalone ? "连接你的空间" : <>你在意的事，<br />我陪你一起做。</>}</h1><p>{standalone ? "安全地将你的 Bibo 空间连接到终端。" : "从一个想法、一项待办，或一段对话开始。"}</p></div>
+      {!standalone && <p className="bibo-auth-story-foot">想法 · 日程 · 待办 · 文件</p>}
     </div>
     <div className="bibo-auth-form-pane">
       {mobileDetails && <button className="bibo-auth-back" type="button" onClick={() => setMobileStep("email")}><ArrowLeft size={18} aria-hidden="true" />返回</button>}
@@ -81,8 +82,9 @@ export function AuthPanel() {
         {feedback && (!mobile || mobileDetails) && <p className={`bibo-auth-feedback is-${feedback.kind}`} role={feedback.kind === "error" ? "alert" : "status"}>{feedback.kind === "success" && <Check size={16} aria-hidden="true" />}{feedback.message}</p>}
         <Button className="bibo-auth-submit" tone="primary" type="submit" disabled={working || (mobile && mobileStep === "email" && codeWorking)}>{working ? "请稍候…" : mobile && mobileStep === "email" ? "继续" : mode === "reset" ? "设置新密码并登录" : mode === "login" ? copy.login : copy.createAccount}<ArrowRight size={17} aria-hidden="true" /></Button>
         {mode === "login" && !biboSelfHosted && <Button onClick={() => changeMode("reset")}>忘记密码？</Button>}
+        {standalone && mode === "reset" && <Button onClick={() => changeMode("login")}>返回登录</Button>}
       </form>
-      <p className="bibo-auth-note">{biboSelfHosted ? copy.selfHostedAuthNote : "免费试用额度有限，请勿输入敏感信息。"}</p>
+      <p className="bibo-auth-note">{standalone ? "登录不会自动授权。下一步可确认或拒绝访问。" : biboSelfHosted ? copy.selfHostedAuthNote : "免费试用额度有限，请勿输入敏感信息。"}</p>
     </div>
   </section></div>;
 }

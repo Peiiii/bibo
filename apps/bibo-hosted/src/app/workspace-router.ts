@@ -1,6 +1,7 @@
 import { createBrowserRouter, matchRoutes } from "react-router";
 import type { BiboView } from "@/features/space";
 import type * as ChatComponents from "@/features/chat";
+import type { ComponentType } from "react";
 
 const views: BiboView[] = ["overview", "chat", "inbox", "calendar", "tasks", "notes", "files"];
 const routes = [
@@ -17,12 +18,14 @@ const routes = [
 ];
 let router: ReturnType<typeof createBrowserRouter>;
 
-export function initializeWorkspaceRouter({ BiboApp, ChatPage, SpacePage, NotFoundPage }:
-  Pick<typeof ChatComponents, "BiboApp" | "ChatPage" | "SpacePage" | "NotFoundPage">) {
-  router = createBrowserRouter([{
+export const isAuthorizationRoute = (pathname: string): boolean => pathname.replace(/\/+$/, "") === "/authorize";
+
+export function initializeWorkspaceRouter({ BiboApp, ChatPage, SpacePage, NotFoundPage, AuthorizationPage }:
+  Pick<typeof ChatComponents, "BiboApp" | "ChatPage" | "SpacePage" | "NotFoundPage"> & { AuthorizationPage: ComponentType }) {
+  router = createBrowserRouter([{ path: "/authorize", Component: AuthorizationPage }, {
     path: "/",
     Component: BiboApp,
-    children: routes.map((route) => ({ ...route,
+    children: routes.filter((route) => route.path !== "authorize").map((route) => ({ ...route,
       Component: "notFound" in route.handle ? NotFoundPage : route.handle.view === "chat" ? ChatPage : SpacePage,
     })),
   }]);

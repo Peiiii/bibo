@@ -1,5 +1,7 @@
 # 当前执行状态
 
+- 2026-10-23 00:22 Asia/Shanghai；r4；phase=delivery；用户要求重做独立授权页。顶层路由、账号验证独立于工作区加载、独立登录/权限/成功/拒绝/过期页面已实现。本地真实Worker+CLI+浏览器与1440/390/320截图通过，无工作区数据请求；完整tsc、应用回归和5个定向用例通过。自Review无未关闭finding，待冻结main部署与生产复验；AUTH-PAGE仍pending。
+
 - 2026-10-23 00:01 Asia/Shanghai；flow=standard；phase=delivery；retrospective_state=completed；retrospective_decision=updated-existing-owners。CLI与独立账号已上线，用户无需重置密码或提供验证码；取消额外生产密码重置测试，不再作为交付前提。
 - contract=bibo-open-api-v1 r3；原整体计划追加 r3；方案 docs/designs/2026-10-22-bibo-independent-auth.design.md，设备及账号Design Review passed；生产迁移与发信已验证。
 - 文档修正提交 a3a5798，排除原始Skill重复索引提交 f691fb3；main已推送且开始r3前干净。

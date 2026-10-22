@@ -105,3 +105,10 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - 用户问「为什么要重置？」。澄清：迁移已保留旧密码，重置仅是AI追加的专用测试账号验收，不是迁移或使用新版CLI的前提。将它卡成用户验证码依赖不合适，已取消；session16344停止，未提交任何验证码、未更改任何密码或私有凭据。
 - 保留已有有效证据：真实D1中独立注册/重置/会话隔离、生产140身份/旧密码/会话/空间/PAT连续性、上线后的正式CLI两种登录与真实邮件实收。生产密码重置E2E明确未执行，不将其改写为通过，也不要求用户操作。
 - retrospective_decision=updated-existing-owners：修正原状态与验收记录，解除额外生产测试形成的人工阻塞；未发现需要升级成跨项目规则的重复证据，不扩张治理。parent_status=ready-for-completion-check；完成核对：所有Required已有注明环境的有效证据，发布及原范围交付完整，未验证边界已披露，源代码无未提交遗留。
+
+### 独立授权页重做（2026-10-23 00:10开始）
+- 用户截图：「这个界面怎么这样？为啥不参考谷歌之类的搞个专门页面。这个也太丑了吧」。原成功页仍嵌入Bibo工作区；功能烟测通过不代表界面达到成熟产品体验，r4追加AUTH-PAGE验收。
+- 路由根因：/authorize挂BiboApp子路由，bootstrap加载会话/历史/运行，页面受工作区全高白色内容区影响。改为顶层独立路由，复用原身份owner的账号验证与AuthPanel展现模式；保留单一设备协议/PAT owner，未新建身份系统或改变CLI/DB/DO/容器。
+- 设计方向由用户Google参考已明确，采用专注单任务授权、品牌/当前账号/权限/明确同意或拒绝，保留Bibo配色；参考[Google官方设备授权界面](https://developers.google.com/identity/gsi/web/guides/devices)，没有仿冒Google身份或接入其OAuth。按oil-ui方法制作并自查，用户约定单代理优先，没有独立视觉评审，不以虚构评分代替看图。
+- 实际本地Worker+CLI+浏览器覆盖登录回原码、手输短码、只读403、拒绝、显式过期状态及恢复、切换账号；请求监听断言无sessions/history/runs/space/chat请求。截图覆盖登录/确认/成功1440/390/320以及拒绝/过期。证据.local/auth-page-{types,final-types,tests,browser,regression}.log和.local/device-auth-browser/。
+- 完整workspace tsc、应用默认测试、路由及设备store共5个定向用例通过；新烟测脚本tsc通过。git diff --check通过，项目无diff-only maintainability自动入口；自Review检查顶层/尾斜杠路由、登录原码连续性、权限与错误状态、单一身份/设备owner及旧样式删除，没有未关闭finding。实际查看桌面确认/成功和320登录/确认；修正复用登录标题的sr-only clip-path，关闭截图动画保证取稳定画面。

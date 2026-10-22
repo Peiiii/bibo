@@ -51,9 +51,18 @@ try {
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  const workspaceCalls: string[] = [];
+  page.on("request", (request) => { const path = new URL(request.url()).pathname; if (/^\/api\/(sessions|history|runs|space|chat)(\/|$)/.test(path)) workspaceCalls.push(path); });
   const errors: string[] = []; page.on("pageerror", (error) => errors.push(error.message));
   const first = startCli("Browser test CLI"), start = await first.ready;
   await page.goto(start.url, { waitUntil: "domcontentloaded" });
+  await page.locator(".bibo-auth-form-pane").getByLabel("邮箱").waitFor();
+  for (const width of [1440, 390, 320]) {
+    await page.setViewportSize({ width, height: width < 800 ? 844 : 1000 });
+    assert.equal(await page.locator(".bibo-shell, .bibo-sidebar, .bibo-mobile-nav").count(), 0);
+    await page.screenshot({ animations: "disabled", path: new URL(`login-${width}.png`, artifacts).pathname, fullPage: true });
+  }
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.locator(".bibo-auth-form-pane").getByLabel("邮箱").fill(account.email);
   await page.locator(".bibo-auth-form-pane").getByLabel("密码").fill(account.password);
   await page.locator(".bibo-auth-form-pane form").getByRole("button", { name: "登录", exact: true }).click();
@@ -68,10 +77,16 @@ try {
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: width < 800 ? 844 : 1000 });
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
-    await page.screenshot({ path: new URL(`consent-${width}.png`, artifacts).pathname, fullPage: true });
+    await page.screenshot({ animations: "disabled", path: new URL(`consent-${width}.png`, artifacts).pathname, fullPage: true });
   }
   await page.getByRole("button", { name: "授权读写空间", exact: true }).click();
   await page.getByRole("heading", { name: "授权成功", exact: true }).waitFor();
+  for (const width of [1440, 390, 320]) {
+    await page.setViewportSize({ width, height: width < 800 ? 844 : 1000 });
+    assert.equal(await page.locator(".bibo-shell, .bibo-sidebar, .bibo-mobile-nav").count(), 0);
+    const card = await page.locator(".bibo-authorization__result").boundingBox(); assert.ok(card && card.height < 450);
+    await page.screenshot({ animations: "disabled", path: new URL(`success-${width}.png`, artifacts).pathname, fullPage: true });
+  }
   const firstResult = await first.done; assert.equal(firstResult.code, 0, firstResult.stderr);
   const saved = join(directory, "Browser test CLI/bibo/config.json");
   const credential = JSON.parse(await readFile(saved, "utf8")) as { token: string };
@@ -80,7 +95,7 @@ try {
   await page.setViewportSize({ width: 1440, height: 1000 });
   const remote = startCli("Remote readonly CLI", ["--no-browser", "--read-only"]), remoteStart = await remote.ready;
   await page.goto(`${origin}/authorize`, { waitUntil: "domcontentloaded" });
-  await page.getByLabel("授权码", { exact: true }).fill(remoteStart.code);
+  await page.getByLabel("设备授权码", { exact: true }).fill(remoteStart.code);
   await page.getByRole("button", { name: "继续", exact: true }).click();
   await page.getByRole("button", { name: "授权读取空间", exact: true }).click();
   assert.equal((await remote.done).code, 0);
@@ -92,10 +107,19 @@ try {
   await page.getByRole("heading", { name: "已拒绝授权", exact: true }).waitFor();
   assert.notEqual((await denied.done).code, 0);
   await assert.rejects(stat(join(directory, "Denied CLI/bibo/config.json")), { code: "ENOENT" });
+  await page.screenshot({ animations: "disabled", path: new URL("denied.png", artifacts).pathname, fullPage: true });
+  await page.goto(`${origin}/authorize?user_code=ZZZZZZZZ`, { waitUntil: "domcontentloaded" });
+  await page.getByRole("heading", { name: "授权链接已过期", exact: true }).waitFor();
+  await page.screenshot({ animations: "disabled", path: new URL("expired.png", artifacts).pathname, fullPage: true });
+  await page.getByRole("button", { name: "输入其他授权码", exact: true }).click();
+  await page.getByLabel("设备授权码", { exact: true }).waitFor();
+  await page.getByRole("button", { name: "切换账号", exact: true }).click();
+  await page.locator(".bibo-auth-form-pane").getByLabel("邮箱").waitFor();
+  assert.deepEqual(workspaceCalls, [], "Authorization never initializes chats, history, space or subscriptions");
   assert.deepEqual(errors, []);
   console.log(JSON.stringify({ defaultBrowser: "passed", remoteManualCode: "passed", denial: "passed", readonly: "passed", privateCredentials: "passed", widths: [1440, 390, 320], artifacts: artifacts.pathname }));
 } catch (error) {
-  await browser.contexts()[0]?.pages()[0]?.screenshot({ path: new URL("failure.png", artifacts).pathname, fullPage: true }).catch(() => undefined);
+  await browser.contexts()[0]?.pages()[0]?.screenshot({ animations: "disabled", path: new URL("failure.png", artifacts).pathname, fullPage: true }).catch(() => undefined);
   throw error;
 } finally {
   for (const child of children) child.kill("SIGTERM");
