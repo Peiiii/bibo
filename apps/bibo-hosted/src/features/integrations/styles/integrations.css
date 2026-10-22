@@ -6,7 +6,6 @@
 .bibo-integration-columns, .bibo-integration-row { display:grid; grid-template-columns:minmax(170px,1.4fr) .7fr 1fr 1fr 32px; gap:16px; align-items:center; }
 .bibo-integration-columns { padding:14px 10px 10px; border-top:1px solid var(--ui-line); font-size:12px; color:var(--ui-muted); }
 .bibo-integration-row { padding:20px 10px; border-bottom:1px solid var(--ui-line); font-size:13px; }
-.bibo-integration-row:hover { background:var(--ui-hover); }
 .bibo-integration-identity { display:flex; align-items:center; gap:12px; min-width:0; }
 .bibo-integration-icon { display:grid; place-items:center; flex:none; width:36px; height:36px; background:var(--ui-selection); color:var(--ui-primary); border-radius:8px; }
 .bibo-integration-identity > div { min-width:0; }

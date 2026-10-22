@@ -69,7 +69,6 @@ button, input, textarea, select { @apply [font-family:inherit]; }
 .bibo-topbar-leading { @apply flex flex-1 min-w-0 items-center gap-2 mr-3; }
 .bibo-topbar-leading > .ui-icon-button { @apply flex-none; }
 .bibo-topbar-context { display:flex; align-items:center; gap:var(--ui-space-2); min-width:0; }
-.bibo-run-status { display:flex; align-items:center; flex:none; }
 .bibo-topbar.is-file-header { @apply px-2 gap-1; }
 .bibo-topbar.is-file-header .bibo-topbar-leading { @apply flex-none m-0; }
 .bibo-topbar-actions { @apply flex flex-none items-center gap-1; }

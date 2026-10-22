@@ -138,3 +138,11 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - mode=implementation Review：审查全部源码diff与实际画面，git diff --check通过；无认证、路由、状态、协议改动，无待关闭finding。本仓没有diff-only maintainability入口，采用定向人工复核；不重复无关后端或CLI全量验收。
 - 01:17生产闭环：源be17dc8已推送，干净冻结main经两次preflight部署App Worker437c8d50-5a16-461b-97d3-ad0d729bfc7d，containers-rollout=none。真实生产账号1440/390/320均确认返回控件不存在、无横向溢出、无页面异常，并实际通过全局笔记/任务链接离开设置；实际查看线上1440截图。证据.local/settings-nav-production-browser.log与settings-nav-production/，本轮仅登录与读取，不创建/撤销授权或清空空间。源码CI39821102518仍运行，不冒报通过；不需要NPM、DB、容器或独立文档站发布。
 - retrospective_state=completed，retrospective_decision=updated-existing-owners：原设计纠正为设置与资源页面同层级，原烟测覆盖实际可见导航而非仅goto；不新增规则。01:11开始、01:17上线并验证，早于01:21预计检查点。
+
+### Hover 与全局状态展示纠正（2026-10-23 01:20）
+
+- 用户指出授权行仅名称/更多可点击，却整行高亮；随后明确移除左上角运行状态点。前者由.bibo-integration-row:hover直接产生，后者由RunStatus在展开/折叠/手机三处分支挂载。两项均为同一既有界面的局部减法，flow=bugfix、L1；skip-design：直接删除错误反馈和指定展示，不改变授权、运行状态或持久化合同。
+- Hover选择reproduce：原settings浏览器新增元数据hover断言，在修前失败（实际rgb(232,236,229)，预期transparent）；修后无整行底色，元数据点击无详情，名称hover下划线与Enter打开详情、更多操作仍可用。状态点由用户截图和全部挂载源码锁定，skip-reproduction，以两种导航布局/手机和运行恢复烟测替代，无独立修前运行基线。
+- 删除整行hover规则、RunStatus组件/三个挂载点/专用CSS/无调用文案。保留对话原有生成/停止/忙碌/错误反馈；背景任务可通过实际对话导航返回，未改变运行owner。更新原恢复smoke改查Composer实际操作状态，删除已退场指示器的tooltip/动画断言；live脚本同步改等待真实停止按钮，本轮不调用生产模型。
+- 规范写入现有packages/personal-agent-ui/README.md「间距与内容行」：非交互容器无操作型hover，反馈随真实控件范围及共享几何，整行反馈必须具有整行点击/键盘语义；AGENTS仅链接原规范入口。AGENTS增1条路由，无新Skill/discovery/Wiki/脚本或baseline；本仓无治理链接/maintainability/lint检查入口，核对相对目标存在和git diff --check。
+- 验证：完整pnpm typecheck、hosted构建、1440/390/320设置浏览器和桌面/手机运行恢复均通过；修后hover桌面及去状态点桌面实际截图已查看。额外脚本断言检查最终生成行metadata hover及导航无状态点。证据.local/settings-hover-{before,types,build,browser}.log、settings-navigation-recovery.log与settings-browser/metadata-hover-1440.png。Review：无未关闭finding；不以截图替代交互测试，不新增通用CSS拦截器或全仓hover治理。

@@ -17,6 +17,8 @@
 
 ## 开发、验证与交付
 
+- 前端视觉与交互遵循现有 [personal-agent-ui 规范](packages/personal-agent-ui/README.md)，复用组件及反馈配方；界面修正同步核对真实点击范围与 hover/focus 状态。
+
 - 使用 `.nvmrc` 和 package.json 固定的工具链。开发入口为 `pnpm dev`，凭据无关预览；现有技术栈和架构说明见应用 README。
 - TS、类型或导入导出改动运行 `pnpm typecheck`；运行链路改动执行相关测试、构建和 Worker dry-run。仓库迁移/公共依赖升级使用完整 `pnpm test`、两种构建和真实桌面/手机浏览器验证。
 - 默认 `pnpm build` / `pnpm deploy` 服务自部署；官方托管使用显式 `build:hosted` / `deploy:hosted`，官网用 `build:site` / `deploy:site`。官方发布从冻结远程 `main` 的干净 checkout 执行，保留 `--containers-rollout=none`，除非本任务确实需要更新沙箱。

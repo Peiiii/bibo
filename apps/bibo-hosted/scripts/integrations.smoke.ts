@@ -77,6 +77,24 @@ try {
       assert.equal(await page.getByRole("link", { name: "返回空间", exact: true }).count(), 0, "Settings is a peer workspace page, not a nested flow with an extra back action");
       assert.equal(await page.getByRole("button", { name: "返回空间", exact: true }).count(), 0);
       assert.equal(await page.locator('.bibo-primary-nav a[aria-current="page"]').count(), 0);
+      if (!production) {
+        const row = page.getByRole("table", { name: "有效授权", exact: true }).locator(".bibo-integration-row").first();
+        await page.mouse.move(0, 0);
+        const background = await row.evaluate((node) => getComputedStyle(node).backgroundColor);
+        const metadata = row.locator(".bibo-integration-used");
+        await metadata.hover();
+        assert.equal(await row.evaluate((node) => getComputedStyle(node).backgroundColor), background, "Noninteractive row must not advertise a click action on hover");
+        await metadata.click();
+        assert.equal(await page.getByRole("dialog").count(), 0, "Metadata is not a details trigger");
+        await page.screenshot({ animations: "disabled", path: new URL(`metadata-hover-${width}.png`, artifacts).pathname, fullPage: true });
+        const name = row.getByRole("button", { name: "Bibo CLI", exact: true });
+        await name.hover();
+        assert.match(await name.evaluate((node) => getComputedStyle(node).textDecorationLine), /underline/);
+        await name.focus(); await name.press("Enter");
+        const details = page.getByRole("dialog", { name: "Bibo CLI", exact: true });
+        await details.waitFor(); await details.getByRole("button", { name: "关闭", exact: true }).click();
+        await details.waitFor({ state: "detached" });
+      }
       await page.getByRole("button", { name: "创建访问令牌", exact: true }).click();
       const create = page.getByRole("dialog", { name: "创建访问令牌", exact: true });
       await create.getByLabel("名称", { exact: true }).fill(integrationName); await create.getByLabel("访问权限").selectOption("read");
@@ -97,6 +115,10 @@ try {
         await page.setViewportSize({ width: screenshotWidth, height: screenshotWidth < 760 ? 844 : 1000 });
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
         await page.locator("#settings-title").click();
+        const visibleRow = page.locator(".bibo-integration-row").filter({ has: page.getByRole("button", { name: integrationName, exact: true }) });
+        const background = await visibleRow.evaluate((node) => getComputedStyle(node).backgroundColor);
+        await visibleRow.locator(".bibo-integration-used").hover();
+        assert.equal(await visibleRow.evaluate((node) => getComputedStyle(node).backgroundColor), background, "Published row metadata has no action hover");
         await page.screenshot({ animations: "disabled", path: new URL(`integrations-${screenshotWidth}.png`, artifacts).pathname, fullPage: true });
       }
       await page.setViewportSize({ width, height: width < 760 ? 844 : 1000 });
@@ -115,6 +137,7 @@ try {
       if (width > 760) await page.getByRole("navigation", { name: "工作空间" }).getByRole("link", { name: "笔记", exact: true }).click();
       else await page.getByRole("navigation", { name: "手机快捷导航" }).getByRole("link", { name: "任务", exact: true }).click();
       await page.locator(".bibo-shell:not(.is-settings)").waitFor();
+      assert.equal(await page.locator(".bibo-run-status").count(), 0, "Global navigation does not expose execution status");
       if (production) assert.equal(resets, 0, "Production verification never clears space");
       assert.deepEqual(errors, []); console.log(JSON.stringify({ settings: "passed", width, production }));
     } catch (error) { await page.screenshot({ animations: "disabled", path: new URL(`failure-${width}.png`, artifacts).pathname, fullPage: true }).catch(() => undefined); throw error; }

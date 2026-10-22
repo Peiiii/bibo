@@ -53,16 +53,7 @@ try {
     const firstCard = page.getByText(run.partialBlocks![0].text, { exact: true });
     await firstCard.waitFor();
     await page.getByText(run.partialBlocks![1].text, { exact: true }).waitFor();
-    const indicator = page.locator(".bibo-run-status");
-    await page.locator('.bibo-run-status[data-state="working"]').waitFor();
-    assert.equal(await indicator.count(), 1, "only one status indicator is mounted");
-    assert.ok(await indicator.locator("svg").isVisible(), "status is a visible SVG");
-    assert.equal(await indicator.evaluate((element) => {
-      const anchor = element.closest(".sidebar-header, .bibo-topbar-context")!;
-      const heading = anchor.querySelector(".bibo-brand, h1")!;
-      const icon = element.getBoundingClientRect(), title = heading.getBoundingClientRect();
-      return Math.abs(icon.y + icon.height / 2 - title.y - title.height / 2) < 2;
-    }), true, "status shares the brand/title row");
+    assert.equal(await page.locator(".bibo-run-status").count(), 0, "Global navigation has no execution indicator");
     assert.equal(posts, 0, "fresh tab without pending storage attaches instead of resending");
     await page.evaluate((run) => sessionStorage.setItem("bibo-pending-smoke", JSON.stringify({
       message: run.message, sessionId: run.sessionId, clientRequestId: run.clientRequestId,
@@ -71,7 +62,7 @@ try {
     const queryStarted = new Promise<void>((resolve) => { queried = resolve; });
     await page.reload();
     await queryStarted;
-    await page.getByRole("img", { name: "Bibo · 正在查询状态", exact: true }).first().waitFor();
+    await page.getByRole("button", { name: "请稍候", exact: true }).waitFor();
     assert.equal(await page.getByText(/上次生成中断|内容未保存/).count(), 0, "receipt must not be treated as failure before authority returns");
     assert.equal(await page.locator("textarea").inputValue(), "", "active input must not be restored as a failed draft");
     assert.equal(await page.getByRole("button", { name: "发送消息", exact: true }).count(), 0);
@@ -82,16 +73,16 @@ try {
     const node = (await page.locator(".ui-message--assistant").filter({ hasText: run.partialBlocks![0].text }).elementHandle())!;
     run = { ...run, activity: undefined };
     await page.evaluate(() => window.dispatchEvent(new Event("online")));
-    await page.locator('.bibo-run-status[data-state="thinking"]').waitFor();
+    await page.getByRole("button", { name: "停止生成", exact: true }).waitFor();
     run = { ...run, phase: "saving" };
     await page.evaluate(() => window.dispatchEvent(new Event("online")));
-    await page.locator('.bibo-run-status[data-state="saving"]').waitFor();
+    await page.getByRole("button", { name: "请稍候", exact: true }).waitFor();
     run = { ...run, phase: "generating", activity: "exec" };
     await page.evaluate(() => window.dispatchEvent(new Event("online")));
-    await page.locator('.bibo-run-status[data-state="working"]').waitFor();
+    await page.getByRole("button", { name: "停止生成", exact: true }).waitFor();
     disconnected = true;
     await page.evaluate(() => window.dispatchEvent(new Event("pageshow")));
-    await page.locator('.bibo-run-status[data-state="reconnecting"]').waitFor();
+    await page.getByRole("button", { name: "请稍候", exact: true }).waitFor();
     assert.equal(await page.getByRole("button", { name: "发送消息", exact: true }).count(), 0, "unknown server state cannot expose send");
     disconnected = false;
     await page.evaluate(() => window.dispatchEvent(new Event("online")));
@@ -102,31 +93,18 @@ try {
     run = { ...run, phase: "completed", activity: undefined };
     release();
     await page.getByText("后台任务完整结果", { exact: true }).waitFor();
-    await page.locator('.bibo-run-status[data-state="idle"]').waitFor();
+    await page.getByRole("button", { name: "发送消息", exact: true }).waitFor();
     assert.equal(await page.locator("textarea").inputValue(), "下一条独立草稿", "commit preserves the later draft");
     assert.equal(await page.evaluate(() => sessionStorage.getItem("bibo-pending-smoke")), null);
-    const statusIcon = indicator.getByRole("img", { name: "Bibo · 空闲", exact: true });
     if (!mobile) {
-      await statusIcon.hover();
-      await page.getByRole("tooltip", { name: "Bibo · 空闲" }).waitFor();
-      await page.mouse.move(900, 800);
-      await page.getByRole("tooltip").waitFor({ state: "hidden" });
-      await page.keyboard.press("Tab");
-      await statusIcon.focus();
-      await page.getByRole("tooltip", { name: "Bibo · 空闲" }).waitFor();
-      await page.keyboard.press("Escape");
       await page.getByRole("button", { name: "收起侧边栏", exact: true }).click();
-      assert.equal(await indicator.count(), 1);
-      assert.ok(await indicator.isVisible(), "collapsed sidebar keeps the status accessible");
+      assert.equal(await page.locator(".bibo-run-status").count(), 0, "Collapsed navigation has no execution indicator either");
       await page.getByRole("button", { name: "展开侧边栏", exact: true }).click();
     }
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    assert.equal(await indicator.locator("svg").evaluate((element) => element.getAnimations({ subtree: true }).length), 0);
-    await page.emulateMedia({ reducedMotion: "no-preference" });
     for (const theme of ["classic", "neutral"]) {
       await page.evaluate((value) => document.documentElement.dataset.biboTheme = value, theme);
-      assert.ok(await indicator.isVisible());
-      await page.screenshot({ path: `/tmp/bibo-status-${mobile ? "mobile" : "desktop"}-${theme}.png` });
+      assert.equal(await page.locator(".bibo-run-status").count(), 0);
+      await page.screenshot({ path: `/tmp/bibo-navigation-${mobile ? "mobile" : "desktop"}-${theme}.png` });
     }
     await page.reload();
     await page.getByText("后台任务完整结果", { exact: true }).waitFor();
@@ -153,11 +131,11 @@ try {
     await page.reload();
     if (mobile) await page.getByRole("button", { name: "打开菜单", exact: true }).click();
     await page.getByRole("link", { name: "任务", exact: true }).click();
-    await indicator.getByRole("link", { name: /查看正在工作的会话/ }).click();
+    await page.getByRole("navigation", { name: mobile ? "手机快捷导航" : "工作空间" }).getByRole("link", { name: "对话", exact: true }).click();
     await page.getByRole("button", { name: "停止生成", exact: true }).waitFor();
-    assert.equal(new URL(page.url()).pathname, "/chat/session-a", "status returns to the background run");
+    assert.equal(new URL(page.url()).pathname, "/chat/session-a", "Conversation navigation returns to the background run");
     await page.getByRole("button", { name: "停止生成", exact: true }).click();
-    await page.locator('.bibo-run-status[data-state="stopping"]').waitFor();
+    await page.getByRole("button", { name: "请稍候", exact: true }).waitFor();
     allowStop();
     await page.getByText("已停止这次任务。", { exact: true }).waitFor();
     assert.equal(stops, 1);
