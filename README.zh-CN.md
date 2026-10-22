@@ -4,6 +4,14 @@
 
 [English](README.md) · [在线体验](https://app.bibo.bot) · [官网](https://bibo.bot) · [版本发布](https://github.com/Peiiii/bibo/releases)
 
+## 独立开发与产品方向
+
+本仓库现为 Bibo 的日常开发主仓，默认分支 `main`。应用、client/UI 和官网在这里直接维护；NextClaw 执行能力继续通过锁定版本的公共包复用。`SOURCE.json` 保存历史导入依据，不再代表持续导出同步。
+
+Bibo 正在探索各类获授权 Agent 都能接入的个人全局上下文与资产空间，内置助手保留，承担管理员角色。开放 API、Skill、CLI 和 Agent 协作仍是待设计方向，不是已上线能力。见[产品方向](docs/VISION.md)、[原始想法与已确认决策](docs/thoughts/2026-10-21-bibo-open-personal-context-hub.thought.md)和[贡献指南](CONTRIBUTING.md)。
+
+开发：`pnpm install --frozen-lockfile` 后运行 `pnpm dev`，在 `http://127.0.0.1:5188/` 打开无需凭据的预览。验证使用 `pnpm typecheck`、`pnpm test`、`pnpm build` 和 `pnpm check:worker`。默认构建/部署为自部署；官方应用使用显式 `build:hosted` / `deploy:hosted`，官网使用 `build:site` / `deploy:site`。详见[应用说明](apps/bibo-hosted/README.md)。
+
 让 Bibo 处理一份表，留下报告，再把后续行动存成待办。对话、笔记、任务、日程和文件都在同一个空间里。
 
 ![在对话旁打开保存的咖啡店销售报告，报告清楚标明示例数据](images/screenshots/v2ex-2026-10-04/bibo-chat.jpg)
@@ -116,7 +124,7 @@ Agent 通过 `exec` 执行、`mount_directory` 挂载持久文件；网页读取
 
 另一个执行例子见[Linux 沙箱执行记录](images/screenshots/bibo-sandbox-workspace.png)。
 
-React → Worker → 单人 Durable Object → 公共 NextClaw Harness → 模型与工具。会话和结构化状态保存在 DO，文件保存在 R2，OS 工具才获取沙箱。网页与 Agent 复用同一个领域动作 owner。架构图及更多细节见 [English README](README.md#architecture)。`SOURCE.json` 标记上游源码版本；公共内核通过锁定版本的 NPM 包复用。
+React → Worker → 单人 Durable Object → 公共 NextClaw Harness → 模型与工具。会话和结构化状态保存在 DO，文件保存在 R2，OS 工具才获取沙箱。网页与 Agent 复用同一个领域动作 owner。架构图及更多细节见 [English README](README.md#architecture)。`SOURCE.json` 仅保存历史导入溯源，产品源码由本仓独立维护；公共内核通过锁定版本的 NPM 包复用。
 
 没有常驻 Linux 容器的日常负担，沙箱默认空闲 5 分钟后休眠。费用仍包括 Cloudflare 套餐、Workers/DO/R2 用量、沙箱运行资源，以及模型和可选搜索 API。见 [Workers 计费](https://developers.cloudflare.com/workers/platform/pricing/)和 [Containers 计费](https://developers.cloudflare.com/containers/pricing/)。不承诺所有用户固定月费或完全免费。
 

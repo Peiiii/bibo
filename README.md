@@ -4,6 +4,14 @@
 
 [中文](README.zh-CN.md) · [Try hosted Bibo](https://app.bibo.bot) · [Website](https://bibo.bot) · [Releases](https://github.com/Peiiii/bibo/releases)
 
+## Independent development and direction
+
+This repository is now Bibo's development source of truth, on `main`. App, client/UI and website changes are maintained here directly. NextClaw's execution capabilities remain pinned public package dependencies; `SOURCE.json` records historical imports rather than an ongoing export workflow.
+
+Bibo is exploring an open personal context and asset space that authorized agents can use across tools. Its built-in assistant remains a context administrator. Open APIs, skills, a CLI and agent collaboration are directions under discussion, not shipped features. See the [product direction](docs/VISION.md), [original idea and confirmed decisions](docs/thoughts/2026-10-21-bibo-open-personal-context-hub.thought.md) and [contribution guide](CONTRIBUTING.md).
+
+For development: `pnpm install --frozen-lockfile`, then `pnpm dev` opens a credential-free preview at `http://127.0.0.1:5188/`. Verify with `pnpm typecheck`, `pnpm test`, `pnpm build` and `pnpm check:worker`. Default build/deploy targets self-hosting; official hosting uses explicit `build:hosted` / `deploy:hosted`, and the website uses `build:site` / `deploy:site`. See the [application guide](apps/bibo-hosted/README.md).
+
 Ask Bibo to process a spreadsheet, keep the report, and save the next steps as tasks. Conversations, notes, tasks, a calendar and files share one workspace.
 
 ![Bibo conversation beside a saved coffee-shop sales report, using clearly labelled example data](images/screenshots/v2ex-2026-10-04/bibo-chat.jpg)

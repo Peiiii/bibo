@@ -5,3 +5,12 @@ dist/
 .env*
 *.log
 .DS_Store
+.local/
+.publish/
+!apps/bibo-camera-site/dist/
+!apps/bibo-site/dist/
+!apps/bibo-sprite-site/dist/
+!apps/bibo-navigator-site/dist/
+!apps/bibo-workshop-site/dist/
+!apps/bibo-edge-site/dist/
+!apps/bibo-orbit-site/dist/

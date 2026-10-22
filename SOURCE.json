@@ -1,6 +1,16 @@
 {
-  "repository": "https://github.com/Peiiii/nextclaw",
-  "commit": "45b0de644dd1c43d304cc3bbaefb83fb61eef100",
-  "dirty": false,
-  "exporter": "scripts/bibo/export-bibo.controller.mjs"
+  "developmentRepository": "https://github.com/Peiiii/bibo",
+  "sourceOfTruth": "this-repository",
+  "independentSince": "2026-10-22",
+  "initialImport": {
+    "repository": "https://github.com/Peiiii/nextclaw",
+    "commit": "45b0de644dd1c43d304cc3bbaefb83fb61eef100",
+    "dirty": false,
+    "exporter": "scripts/bibo/export-bibo.controller.mjs"
+  },
+  "lastUpstreamImport": {
+    "repository": "https://github.com/Peiiii/nextclaw",
+    "commit": "3c60bfa97ad44ba0d89c6a24ac06cb85ff48663c"
+  },
+  "note": "Historical import provenance. Development now happens directly in Peiiii/bibo; no further exporter synchronization."
 }

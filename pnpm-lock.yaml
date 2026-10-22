@@ -5,26 +5,26 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@nextclaw/core': 0.18.6-beta.1
-  '@nextclaw/feishu-core': 0.3.14-beta.0
+  '@nextclaw/core': 0.18.8
+  '@nextclaw/feishu-core': 0.3.14
   '@nextclaw/shared': 0.8.4
   '@nextclaw/ncp': 0.11.3
-  '@nextclaw/harness': 0.2.28-beta.2
-  '@nextclaw/kernel': 0.19.2-beta.2
+  '@nextclaw/harness': 0.2.31
+  '@nextclaw/kernel': 0.19.5
   '@nextclaw/app-runtime': 0.16.11
   '@nextclaw/channel-extension-feishu': 0.2.42
   '@nextclaw/extension-sdk': 0.5.11
   '@nextclaw/ncp-toolkit': 0.6.28
   '@nextclaw/channel-extension-weixin': 0.2.42
-  '@nextclaw/mcp': 0.3.56-beta.1
-  '@nextclaw/ncp-agent-runtime': 0.4.28-beta.0
-  '@nextclaw/ncp-agent-runtime-next': 0.1.30-beta.0
-  '@nextclaw/ncp-mcp': 0.2.56-beta.1
+  '@nextclaw/mcp': 0.3.58
+  '@nextclaw/ncp-agent-runtime': 0.4.28
+  '@nextclaw/ncp-agent-runtime-next': 0.1.31
+  '@nextclaw/ncp-mcp': 0.2.58
   '@nextclaw/nextclaw-ncp-runtime-http-client': 0.3.27
   '@nextclaw/ncp-http-agent-client': 0.4.27
-  '@nextclaw/nextclaw-ncp-runtime-stdio-client': 0.3.56-beta.1
-  '@nextclaw/runtime': 0.4.55-beta.1
-  '@nextclaw/agent-chat-ui': 0.12.4-beta.0
+  '@nextclaw/nextclaw-ncp-runtime-stdio-client': 0.3.58
+  '@nextclaw/runtime': 0.4.57
+  '@nextclaw/agent-chat-ui': 0.12.4
 
 importers:
 
@@ -36,20 +36,20 @@ importers:
         specifier: 0.12.10
         version: 0.12.10
       '@nextclaw/core':
-        specifier: 0.18.6-beta.1
-        version: 0.18.6-beta.1(ws@8.22.0)
+        specifier: 0.18.8
+        version: 0.18.8(ws@8.22.0)
       '@nextclaw/harness':
-        specifier: 0.2.28-beta.2
-        version: 0.2.28-beta.2(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)
+        specifier: 0.2.31
+        version: 0.2.31(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)
       '@nextclaw/kernel':
-        specifier: 0.19.2-beta.2
-        version: 0.19.2-beta.2(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)
+        specifier: 0.19.5
+        version: 0.19.5(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)
       '@nextclaw/ncp':
         specifier: 0.11.3
         version: 0.11.3
       '@nextclaw/ncp-agent-runtime-next':
-        specifier: 0.1.30-beta.0
-        version: 0.1.30-beta.0
+        specifier: 0.1.31
+        version: 0.1.31
       '@nextclaw/ncp-toolkit':
         specifier: 0.6.28
         version: 0.6.28
@@ -90,6 +90,9 @@ importers:
       lucide-react:
         specifier: ^0.462.0
         version: 0.462.0(react@18.3.1)
+      miniflare:
+        specifier: 4.20260219.0
+        version: 4.20260219.0
       playwright:
         specifier: ^1.52.0
         version: 1.63.0
@@ -163,8 +166,8 @@ importers:
         specifier: ^1.2.5
         version: 1.2.5
       '@nextclaw/agent-chat-ui':
-        specifier: 0.12.4-beta.0
-        version: 0.12.4-beta.0(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.33)
+        specifier: 0.12.4
+        version: 0.12.4(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.33)
       '@radix-ui/react-dialog':
         specifier: ^1.1.15
         version: 1.1.23(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -315,10 +318,22 @@ packages:
       workerd:
         optional: true
 
+  '@cloudflare/workerd-darwin-64@1.20260219.0':
+    resolution: {integrity: sha512-k+xM+swQBQnkrvwobjRPxyeYwjLSludJusR0PqeHe+h6X9QIRGgw3s1AO38lXQsqzMSgG5709oOXSF19NKVVaQ==}
+    engines: {node: '>=16'}
+    cpu: [x64]
+    os: [darwin]
+
   '@cloudflare/workerd-darwin-64@1.20260921.1':
     resolution: {integrity: sha512-3iB2WnYOlZ29T+1zhCwbHFExCBp6E9bgmDUMryATYwrIGEQ1YbvR78m4ydm56XKN/d/yF3803ivMGfZMYDtiMg==}
     engines: {node: '>=16'}
     cpu: [x64]
+    os: [darwin]
+
+  '@cloudflare/workerd-darwin-arm64@1.20260219.0':
+    resolution: {integrity: sha512-EyfQdsG1KcIVAf4qndT00LZly7sLFm1VxMWHBvOFB/EVYF2sE5HZ0dPbe+yrax5p3eS0oLZthR8ynhz4UulMUQ==}
+    engines: {node: '>=16'}
+    cpu: [arm64]
     os: [darwin]
 
   '@cloudflare/workerd-darwin-arm64@1.20260921.1':
@@ -327,10 +342,22 @@ packages:
     cpu: [arm64]
     os: [darwin]
 
+  '@cloudflare/workerd-linux-64@1.20260219.0':
+    resolution: {integrity: sha512-N0UHXILYYa6htFO/uC92uAqusvynbSbOcHcrVXMKqP9Jy7eqXGMovyKIrNgzYnKIszNB+0lfUYdGI3Wci07LuA==}
+    engines: {node: '>=16'}
+    cpu: [x64]
+    os: [linux]
+
   '@cloudflare/workerd-linux-64@1.20260921.1':
     resolution: {integrity: sha512-riAJIohaVp5A8Sqy4yKlzHOaLPOICMf5oey+jC2rm45RVT+wK8+7UU0d31Dy/02Nc8YUkobAFwNVjX06P8WQ5g==}
     engines: {node: '>=16'}
     cpu: [x64]
+    os: [linux]
+
+  '@cloudflare/workerd-linux-arm64@1.20260219.0':
+    resolution: {integrity: sha512-835pjQ9uuAtwPBOAkPf+oxH3mNE5mqWuE3H7hJsul7WZsRD2FDcariyoT2AW6xyOePILrn4uMnmG1KGc9m/8Pg==}
+    engines: {node: '>=16'}
+    cpu: [arm64]
     os: [linux]
 
   '@cloudflare/workerd-linux-arm64@1.20260921.1':
@@ -338,6 +365,12 @@ packages:
     engines: {node: '>=16'}
     cpu: [arm64]
     os: [linux]
+
+  '@cloudflare/workerd-windows-64@1.20260219.0':
+    resolution: {integrity: sha512-i7qcuOsuAxqqn1n5Ar3Rh1dHUL9vNmpF9FcdMTT84jIrdm5UNrPZz5grJthPmpB9LTcreT9iiP6qKbzGjnCwPA==}
+    engines: {node: '>=16'}
+    cpu: [x64]
+    os: [win32]
 
   '@cloudflare/workerd-windows-64@1.20260921.1':
     resolution: {integrity: sha512-VgNcRPstoZMb1G94JTrx+jU24GtkkazNfox0gnF/2fkuXpcfW/M0e0xvdMovYfwt8ZxG5AB2ZNvanD6ufBwiuQ==}
@@ -1372,6 +1405,51 @@ packages:
   '@lezer/yaml@1.0.4':
     resolution: {integrity: sha512-2lrrHqxalACEbxIbsjhqGpSW8kWpUKuY6RHgnSAFZa6qK62wvnPxA8hGOwOoDbwHcOFs5M4o27mjGu+P7TvBmw==}
 
+  '@libsql/darwin-arm64@0.5.29':
+    resolution: {integrity: sha512-K+2RIB1OGFPYQbfay48GakLhqf3ArcbHqPFu7EZiaUcRgFcdw8RoltsMyvbj5ix2fY0HV3Q3Ioa/ByvQdaSM0A==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@libsql/darwin-x64@0.5.29':
+    resolution: {integrity: sha512-OtT+KFHsKFy1R5FVadr8FJ2Bb1mghtXTyJkxv0trocq7NuHntSki1eUbxpO5ezJesDvBlqFjnWaYYY516QNLhQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@libsql/linux-arm-gnueabihf@0.5.29':
+    resolution: {integrity: sha512-CD4n4zj7SJTHso4nf5cuMoWoMSS7asn5hHygsDuhRl8jjjCTT3yE+xdUvI4J7zsyb53VO5ISh4cwwOtf6k2UhQ==}
+    cpu: [arm]
+    os: [linux]
+
+  '@libsql/linux-arm-musleabihf@0.5.29':
+    resolution: {integrity: sha512-2Z9qBVpEJV7OeflzIR3+l5yAd4uTOLxklScYTwpZnkm2vDSGlC1PRlueLaufc4EFITkLKXK2MWBpexuNJfMVcg==}
+    cpu: [arm]
+    os: [linux]
+
+  '@libsql/linux-arm64-gnu@0.5.29':
+    resolution: {integrity: sha512-gURBqaiXIGGwFNEaUj8Ldk7Hps4STtG+31aEidCk5evMMdtsdfL3HPCpvys+ZF/tkOs2MWlRWoSq7SOuCE9k3w==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@libsql/linux-arm64-musl@0.5.29':
+    resolution: {integrity: sha512-fwgYZ0H8mUkyVqXZHF3mT/92iIh1N94Owi/f66cPVNsk9BdGKq5gVpoKO+7UxaNzuEH1roJp2QEwsCZMvBLpqg==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@libsql/linux-x64-gnu@0.5.29':
+    resolution: {integrity: sha512-y14V0vY0nmMC6G0pHeJcEarcnGU2H6cm21ZceRkacWHvQAEhAG0latQkCtoS2njFOXiYIg+JYPfAoWKbi82rkg==}
+    cpu: [x64]
+    os: [linux]
+
+  '@libsql/linux-x64-musl@0.5.29':
+    resolution: {integrity: sha512-gquqwA/39tH4pFl+J9n3SOMSymjX+6kZ3kWgY3b94nXFTwac9bnFNMffIomgvlFaC4ArVqMnOZD3nuJ3H3VO1w==}
+    cpu: [x64]
+    os: [linux]
+
+  '@libsql/win32-x64-msvc@0.5.29':
+    resolution: {integrity: sha512-4/0CvEdhi6+KjMxMaVbFM2n2Z44escBRoEYpR+gZg64DdetzGnYm8mcNLcoySaDJZNaBd6wz5DNdgRmcI4hXcg==}
+    cpu: [x64]
+    os: [win32]
+
   '@marijn/find-cluster-break@1.0.4':
     resolution: {integrity: sha512-Wy0V7+SGUjnF9/TkiM1hKVDPj7jKXduPNboMVtHTA8dySMURWqfg/JZ9E2Sq8JgSJmkl7k7Qe9FLeMSrSraWmQ==}
 
@@ -1388,8 +1466,11 @@ packages:
       '@cfworker/json-schema':
         optional: true
 
-  '@nextclaw/agent-chat-ui@0.12.4-beta.0':
-    resolution: {integrity: sha512-CI7UdMXtqcsZ5eSKRtyqhVlLwczFYQsJf4wz3X/pGFFbZliSW4hWY9xVy9gH+bgnleexg/pPuwTaFBZrfFqLTw==}
+  '@neon-rs/load@0.0.4':
+    resolution: {integrity: sha512-kTPhdZyTQxB+2wpiRcFWrDcejc4JI6tkPuS7UZCG4l6Zvc5kU/gGQ/ozvHTh1XR5tS+UlfAfGuPajjzQjCiHCw==}
+
+  '@nextclaw/agent-chat-ui@0.12.4':
+    resolution: {integrity: sha512-VgMAQ7yKl7S/jzXb6YfOSleto3ZT0EPEZImIPmdwY2RqpwnzBIJek3GCLnRuDuXouhho3oq0oXhtT7U9nC9ZLg==}
     peerDependencies:
       react: ^18.3.1
       react-dom: ^18.3.1
@@ -1404,35 +1485,35 @@ packages:
   '@nextclaw/channel-extension-weixin@0.2.42':
     resolution: {integrity: sha512-Br0OPS+/Vgg9J5DkRGDn8xDiA7GHqxa69QDDojxoNzf7pWSiaWLKa0MVcyOFyoRnWApJFTeRmqy2R/IfLZUYrQ==}
 
-  '@nextclaw/core@0.18.6-beta.1':
-    resolution: {integrity: sha512-Anxllo1G+VlVQmNFmKAjXBTihJr2Cijiioo2F2ihUk4B6/MMZSUXZitv3TciaxxuXUfAZCd+t61aUNYwivBuzQ==}
+  '@nextclaw/core@0.18.8':
+    resolution: {integrity: sha512-p1lXRhl2+nxlwHnOGc/I1FEPHDzz1Nn36mlfX9yxqw5+YNt8ftXQcfguNROZVXlIjkkvlgPN/M92j6e/89XRgA==}
 
   '@nextclaw/extension-sdk@0.5.11':
     resolution: {integrity: sha512-oi6NOsWRkJ7HKbKaAvtGjt8k/aEkUQzFi0H2qWlmFx06L/g/llf45fchua3bxCCH/pxq4Lj56zEG9mYNKhJMLg==}
 
-  '@nextclaw/feishu-core@0.3.14-beta.0':
-    resolution: {integrity: sha512-YgLbnAxrr8aZhR6Zd573m/qsr3mqDQZOnfKVHIme4z18qjuKpoMP4Ve5Fai8YOi+IH2TPn7XawqRSo/ltOBHuw==}
+  '@nextclaw/feishu-core@0.3.14':
+    resolution: {integrity: sha512-a8v7e8Uzrz0l2B5Njt6DDjasoX1GMSae7g8txSpEPZn2ZV0AMOcaRfHkHA/L8FCiE/1GT36IrqVS2DOEPBF8lQ==}
 
-  '@nextclaw/harness@0.2.28-beta.2':
-    resolution: {integrity: sha512-YRq2RB/yfCn53qZafPVQE3mFweiRd8ANVR0N9XobNjB8pb7cGYXXiWVAUBO714mw+oSDvtfUlmqvdQ8Q0LL/6Q==}
+  '@nextclaw/harness@0.2.31':
+    resolution: {integrity: sha512-aW5OFH6tXEHlHqiDHaRNwuDIWD4NFzz1hSPV9+48bsNDkG1qmu5nZFUpmsK9CaYbZ48KhIFy0LkLHofqlrYjiA==}
 
-  '@nextclaw/kernel@0.19.2-beta.2':
-    resolution: {integrity: sha512-tXhV/iA9YVqDaluHM502ZkEmXKM9J4mBZ+18aNvvYQTuH+cDkSKBMDjDvag+Q+bt0juV4GNNGChfZPPszjMaww==}
+  '@nextclaw/kernel@0.19.5':
+    resolution: {integrity: sha512-kCjwMdPT5vSXP/Zm8bYwWl0KpaNdxHN9Kw0sxuOx6G9NfaytYa3dUYv3mGUIpSaBThCxvIFXwZlHAwTMe73X9g==}
 
-  '@nextclaw/mcp@0.3.56-beta.1':
-    resolution: {integrity: sha512-O28ZNN2F5UZOXf7lnUcQzYJNsjxwOjmz36JO80u3x24mbZ6ftUjjWSJ4Ned1tfrO2cKAFTCfm4L5Od8t5GQfaA==}
+  '@nextclaw/mcp@0.3.58':
+    resolution: {integrity: sha512-dCAjBVBSm/H4bKc0/Ujqq7xLgbd+91zJHFI5iltDsmwRcoUYJsc6EA/SovKRr+EJB7jDI9+4oLSVZK7jTXlG6g==}
 
-  '@nextclaw/ncp-agent-runtime-next@0.1.30-beta.0':
-    resolution: {integrity: sha512-XVbl8Y3ljkB51jdVA2M9LKKHJ94ALN8nuS5Z+paB7EI1aPeOcMEKvt5lqNaHI1dOKcp7//1h/Gv+OrfGbOu3rg==}
+  '@nextclaw/ncp-agent-runtime-next@0.1.31':
+    resolution: {integrity: sha512-3XfGlis2Ant8pzo/9SPX0BqjtGae5I/olHpV5C4uBDvAI56EnTvDyjDn3m9PZcne7duM2WP8eCXOW5oVeHzuJw==}
 
-  '@nextclaw/ncp-agent-runtime@0.4.28-beta.0':
-    resolution: {integrity: sha512-91hK/72vaWo2/vYGVuUDgExsfuAMsSARhR3ql4J7GwEgGYqqTZFzNNm4YuVV3Zf9YlJDZ7q252ZgwADDEA4NWA==}
+  '@nextclaw/ncp-agent-runtime@0.4.28':
+    resolution: {integrity: sha512-pgjfG4T2VHKq+EA2vR6Rs51eIWv9l6WeX1vWaeUNhwyippePQCYKTStqYxay9rTIDAWzlLK4Yh2RkcEnzUvdvQ==}
 
   '@nextclaw/ncp-http-agent-client@0.4.27':
     resolution: {integrity: sha512-v+0jV6vQvL/NKD5bxOPigCoHVsEl11u8oSixxc+ghN67Je+Hd4vtw3Dbg456SQF+UwPHVpbtRaYcbv6z+3v1fw==}
 
-  '@nextclaw/ncp-mcp@0.2.56-beta.1':
-    resolution: {integrity: sha512-L8uq/SklHvYd0eRG7dZ/RpRP7UPgPigTigXBP1rcvCruaYJ8SY95R8fMeDeS8ZE6Qp4YUnhO4PjnCX7bCOvmYA==}
+  '@nextclaw/ncp-mcp@0.2.58':
+    resolution: {integrity: sha512-0wQGDbXiccbmO8VrF7uSG1P+hOTSwncV0EQ2Naz3mpIqGBIvJta8mfcQoumJIBAYJwpwfZA/6WXBYpIcZbn6ww==}
 
   '@nextclaw/ncp-toolkit@0.6.28':
     resolution: {integrity: sha512-eSWa4jW8Kd4PsYk7vtOvYBsHlo98WENHxwhJ3A6KrxNyeQ8pZuJZTLENvVH6Q5s4c22pQNZnWtzz29c1xXi52Q==}
@@ -1443,11 +1524,11 @@ packages:
   '@nextclaw/nextclaw-ncp-runtime-http-client@0.3.27':
     resolution: {integrity: sha512-vGYEeGmuG2Fi2/83XeklLmFKYgDf3FeWD1l2kT5iiFo8RZFYU6z3JgOzVs3NrZ3iyajLvi0gcYNahibTp6s3fQ==}
 
-  '@nextclaw/nextclaw-ncp-runtime-stdio-client@0.3.56-beta.1':
-    resolution: {integrity: sha512-FgwsXBBI/ob2UhIexnAzoiGpfkn1Ve8473kPuYCCn07vs81vomxwMVLF6M5PtRnUe4+gs1KXfRdITXDx0UygUg==}
+  '@nextclaw/nextclaw-ncp-runtime-stdio-client@0.3.58':
+    resolution: {integrity: sha512-ZaWgJ5RwS+N9eGLOkDqr5Ml2XIRv2evm95XrKk6h0bZo5KY75+pMrJlOi23o4nUrLcll4rhId4N+5wgv95QaAQ==}
 
-  '@nextclaw/runtime@0.4.55-beta.1':
-    resolution: {integrity: sha512-z7UindbqQ2w3My5rWk0oC1wojFEryW2xk/zUSZe1AYZxRaw0ngy8NEIVxPi7FSEpaQ6FR1sxprPJ4RPikVDDDw==}
+  '@nextclaw/runtime@0.4.57':
+    resolution: {integrity: sha512-E1+7SD2HLMCvwkrOHtnignHQ5gppq74+mnpJf8DPobQqXwihEneiJmRsJ32KZC4zPb/sgqYAZ8bW7+KHoe3FOQ==}
 
   '@nextclaw/shared@0.8.4':
     resolution: {integrity: sha512-mOP9M40aVuKOd5Bm3+19plHg4rrtCd9+KLbKI389NtUAtMmWMdZNKfd+0cBS69V/3/qNICjvc6Y3yQKOxr26lA==}
@@ -2834,6 +2915,10 @@ packages:
     resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
     engines: {node: '>=6'}
 
+  detect-libc@2.0.2:
+    resolution: {integrity: sha512-UX6sGumvvqSaXgdKGUsgZWqcUyIXZ/vZTrlRT/iobiKhGL0zL4d3osHj3uqllWJK+i+sixDS/3COVEOFbupFyw==}
+    engines: {node: '>=8'}
+
   detect-libc@2.1.2:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
@@ -3252,6 +3337,11 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
+  libsql@0.5.29:
+    resolution: {integrity: sha512-8lMP8iMgiBzzoNbAPQ59qdVcj6UaE/Vnm+fiwX4doX4Narook0a4GPKWBEv+CR8a1OwbfkgL18uBfBjWdF0Fzg==}
+    cpu: [x64, arm64, wasm32, arm]
+    os: [darwin, linux, win32]
+
   lightningcss-android-arm64@1.32.0:
     resolution: {integrity: sha512-YK7/ClTt4kAK0vo6w3X+Pnm0D2cf2vPHbhOXdoNti1Ga0al1P4TBZhwjATvjNwLEBCnKvjJc2jQgHXH0NEwlAg==}
     engines: {node: '>= 12.0.0'}
@@ -3622,6 +3712,11 @@ packages:
   mime-types@3.0.2:
     resolution: {integrity: sha512-Lbgzdk0h4juoQ9fCKXW4by0UJqj+nOOrI9MJ1sSj4nI8aI2eo1qmvQEie4VD1glsS250n15LsWsYtCugiStS5A==}
     engines: {node: '>=18'}
+
+  miniflare@4.20260219.0:
+    resolution: {integrity: sha512-EIb5wXbWUnnC60XU2aiFOPNd4fgTXzECkwRSOXZ1vdcY9WZaEE9rVf+h+Apw+WkOHRkp3Dr9/ZhQ5y1R+9iZ4Q==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
 
   miniflare@5.20260921.1-alpha:
     resolution: {integrity: sha512-nvw7bDhUCMTKbpZWJ/WHQFn1FDopseuMQQGxkO3/f0r9eXeizux0ZxV3sZnEHnS0lDWb3Je0bIO2MJcFK4O8GQ==}
@@ -4076,6 +4171,12 @@ packages:
   std-env@4.3.0:
     resolution: {integrity: sha512-OtU/EgQ1kIm5KwqQpBC6ZEMXrZRui11w8zgfTWp8cdO9B8OaPsbA8bTHO2P+HNo1VlUTGMVBwPhydu6poeXiag==}
 
+  stream-chain@2.2.5:
+    resolution: {integrity: sha512-1TJmBx6aSWqZ4tx7aTpBDXK0/e2hhcNSTV8+CbFJtDjbb+I1mZ8lHit0Grw9GRT+6JbIrrDd8esncgBi8aBXGA==}
+
+  stream-json@1.9.1:
+    resolution: {integrity: sha512-uWkjJ+2Nt/LO9Z/JyKZbMusL8Dkh97uUBTv3AJQ74y07lVahLY4eEFsPsE97pxYBwr8nnjMAIch5eqI0gPShyw==}
+
   strictdom@1.0.1:
     resolution: {integrity: sha512-cEmp9QeXXRmjj/rVp9oyiqcvyocWab/HaoN4+bwFeZ7QzykJD6L3yD4v12K1x0tHpqRqVpJevN3gW7kyM39Bqg==}
 
@@ -4176,6 +4277,10 @@ packages:
   undici@6.29.0:
     resolution: {integrity: sha512-R+RODBqp6i2pPflGdq+xIOUkl+RNfGgHwoinecKu/JCuf2uO06cOKoDbI2P7Dn6KcswdKwrczbU6IYJ6K8X+wg==}
     engines: {node: '>=18.17'}
+
+  undici@7.18.2:
+    resolution: {integrity: sha512-y+8YjDFzWdQlSE9N5nzKMT3g4a5UBX1HKowfdXh0uvAnTaqqwqB92Jt4UXBAeKekDs5IaDKyJFR4X1gYVCgXcw==}
+    engines: {node: '>=20.18.1'}
 
   undici@7.29.0:
     resolution: {integrity: sha512-IDxfleLmmbSskfWSUATiN1nfn2rDuvnMOqb5CWR92iIfojA0Ud+ulOAAEQ57LPr9rWmsreUyf5lwyao+7GNNVw==}
@@ -4359,6 +4464,11 @@ packages:
     engines: {node: '>=8'}
     hasBin: true
 
+  workerd@1.20260219.0:
+    resolution: {integrity: sha512-l4U4iT5H8jNV6+EK23ExnUV2z6JvqQtQPrT8XCm4G8RpwC9EPpYTOO9s/ImMPJKe1WSbQUQoJ4k8Nd83fz8skQ==}
+    engines: {node: '>=16'}
+    hasBin: true
+
   workerd@1.20260921.1:
     resolution: {integrity: sha512-4HyG7G1W4ksa6tUZ8bV2jxDRWuL5PXnHm9+Z1sjFPb9OZNoYtXz4y7QQRh4ibi0BF/lOmlAVjbhkUqsAVZuUKA==}
     engines: {node: '>=16'}
@@ -4376,6 +4486,18 @@ packages:
 
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+
+  ws@8.18.0:
+    resolution: {integrity: sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
 
   ws@8.21.0:
     resolution: {integrity: sha512-Vsp28b7DRcimFQvrqu2Wek3z1iYxDCWqHYB8Qsnk/S4RfaCQzPGPyBNuVjJV3cd6UiKtUtp6sNM77gWvzcCH+g==}
@@ -4485,16 +4607,31 @@ snapshots:
     optionalDependencies:
       workerd: 1.20260921.1
 
+  '@cloudflare/workerd-darwin-64@1.20260219.0':
+    optional: true
+
   '@cloudflare/workerd-darwin-64@1.20260921.1':
+    optional: true
+
+  '@cloudflare/workerd-darwin-arm64@1.20260219.0':
     optional: true
 
   '@cloudflare/workerd-darwin-arm64@1.20260921.1':
     optional: true
 
+  '@cloudflare/workerd-linux-64@1.20260219.0':
+    optional: true
+
   '@cloudflare/workerd-linux-64@1.20260921.1':
     optional: true
 
+  '@cloudflare/workerd-linux-arm64@1.20260219.0':
+    optional: true
+
   '@cloudflare/workerd-linux-arm64@1.20260921.1':
+    optional: true
+
+  '@cloudflare/workerd-windows-64@1.20260219.0':
     optional: true
 
   '@cloudflare/workerd-windows-64@1.20260921.1':
@@ -5523,6 +5660,33 @@ snapshots:
       '@lezer/highlight': 1.2.5
       '@lezer/lr': 1.4.10
 
+  '@libsql/darwin-arm64@0.5.29':
+    optional: true
+
+  '@libsql/darwin-x64@0.5.29':
+    optional: true
+
+  '@libsql/linux-arm-gnueabihf@0.5.29':
+    optional: true
+
+  '@libsql/linux-arm-musleabihf@0.5.29':
+    optional: true
+
+  '@libsql/linux-arm64-gnu@0.5.29':
+    optional: true
+
+  '@libsql/linux-arm64-musl@0.5.29':
+    optional: true
+
+  '@libsql/linux-x64-gnu@0.5.29':
+    optional: true
+
+  '@libsql/linux-x64-musl@0.5.29':
+    optional: true
+
+  '@libsql/win32-x64-msvc@0.5.29':
+    optional: true
+
   '@marijn/find-cluster-break@1.0.4': {}
 
   '@mermaid-js/parser@1.2.1':
@@ -5553,7 +5717,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nextclaw/agent-chat-ui@0.12.4-beta.0(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.33)':
+  '@neon-rs/load@0.0.4': {}
+
+  '@nextclaw/agent-chat-ui@0.12.4(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.33)':
     dependencies:
       '@lexical/react': 0.43.0(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.33)
       '@radix-ui/react-dialog': 1.1.23(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -5611,9 +5777,9 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@nextclaw/core@0.18.6-beta.1(ws@8.22.0)':
+  '@nextclaw/core@0.18.8(ws@8.22.0)':
     dependencies:
-      '@nextclaw/feishu-core': 0.3.14-beta.0
+      '@nextclaw/feishu-core': 0.3.14
       '@nextclaw/shared': 0.8.4
       chokidar: 3.6.0
       commander: 12.1.0
@@ -5644,7 +5810,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@nextclaw/feishu-core@0.3.14-beta.0':
+  '@nextclaw/feishu-core@0.3.14':
     dependencies:
       '@larksuiteoapi/node-sdk': 1.74.0
       zod: 3.25.76
@@ -5654,9 +5820,9 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@nextclaw/harness@0.2.28-beta.2(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)':
+  '@nextclaw/harness@0.2.31(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)':
     dependencies:
-      '@nextclaw/kernel': 0.19.2-beta.2(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)
+      '@nextclaw/kernel': 0.19.5(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)
     transitivePeerDependencies:
       - '@cfworker/json-schema'
       - bufferutil
@@ -5667,24 +5833,26 @@ snapshots:
       - ws
       - zod
 
-  '@nextclaw/kernel@0.19.2-beta.2(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)':
+  '@nextclaw/kernel@0.19.5(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)':
     dependencies:
       '@nextclaw/app-runtime': 0.16.11
       '@nextclaw/channel-extension-feishu': 0.2.42
       '@nextclaw/channel-extension-weixin': 0.2.42
-      '@nextclaw/core': 0.18.6-beta.1(ws@8.22.0)
-      '@nextclaw/mcp': 0.3.56-beta.1(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)
+      '@nextclaw/core': 0.18.8(ws@8.22.0)
+      '@nextclaw/mcp': 0.3.58(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)
       '@nextclaw/ncp': 0.11.3
-      '@nextclaw/ncp-agent-runtime': 0.4.28-beta.0
-      '@nextclaw/ncp-agent-runtime-next': 0.1.30-beta.0
-      '@nextclaw/ncp-mcp': 0.2.56-beta.1(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)
+      '@nextclaw/ncp-agent-runtime': 0.4.28
+      '@nextclaw/ncp-agent-runtime-next': 0.1.31
+      '@nextclaw/ncp-mcp': 0.2.58(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)
       '@nextclaw/ncp-toolkit': 0.6.28
       '@nextclaw/nextclaw-ncp-runtime-http-client': 0.3.27
-      '@nextclaw/nextclaw-ncp-runtime-stdio-client': 0.3.56-beta.1(ws@8.22.0)(zod@3.25.76)
-      '@nextclaw/runtime': 0.4.55-beta.1(ws@8.22.0)
+      '@nextclaw/nextclaw-ncp-runtime-stdio-client': 0.3.58(ws@8.22.0)(zod@3.25.76)
+      '@nextclaw/runtime': 0.4.57(ws@8.22.0)
       '@nextclaw/shared': 0.8.4
+      libsql: 0.5.29
       rxjs: 7.8.2
       sql.js: 1.14.2
+      stream-json: 1.9.1
     transitivePeerDependencies:
       - '@cfworker/json-schema'
       - bufferutil
@@ -5695,10 +5863,10 @@ snapshots:
       - ws
       - zod
 
-  '@nextclaw/mcp@0.3.56-beta.1(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)':
+  '@nextclaw/mcp@0.3.58(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)':
     dependencies:
       '@modelcontextprotocol/sdk': 1.32.0(@cfworker/json-schema@4.1.1)(zod@3.25.76)
-      '@nextclaw/core': 0.18.6-beta.1(ws@8.22.0)
+      '@nextclaw/core': 0.18.8(ws@8.22.0)
       undici: 6.29.0
     transitivePeerDependencies:
       - '@cfworker/json-schema'
@@ -5710,12 +5878,12 @@ snapshots:
       - ws
       - zod
 
-  '@nextclaw/ncp-agent-runtime-next@0.1.30-beta.0':
+  '@nextclaw/ncp-agent-runtime-next@0.1.31':
     dependencies:
       '@nextclaw/ncp': 0.11.3
-      '@nextclaw/ncp-agent-runtime': 0.4.28-beta.0
+      '@nextclaw/ncp-agent-runtime': 0.4.28
 
-  '@nextclaw/ncp-agent-runtime@0.4.28-beta.0':
+  '@nextclaw/ncp-agent-runtime@0.4.28':
     dependencies:
       '@cfworker/json-schema': 4.1.1
       '@nextclaw/ncp': 0.11.3
@@ -5724,9 +5892,9 @@ snapshots:
     dependencies:
       '@nextclaw/ncp': 0.11.3
 
-  '@nextclaw/ncp-mcp@0.2.56-beta.1(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)':
+  '@nextclaw/ncp-mcp@0.2.58(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)':
     dependencies:
-      '@nextclaw/mcp': 0.3.56-beta.1(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)
+      '@nextclaw/mcp': 0.3.58(@cfworker/json-schema@4.1.1)(ws@8.22.0)(zod@3.25.76)
       '@nextclaw/ncp': 0.11.3
     transitivePeerDependencies:
       - '@cfworker/json-schema'
@@ -5749,10 +5917,10 @@ snapshots:
       '@nextclaw/ncp': 0.11.3
       '@nextclaw/ncp-http-agent-client': 0.4.27
 
-  '@nextclaw/nextclaw-ncp-runtime-stdio-client@0.3.56-beta.1(ws@8.22.0)(zod@3.25.76)':
+  '@nextclaw/nextclaw-ncp-runtime-stdio-client@0.3.58(ws@8.22.0)(zod@3.25.76)':
     dependencies:
       '@agentclientprotocol/sdk': 0.19.2(zod@3.25.76)
-      '@nextclaw/core': 0.18.6-beta.1(ws@8.22.0)
+      '@nextclaw/core': 0.18.8(ws@8.22.0)
       '@nextclaw/ncp': 0.11.3
       '@nextclaw/ncp-toolkit': 0.6.28
     transitivePeerDependencies:
@@ -5764,9 +5932,9 @@ snapshots:
       - ws
       - zod
 
-  '@nextclaw/runtime@0.4.55-beta.1(ws@8.22.0)':
+  '@nextclaw/runtime@0.4.57(ws@8.22.0)':
     dependencies:
-      '@nextclaw/core': 0.18.6-beta.1(ws@8.22.0)
+      '@nextclaw/core': 0.18.8(ws@8.22.0)
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -7142,6 +7310,8 @@ snapshots:
 
   dequal@2.0.3: {}
 
+  detect-libc@2.0.2: {}
+
   detect-libc@2.1.2: {}
 
   detect-node-es@1.1.0: {}
@@ -7672,6 +7842,21 @@ snapshots:
   lib0@0.2.119:
     dependencies:
       isomorphic.js: 0.2.5
+
+  libsql@0.5.29:
+    dependencies:
+      '@neon-rs/load': 0.0.4
+      detect-libc: 2.0.2
+    optionalDependencies:
+      '@libsql/darwin-arm64': 0.5.29
+      '@libsql/darwin-x64': 0.5.29
+      '@libsql/linux-arm-gnueabihf': 0.5.29
+      '@libsql/linux-arm-musleabihf': 0.5.29
+      '@libsql/linux-arm64-gnu': 0.5.29
+      '@libsql/linux-arm64-musl': 0.5.29
+      '@libsql/linux-x64-gnu': 0.5.29
+      '@libsql/linux-x64-musl': 0.5.29
+      '@libsql/win32-x64-msvc': 0.5.29
 
   lightningcss-android-arm64@1.32.0:
     optional: true
@@ -8250,6 +8435,18 @@ snapshots:
   mime-types@3.0.2:
     dependencies:
       mime-db: 1.54.0
+
+  miniflare@4.20260219.0:
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      sharp: 0.34.5
+      undici: 7.18.2
+      workerd: 1.20260219.0
+      ws: 8.18.0
+      youch: 4.1.0-beta.10
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
 
   miniflare@5.20260921.1-alpha(@types/node@24.19.1):
     dependencies:
@@ -8877,6 +9074,12 @@ snapshots:
 
   std-env@4.3.0: {}
 
+  stream-chain@2.2.5: {}
+
+  stream-json@1.9.1:
+    dependencies:
+      stream-chain: 2.2.5
+
   strictdom@1.0.1: {}
 
   stringify-entities@4.0.4:
@@ -8956,6 +9159,8 @@ snapshots:
   undici-types@7.24.6: {}
 
   undici@6.29.0: {}
+
+  undici@7.18.2: {}
 
   undici@7.29.0: {}
 
@@ -9121,6 +9326,14 @@ snapshots:
       siginfo: 2.0.0
       stackback: 0.0.2
 
+  workerd@1.20260219.0:
+    optionalDependencies:
+      '@cloudflare/workerd-darwin-64': 1.20260219.0
+      '@cloudflare/workerd-darwin-arm64': 1.20260219.0
+      '@cloudflare/workerd-linux-64': 1.20260219.0
+      '@cloudflare/workerd-linux-arm64': 1.20260219.0
+      '@cloudflare/workerd-windows-64': 1.20260219.0
+
   workerd@1.20260921.1:
     optionalDependencies:
       '@cloudflare/workerd-darwin-64': 1.20260921.1
@@ -9148,6 +9361,8 @@ snapshots:
       - utf-8-validate
 
   wrappy@1.0.2: {}
+
+  ws@8.18.0: {}
 
   ws@8.21.0: {}
 

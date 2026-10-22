@@ -284,6 +284,8 @@ async function checkIconFeedback(page: Page, base: string): Promise<void> {
   assert.ok(await account.evaluate(element => getComputedStyle(element, "::before").backgroundColor !== getComputedStyle(element.closest(".bibo-navigation-rail")!).backgroundColor), "account icon hover contrasts with the rail");
   await account.click();
   await page.getByRole("menuitemradio", { name: "Bibo 经典" }).waitFor();
+  // Radix installs its outside-pointer listener after opening the menu.
+  await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
   const topbar = (await page.locator(".bibo-topbar").boundingBox())!;
   await page.mouse.click(topbar.x + topbar.width / 2, topbar.y + topbar.height / 2);
   await page.getByRole("menu").waitFor({ state: "hidden" });

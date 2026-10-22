@@ -15,5 +15,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm test
+      - run: pnpm -C apps/bibo-hosted test:worker
       - run: pnpm build
       - run: pnpm -C apps/bibo-hosted exec wrangler deploy --dry-run
+      - run: pnpm build:hosted
+      - run: pnpm check:hosted
+      - run: pnpm build:site
