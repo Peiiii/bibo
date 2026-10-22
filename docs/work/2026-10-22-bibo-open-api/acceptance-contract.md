@@ -1,6 +1,6 @@
 # Bibo 开放空间验收合同
 
-- contract-id: bibo-open-api-v1；revision: r3；状态：in-progress（文档修正已部署，追加独立账号与 CLI 浏览器/设备码授权）。
+- contract-id: bibo-open-api-v1；revision: r3；状态：delivered（文档、CLI设备授权、独立账号已部署发布；各验证环境及未执行项见证据）。
 - [原始输入](../../logs/2026-10-22-bibo-open-api/README.md#原始输入与约束)；[设计与黄金验收](../../designs/2026-10-22-bibo-open-api.design.md)；[恢复入口](current-state.md)。
 
 | ID | Required 结果 | 证据与状态 |
@@ -11,7 +11,7 @@
 | DOCS | 独立 docs.bibo.bot 文档站；首页与侧栏按笔记、文件、待办、项目、日程、收件箱、图片、概览完整列出能力，每类有操作/参数/结果/CLI/API 示例；安装/SDK/安全/Skill 完整 | passed：独立域/八类指南/19页、搜索与手机导航/下载生产浏览器通过；文档HTTP示例交实际业务owner执行通过；版本640e7091 |
 | CI | 独立仓库 NPM 发布 CI 完成真实发布并可核验，秘密不入仓库 | passed：[release run 39790168184](https://github.com/Peiiii/bibo/actions/runs/39790168184) success；[正式 Release](https://github.com/Peiiii/bibo/releases/tag/bibo-v0.1.0)；Secret 独立环境 |
 | LOGIN | 默认自动开网页、最少介入确认；VPS/SSH手工短码/完整链接，CLI自动轮询；拒绝/过期/退避/取消与scope安全 | passed：正式NPM0.2.0+生产Worker f378b7f9+真实浏览器预填/手填/轮询/拒绝/只读通过；过期、退避与取消由Worker/CLI定向测试证明；本机打开器仅验证调用URL |
-| ACCOUNTS | Bibo独立注册、登录、会话；老用户身份/密码/空间迁移；不再共享NextClaw账号变更 | pending：已定位现有代理与可迁移verifier，邮件认证入口与迁移源数据待核对 |
+| ACCOUNTS | Bibo独立注册、登录、会话；老用户身份/密码/空间迁移；不再共享NextClaw账号变更 | passed：独立D1注册/密码重置/会话撤销与身份隔离测试通过；生产140身份同ID审计、旧密码/会话交换/空间/PAT连续性及真实邮件实收通过，Worker abbba208；生产密码重置E2E未执行，不要求用户重置或提供验证码 |
 | REGRESSION | 既有对话/编辑/空间不回归，TS/测试/Worker/包/桌面手机/生产黄金链路及实现 Review 通过 | passed：CI 217 项测试 + 2 项真实 Worker；本地完整工作区浏览器、授权 1440/390/320、两种构建/dry-run、Review、生产黄金链路通过 |
 
 完成条件：以上全部 Required 有有效版本/环境证据；三条黄金验收在真实可用入口成立。文档、设计或自查不能替代实际发布、安装和线上结果。授权已含提交推送、稳定 NPM 发布、应用与文档部署；不重复求批。
