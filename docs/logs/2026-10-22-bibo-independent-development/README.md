@@ -38,3 +38,5 @@ NextClaw 提交 `802b1fe0c` 已推送远程 `master`：撤掉 Bibo 可执行源�
 retrospective_decision：updated-owner。原始想法与用户确认保持同一 thought owner；开发与贡献说明改为 Bibo 唯一主仓；旧入口显式退出。偶发验证问题修在原测试配置与 smoke，没有扩张成全局规则。没有独立值得新增的方法条目。
 
 本次完成独立开发项目与想法沉淀。开放 API、CLI、Skill、Agent 通信及真正的 NextClaw 接入尚未实现，仍归后续讨论。没有把源码迁移或 CI 通过写成这些产品能力已经交付。
+
+最终边界复核删除了旧 `bibo-edge-migration.controller.ts`：它仍尝试进入 NextClaw 的本地 `workers/nextclaw-provider-gateway-api` 目录读取账号，而其调用的 `/api/admin/edge/status` 与 `/migrate` 已无对应路由。该脚本不在当前 package 命令或文档入口中，不是可保留的跨仓能力；退休后本仓无本地 NextClaw checkout 依赖。官方账号仍通过既有远程认证 API 访问，属于保留的系统关联。
