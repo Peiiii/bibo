@@ -1,5 +1,7 @@
 # Bibo 开放空间交付计划
 
+状态：全部完成；实际交付与验证见原验收账本和交付记录。
+
 上位：[方案](../designs/2026-10-22-bibo-open-api.design.md)；合同 `bibo-open-api-v1` r1；恢复只读[当前状态](../work/2026-10-22-bibo-open-api/current-state.md)。全部部分复用上位设计；出现新协议/状态分叉先回原设计修订和 Review。
 
 1. API/授权：公共类型与 SDK、原 owner 幂等、DO key、版本化 API。输入原空间动作，输出安全可联调合同。验证鉴权/隔离/错误/版本/重试/Worker；通过后供 CLI/UI 消费。

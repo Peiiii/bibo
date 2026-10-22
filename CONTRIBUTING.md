@@ -9,3 +9,11 @@ This repository is Bibo's development source of truth. Submit app, client/UI, we
 Agent execution belongs to the public NextClaw Harness. Keep Bibo's domain actions shared between UI and agent; do not introduce another agent loop or duplicate persistence. Generic core fixes belong in [NextClaw](https://github.com/Peiiii/nextclaw); consume them through released public packages with explicit versions, without local checkout aliases or copied core code.
 
 Keep pull requests focused. Describe the user result and your verification; add tests for meaningful behavior or regressions. Do not commit build output, credentials or local data. Contributions retain the MIT license.
+
+## Maintainer release and recovery
+
+Run **Release Bibo NPM** on `main`; its `npm-production` environment owns `NPM_TOKEN`. It verifies, packs and installs both public packages before publishing SDK then CLI. Keep accepted versions immutable. A new package can be accepted by npm while its scan/index still returns 404: the publisher waits up to five minutes, and always uploads tarballs plus any `accepted.json` receipt. If processing outlasts that window, wait for registry visibility, verify the published integrity, then resume the workflow. Do not repeat a pending publish or change a version to hide propagation delay. The same Linux CI tarball is the integrity authority; local macOS gzip headers can differ even when the entire uncompressed tar is identical.
+
+Official deployment uses root `pnpm deploy:hosted`, including `/docs/`, from clean remote `main`. Preflight accepts the official repository through HTTPS, SCP SSH and GitHub SSH 443; repository identity, clean status and remote SHA remain mandatory. Keep container rollout disabled for ordinary app/docs releases.
+
+UI fixtures use `scripts/integrations.smoke.ts`; production validation uses `scripts/integrations-live.smoke.ts` with a newly registry-installed CLI and the dedicated owner-only smoke account file. Never expose its credentials or token. Production cleanup removes exact test objects and all test keys; a resolved inbox receipt and a tiny image remain because the public API has no deletion operation for those assets.

@@ -70,6 +70,7 @@ try {
   token = await page.getByLabel("访问令牌", { exact: true }).inputValue();
   assert.match(token, /^bibo_v1_/);
   await page.getByRole("button", { name: "我已保存，关闭" }).click();
+  await page.getByLabel("访问令牌", { exact: true }).waitFor({ state: "detached" });
   assert.equal(await page.getByLabel("访问令牌", { exact: true }).count(), 0);
   await run(["auth", "login", "--token-stdin"], `${token}\n`);
   cliLoggedIn = true;

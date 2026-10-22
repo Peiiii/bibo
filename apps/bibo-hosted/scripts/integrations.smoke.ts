@@ -42,6 +42,7 @@ try {
     const dialog = page.getByRole("dialog", { name: "保存你的访问令牌" }); await dialog.waitFor();
     assert.equal(await page.getByLabel("访问令牌", { exact: true }).inputValue(), "fixture-only-token-not-a-credential");
     await dialog.getByRole("button", { name: "我已保存，关闭" }).click();
+    await page.getByLabel("访问令牌", { exact: true }).waitFor({ state: "detached" });
     await page.getByRole("heading", { name: /验收用编程助手/ }).waitFor();
     assert.equal(await page.getByLabel("访问令牌", { exact: true }).count(), 0);
     assert.equal(await page.evaluate(() => JSON.stringify(localStorage).includes("fixture-only-token")), false);

@@ -45,4 +45,12 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 
 ## 交付汇总与复盘
 
-进行中，尚未交付。
+- 正式 NPM：`@nextclaw/bibo-api@0.1.0`、`@nextclaw/bibo@0.1.0`；[release run 39790168184](https://github.com/Peiiii/bibo/actions/runs/39790168184) success，保留已有 SDK immutable checkpoint，新发 CLI 后完成 integrity 校验；[GitHub Release](https://github.com/Peiiii/bibo/releases/tag/bibo-v0.1.0) 于 21:55 发布，tag 目标 fbf8cae。
+- 官方应用/文档：version `1174dbc4-6ce1-42ae-9a8b-703f3dc73fbb`，应用源 b4d82a0；后续 fbf8cae 只改变发布控制器/测试/记录，不改变部署的 API/UI。访问 [docs](https://app.bibo.bot/docs/) 和[接入与授权](https://app.bibo.bot/integrations)。
+- CI：217 项测试、2 项真实 Worker、所有 TS、生产构建/dry-run、打包独立安装通过。另有本地 self-hosted 构建/dry-run、完整原工作区 browser、新授权 1440/390/320 与生产文档桌面手机证据。
+- NPM 全新安装到临时 prefix 后，真实 bin `bibo --version` 为 0.1.0；21:58 生产黄金链路通过：网页创建令牌、CLI 私有登录、项目/任务/日程/收件箱/笔记/文件管理、网页读取、幂等/冲突、图片字节、只读拒绝、撤销及打包 Skill。日志 `.local/production-golden-retry.log`；没有使用源码 CLI 冒充正式包。
+- 首次生产脚本在关闭动画完成前统计 DOM，误报令牌仍在；原烟测 owner 改为等待控件 detached，TS 和同一真实链路复验通过，产品没有为测试增加固定等待。脚本 finally 已清理失败轮次和成功轮次的全部测试授权。可删除对象已清理；专用测试账户保留一个已处理收件箱回执和 68 字节图片，因为公共 API 尚无对应删除动作。
+- SDK Mac 与 Linux tarball 包内数据、tar 元信息完全一致，仅 gzip OS 标记不同一字节；跨平台本地比较不能替代 CI 同产物 integrity 校验。实际 registry SDK/CLI 均通过 Linux CI 精确 hash 校验。
+- 范围限制已在公开文档说明：全空间级 read/write PAT；文本上限/大文件预览、图片格式与 10 MiB、60 请求/分钟、有限幂等窗口；不开放聊天模型执行、OAuth、Agent 通信或任意二进制上传。没有把长期愿景冒充本批实现。
+- `retrospective_decision: updated-existing-owners`：NPM 接收与可见性区分落实到原 release utility/回归/accepted artifact；Git 传输与仓库身份分离落实到原 deployment preflight/反例测试；弹窗结束状态落实到原 smoke harness。维护者恢复入口追加 CONTRIBUTING；没有为单次事件新增全局提示词或改造共享框架。Qingtian 使用权威安装、check/readiness 通过，8 个开发阶段入口之外未人为复制规则；真实标记响应已在本会话应用，不宣称历史或未来宿主自动加载已验证。
+- `parent_status=ready-for-completion-check`；原合同全部 Required 已验证，交回 lifecycle 完成最终主线/入口核对。用户主观偏好仍由用户判断，不代指用户已验收。

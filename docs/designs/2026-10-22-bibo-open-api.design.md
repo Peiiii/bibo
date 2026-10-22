@@ -1,6 +1,6 @@
 # Bibo 开放空间第一版方案
 
-- 状态：Design Ready；2026-10-22；design-document: required；plan: required。
+- 状态：已实现、发布并通过生产验收；冻结设计 r1 于 2026-10-22 Design Ready；design-document: required；plan: required。
 - 来源：[原始输入](../logs/2026-10-22-bibo-open-api/README.md#原始输入与约束)。有效合同：`bibo-open-api-v1` r1，[验收账本](../work/2026-10-22-bibo-open-api/acceptance-contract.md)。
 - 恢复：[当前状态](../work/2026-10-22-bibo-open-api/current-state.md)；[执行计划](../plans/2026-10-22-bibo-open-api.plan.md)。风险 L4：对外授权、租户数据、公共包和生产部署。
 
