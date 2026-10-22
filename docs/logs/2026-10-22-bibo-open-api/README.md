@@ -136,3 +136,5 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - flow=bugfix，L1单owner局部导航减法；内联修正原设计并skip-design，不新增路由、协议或状态。删除返回控件与ArrowLeft导入，保留全局图标位置；检查设置分类与账号菜单无同类返回入口。404的「返回概览」属于错误恢复，保持原行为。
 - 原integrations.smoke增加设置页无返回链接/按钮断言，并通过真实桌面全局「笔记」及手机快捷「任务」离开设置，代替goto证明导航可用；复用其余设置/凭据生命周期验证。client与scripts tsc、最终hosted构建及1440/390/320浏览器均通过；实际查看最终桌面画面，无返回按钮且全局图标位置一致。证据.local/settings-nav-{types,script-types,build,browser}.log与settings-browser/integrations-1440.png。
 - mode=implementation Review：审查全部源码diff与实际画面，git diff --check通过；无认证、路由、状态、协议改动，无待关闭finding。本仓没有diff-only maintainability入口，采用定向人工复核；不重复无关后端或CLI全量验收。
+- 01:17生产闭环：源be17dc8已推送，干净冻结main经两次preflight部署App Worker437c8d50-5a16-461b-97d3-ad0d729bfc7d，containers-rollout=none。真实生产账号1440/390/320均确认返回控件不存在、无横向溢出、无页面异常，并实际通过全局笔记/任务链接离开设置；实际查看线上1440截图。证据.local/settings-nav-production-browser.log与settings-nav-production/，本轮仅登录与读取，不创建/撤销授权或清空空间。源码CI39821102518仍运行，不冒报通过；不需要NPM、DB、容器或独立文档站发布。
+- retrospective_state=completed，retrospective_decision=updated-existing-owners：原设计纠正为设置与资源页面同层级，原烟测覆盖实际可见导航而非仅goto；不新增规则。01:11开始、01:17上线并验证，早于01:21预计检查点。

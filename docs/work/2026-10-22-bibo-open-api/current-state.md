@@ -1,6 +1,6 @@
 # 当前执行状态
 
-- 2026-10-23 01:15 Asia/Shanghai；flow=bugfix；phase=delivery；retrospective_state=pending。01:11开始，用户纠正设置页全局导航保留时不应出现「返回空间」。基线b911536、工作区干净；删除冗余入口并保持图标位置，检查原菜单无同类返回入口。client/scripts tsc、最终构建与1440/390/320真实组件导航通过，实际桌面画面已查看，Review无未关闭finding。预计01:21前完成发布；不扩大到授权协议。
+- 2026-10-23 01:17 Asia/Shanghai；flow=bugfix；phase=delivery；retrospective_state=completed；retrospective_decision=updated-existing-owners；delivered。01:11开始、01:17上线并验证，早于01:21预计检查点。源be17dc8推送并经干净冻结main部署Worker437c8d50-5a16-461b-97d3-ad0d729bfc7d；设置页删除「返回空间」并保持全局图标位置。client/scripts tsc、构建、本地与生产1440/390/320实际导航通过，线上画面已查看，Review无未关闭finding；CI39821102518仍运行，不冒报通过。不涉及账号/授权数据修改、NPM、DB或容器发布。
 
 - 2026-10-23 01:05 Asia/Shanghai；r5 delivered；flow=standard；phase=delivery；retrospective_state=completed；retrospective_decision=updated-existing-owners。源b398089已推送，CI39819219258 success；干净冻结main部署App327d2993-709b-49d5-8230-db8ca0e01625、docs7d5edd91-2411-43da-bf84-92401708cbd6。生产设置真实PAT创建→读取200→撤销401，两主题与旧URL、1440/390/320画面通过并实际查看；正式CLI0.2.0生产预填/手填/轮询/拒绝/只读/过期/切换账号全部通过。两个生产脚本exit0，测试授权均清理，生产reset请求0。SETTINGS passed；所有Required成立，视觉偏好未冒报用户认可。无NPM/SDK/数据库/容器变更；NextClaw工作区未触及。
 
