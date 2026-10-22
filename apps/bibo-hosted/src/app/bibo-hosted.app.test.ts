@@ -114,6 +114,7 @@ class PersonalSpaceFixture {
       for (const [name, item] of entries) this.values.set(name as string, structuredClone(item));
     },
     delete: async (keys: string | string[]) => { for (const key of typeof keys === "string" ? [keys] : keys) this.values.delete(key); },
+    deleteAll: async () => { this.values.clear(); },
     list: async (options: { prefix: string }) => new Map([...this.values].filter(([key]) => key.startsWith(options.prefix))),
     transaction: (run: (transaction: unknown) => Promise<unknown>): Promise<unknown> => {
       const result = this.transactions.then(() => run(this.storage));
@@ -202,6 +203,89 @@ class PersonalSpaceFixture {
 }
 
 const personalSpace = (initial?: BiboSpaceState) => new PersonalSpaceFixture(initial);
+
+test("public docs preserve anonymous pages and HEAD while missing pages cannot return the app shell", async () => {
+  const env = { ASSETS: { fetch: async (request: Request) => new Response(new URL(request.url).pathname === "/docs/"
+    ? '<meta name="generator" content="VitePress v1.6.4"><h1>Docs</h1>' : '<div id="root">app</div>', { headers: { "content-type": "text/html" } }) } };
+  assert.equal((await worker.default.fetch(new Request("https://app.bibo.bot/docs"), env)).status, 308);
+  assert.equal((await worker.default.fetch(new Request("https://app.bibo.bot/docs/"), env)).status, 200);
+  const head = await worker.default.fetch(new Request("https://app.bibo.bot/docs/", { method: "HEAD" }), env);
+  assert.equal(head.status, 200); assert.equal(await head.text(), "");
+  assert.equal((await worker.default.fetch(new Request("https://app.bibo.bot/docs/missing"), env)).status, 404);
+});
+
+test("reset fences concurrent token revocation so deleted keys cannot be resurrected", async (t) => {
+  const fixture = personalSpace();
+  const created = await fixture.ownerFetch(new Request("https://bibo.internal/integrations", { method: "POST", headers: { "x-bibo-user-id": "user-1" },
+    body: JSON.stringify({ operation: "create", name: "reset test", scopes: ["space:read"] }) }));
+  const key = await created.json() as { token: string };
+  let release!: () => void, reached!: () => void;
+  const gate = new Promise<void>((resolve) => { release = resolve; });
+  const started = new Promise<void>((resolve) => { reached = resolve; });
+  const list = fixture.env.SNAPSHOTS.list;
+  t.mock.method(fixture.env.SNAPSHOTS, "list", async (...args: Parameters<typeof list>) => { reached(); await gate; return list(...args); });
+  const reset = fixture.ownerFetch(new Request("https://bibo.internal/reset", { method: "POST" }));
+  await started;
+  let settled = false;
+  const revoke = fixture.ownerFetch(new Request("https://bibo.internal/integration-api/auth/revoke", { method: "POST", headers: { authorization: `Bearer ${key.token}` } })).then((response) => { settled = true; return response; });
+  await new Promise<void>((resolve) => setImmediate(resolve));
+  assert.equal(settled, false, "authorization operations wait for the entire reset");
+  release(); assert.equal((await reset).status, 200);
+  assert.equal((await revoke).status, 401);
+  assert.equal(fixture.values.has("bibo.integrationKeys.v1"), false);
+});
+
+test("public API shares the real account space, fences revocation, isolates tenants and bounds input", async () => {
+  const one = personalSpace(), two = personalSpace();
+  const create = async (fixture: PersonalSpaceFixture, userId: string, scopes = ["space:read", "space:write"]) => {
+    const response = await fixture.ownerFetch(new Request("https://bibo.internal/integrations", { method: "POST",
+      headers: { "x-bibo-user-id": userId }, body: JSON.stringify({ operation: "create", name: "Test agent", scopes, expiresInDays: 1 }) }));
+    assert.equal(response.status, 201);
+    return response.json() as Promise<{ token: string; integration: { id: string } }>;
+  };
+  const key = await create(one, "user-1"), other = await create(two, "user-2"), read = await create(one, "user-1", ["space:read"]);
+  const env = { ...one.env, BIBO_USER: { getByName: (name: string) => ({ fetch: (request: Request) => (name === "user:user-1" ? one : two).ownerFetch(request) }) } };
+  const call = (path: string, token: string, body?: unknown) => worker.default.fetch(new Request(`https://app.bibo.bot/api/v1/${path}`, {
+    headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+    ...(body === undefined ? {} : { method: "POST", body: JSON.stringify(body) }),
+  }), env);
+  const action = async (action: string, input: Record<string, unknown>, token = key.token) => call("space", token, { action, input });
+  assert.equal((await call("me", "bad")).status, 401);
+  assert.equal((await worker.default.fetch(new Request("https://app.bibo.bot/api/v1/me", { headers: { cookie: "bibo_session=token" } }), env)).status, 401);
+  assert.equal((await call("me", key.token)).status, 200);
+  const catalog = await (await call("actions", read.token)).json() as { result: { action: string; readOnly: boolean }[] };
+  assert.ok(catalog.result.some((item) => item.action === "project.get" && item.readOnly));
+  assert.equal((await action("task.create", { title: "forbidden" }, read.token)).status, 403);
+  const input = { title: "Agent task", requestId: "same-id" };
+  const task = await (await action("task.create", input)).json() as { result: { id: string; version: number; source: { integrationId: string } } };
+  assert.equal(task.result.source.integrationId, key.integration.id);
+  assert.deepEqual((await (await action("task.create", input)).json() as { result: unknown }).result, task.result);
+  assert.equal((await action("task.create", { ...input, title: "different" })).status, 409);
+  assert.equal((await action("task.get", { id: task.result.id }, other.token)).status, 404);
+  assert.equal((await action("task.update", { id: task.result.id, version: 999, title: "conflict" })).status, 409);
+  const fileInput = { path: "agent.md", kind: "note", content: "shared content", requestId: "file-once" };
+  const first = await (await action("file.create", fileInput)).json() as { result: { id: string } };
+  assert.deepEqual((await (await action("file.create", fileInput)).json() as { result: unknown }).result, first.result);
+  assert.equal((await action("file.create", { ...fileInput, content: "different" })).status, 409);
+  assert.equal((await (await one.action("file.get", { path: "agent.md" })).json() as { result: { content: string } }).result.content, "shared content");
+  await one.restart(); assert.equal((await call("me", key.token)).status, 200);
+  assert.equal((await action("file.get", { path: "agent.md" }, other.token)).status, 404);
+  const malformed = await worker.default.fetch(new Request("https://app.bibo.bot/api/v1/space", { method: "POST", headers: { authorization: `Bearer ${key.token}` }, body: "{" }), env);
+  assert.equal(malformed.status, 400);
+  assert.equal((await action("unknown.get", {})).status, 400);
+  assert.equal((await action("task.list", { padding: "x".repeat(1_100_001) })).status, 413);
+  const png = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 0]);
+  const uploaded = await worker.default.fetch(new Request("https://app.bibo.bot/api/v1/assets", { method: "POST", headers: { authorization: `Bearer ${key.token}` }, body: png }), env);
+  assert.equal(uploaded.status, 201);
+  const asset = await uploaded.json() as { result: { id: string } };
+  assert.deepEqual(new Uint8Array(await (await call(`assets/${asset.result.id}`, key.token)).arrayBuffer()), png);
+  assert.equal((await call(`assets/${asset.result.id}`, other.token)).status, 404);
+  const revoke = one.ownerFetch(new Request("https://bibo.internal/integrations", { method: "POST", body: JSON.stringify({ operation: "revoke", id: key.integration.id }) }));
+  const after = call("me", key.token);
+  await revoke; assert.equal((await after).status, 401);
+  assert.equal((await call("auth/revoke", read.token, {})).status, 200);
+  assert.equal((await call("me", read.token)).status, 401);
+});
 
 test("deployment enables the Cloudflare protection required for detached background work", async () => {
   const config = await readFile(new URL("../../wrangler.toml", import.meta.url), "utf8");

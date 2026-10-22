@@ -1,0 +1,30 @@
+.bibo-integrations { box-sizing: border-box; flex: 1; width: 100%; min-width: 0; min-height: 0; max-width: 1100px; margin: 0 auto; padding: clamp(20px, 4vw, 48px); overflow-y: auto; }
+.bibo-integrations__intro { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+.bibo-integrations__intro h2 { font-size: clamp(22px, 3vw, 28px); margin: 0 0 8px; letter-spacing: -.03em; }
+.bibo-integrations p { color: var(--ui-muted); line-height: 1.65; margin: 8px 0; }
+.bibo-integrations a { display: inline-flex; align-items: center; gap: 4px; color: var(--ui-ink); text-decoration: underline; text-underline-offset: 4px; }
+.bibo-integrations__intro > a { margin-left: auto; font-size: 14px; white-space: nowrap; }
+.bibo-integrations__mark { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 14px; background: var(--ui-surface); border: 1px solid var(--ui-line); }
+.bibo-integrations__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.bibo-integrations__panel { min-width: 0; padding: 24px; border: 1px solid var(--ui-line); border-radius: 16px; background: var(--ui-surface); }
+.bibo-integrations h3 { margin: 0 0 20px; font-size: 17px; }
+.bibo-integrations label { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; font-size: 14px; font-weight: 500; }
+.bibo-integrations input, .bibo-integrations select { width: 100%; min-width: 0; box-sizing: border-box; padding: 11px 12px; border: 1px solid var(--ui-line); border-radius: 8px; background: var(--ui-canvas); color: var(--ui-ink); font: inherit; }
+.bibo-integrations__hint { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+.bibo-integrations__hint svg { flex-shrink: 0; margin-top: 3px; }
+.bibo-integrations__quickstart ol { padding-left: 22px; line-height: 1.8; }
+.bibo-integrations__quickstart li { margin-bottom: 16px; }
+.bibo-integrations code { font-size: 12px; padding: 3px 5px; border-radius: 5px; background: var(--ui-canvas); white-space: pre-wrap; overflow-wrap: anywhere; }
+.bibo-integrations__quickstart > code, .bibo-integrations__quickstart li:nth-child(2) code { display: block; margin-top: 8px; padding: 10px 12px; border-radius: 8px; }
+.bibo-integrations__quickstart > a { margin-top: 24px; font-size: 14px; }
+.bibo-integrations__list { margin-top: 32px; }
+.bibo-integrations__list h3 span { color: var(--ui-muted); font-size: 14px; margin-left: 8px; }
+.bibo-integrations__item { display: flex; align-items: center; gap: 14px; padding: 18px 0; border-top: 1px solid var(--ui-line); }
+.bibo-integrations__item > svg { flex-shrink: 0; color: var(--ui-muted); }
+.bibo-integrations__item > div { min-width: 0; flex: 1; }
+.bibo-integrations__item h4 { margin: 0; font-size: 15px; overflow-wrap: anywhere; }
+.bibo-integrations__item h4 span { display: inline-block; margin-left: 8px; font-size: 11px; padding: 2px 6px; border: 1px solid var(--ui-line); border-radius: 5px; color: var(--ui-muted); font-weight: 400; }
+.bibo-integrations__item p { font-size: 12px; margin-bottom: 0; }
+.bibo-integrations__token { box-sizing: border-box; width: 100%; min-height: 110px; resize: vertical; font-family: monospace; overflow-wrap: anywhere; padding: 12px; border: 1px solid var(--ui-line); border-radius: 8px; background: var(--ui-canvas); color: var(--ui-ink); }
+.bibo-integrations__error { margin-top: 20px; padding: 12px; border: 1px solid var(--ui-line); border-radius: 8px; }
+@media (max-width: 760px) { .bibo-integrations__grid { grid-template-columns: 1fr; gap: 16px; } .bibo-integrations__panel { padding: 20px; } .bibo-integrations__intro > a { margin-left: 0; } .bibo-integrations__mark { display: none; } }

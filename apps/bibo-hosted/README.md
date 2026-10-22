@@ -1,5 +1,11 @@
 # Bibo hosted companion
 
+## 开放空间接入
+
+公共入口是 `/api/v1/`；网页「接入与授权」创建具名、有限期的只读/读写令牌。外部工具通过 `@nextclaw/bibo` CLI、`@nextclaw/bibo-api` SDK 或 HTTP 调用与网页相同的空间 owner，不需要模型或沙箱。
+
+[公开文档](https://app.bibo.bot/docs/)包含快速开始、CLI/API、授权/幂等/限流、SDK、Skill 和自部署说明。源码文档位于 `apps/bibo-docs`，由根 `build` / `build:hosted` 构建到应用 `/docs/`；不要仅用应用内部 `vite build` 发布，否则会漏掉文档。公共包构建入口 `pnpm build:packages`，打包安装验收 `pnpm pack:release`，独立 NPM CI 在 `.github/workflows/release.yml`。
+
 ## 独立开源与自部署
 
 [Bibo 开源仓库](https://github.com/Peiiii/bibo)提供完整应用、UI/client 源码、锁定的公共 NextClaw 依赖、MIT 许可证与独立 Cloudflare 部署说明。日常 Agent/文件操作在边缘运行，真实 Linux 沙箱按需获取；个人文件保存在 R2 并可挂载进沙箱。运行成本取决于实际用量、模型和沙箱驻留，不承诺完全免费。

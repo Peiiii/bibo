@@ -1,0 +1,41 @@
+{
+  "name": "@nextclaw/bibo",
+  "version": "0.1.0",
+  "description": "Bibo CLI \u2014 shared personal context for every authorized agent",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "bibo": "dist/bin.js"
+  },
+  "files": [
+    "dist",
+    "skill",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Peiiii/bibo.git",
+    "directory": "packages/bibo-cli"
+  },
+  "homepage": "https://app.bibo.bot/docs/",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/copy-skill.mjs",
+    "tsc": "tsc -p tsconfig.check.json --noEmit",
+    "test": "tsx --test src/*.test.ts"
+  },
+  "dependencies": {
+    "@nextclaw/bibo-api": "workspace:^"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "tsx": "^4.21.0",
+    "@types/node": "^24.13.3"
+  }
+}

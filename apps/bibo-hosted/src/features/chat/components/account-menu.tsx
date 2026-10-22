@@ -60,8 +60,10 @@ export function AccountMenu({ compact = false }: { compact?: boolean }) {
           认识 Bibo ↗
         </ActionMenuLink>
         <ActionMenuLink href="/help.html">{copy.help}</ActionMenuLink>
+        <ActionMenuLink href="/docs/">开发者文档</ActionMenuLink>
         {store.user && (
           <>
+            <ActionMenuLink href="/integrations">接入与授权</ActionMenuLink>
             <ActionMenuItem
               onSelect={() => void store.logout()}
               disabled={run.busy}

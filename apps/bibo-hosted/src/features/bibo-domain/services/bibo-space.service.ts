@@ -28,11 +28,22 @@ export type BiboFileStorage = {
 };
 export type BiboDeliveryStorage = { read(): Promise<string | null> };
 
-type Actor = { kind: "user" | "agent"; sessionId?: string };
+type Actor = { kind: "user" | "agent"; sessionId?: string; integrationId?: string };
+type FileExecutor = (action: string, input: unknown) => Promise<unknown>;
 type ActionResult = { result: unknown; changed: boolean };
 const emptyState = (): State => ({ schema: 1, projects: [], tasks: [], events: [], inbox: [], deliveryStatuses: {}, files: [], replays: {} });
 const now = () => new Date().toISOString();
 const id = () => crypto.randomUUID();
+
+function canonical(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
+  if (value && typeof value === "object") return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonical((value as Record<string, unknown>)[key])}`).join(",")}}`;
+  return JSON.stringify(value) ?? "null";
+}
+async function digest(value: unknown): Promise<string> {
+  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(canonical(value)));
+  return Array.from(new Uint8Array(bytes), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
 
 export class BiboSpaceError extends Error {
   constructor(message: string, readonly status: number) { super(message); }
@@ -233,6 +244,7 @@ export class BiboSpaceService {
     const entries = [
       ["overview.get", "overview", "读取当下概览", "{}"],
       ["project.list", "projects", "列出项目", "{limit?,cursor?}"],
+      ["project.get", "projects", "读取项目", "{id}"],
       ["project.create", "projects", "创建项目", "{name,requestId?}"],
       ["project.update", "projects", "修改项目名称", "{id,version,name}"],
       ["project.delete", "projects", "删除项目并解除任务归属", "{id,version}"],
@@ -262,35 +274,48 @@ export class BiboSpaceService {
     return entries.filter((entry) => (!domain || entry.domain === domain) && (!needle || Object.values(entry).some((value) => value.toLowerCase().includes(needle))));
   };
 
-  execute = (action: string, rawInput: unknown = {}, actor: Actor = { kind: "user" }): Promise<unknown> => {
+  execute = (action: string, rawInput: unknown = {}, actor: Actor = { kind: "user" }, fileExecutor?: FileExecutor): Promise<unknown> => {
     const operation = this.queue.then(async () => {
-      try { return await this.executeOne(action, rawInput, actor); }
+      try { return await this.executeOne(action, rawInput, actor, fileExecutor); }
       catch (error) { this.fileStorage?.rollback(); throw error; }
     });
     this.queue = operation.then(() => undefined, () => undefined);
     return operation;
   };
 
-  private executeOne = async (action: string, rawInput: unknown, actor: Actor): Promise<unknown> => {
+  private executeOne = async (action: string, rawInput: unknown, actor: Actor, fileExecutor?: FileExecutor): Promise<unknown> => {
     const input = record(rawInput);
     const state = await this.load();
     const allInbox = action.startsWith("inbox.") || action === "overview.get" ? await this.inboxItems(state) : state.inbox;
-    const requestId = typeof input.requestId === "string" && input.requestId.length <= 100 ? input.requestId : null;
-    if (requestId && Object.hasOwn(state.replays, requestId)) return state.replays[requestId];
+    if (input.requestId !== undefined && (typeof input.requestId !== "string" || !input.requestId || input.requestId.length > 100)) throw new BiboSpaceError("requestId 须为 1–100 字符。", 400);
+    const requestId = typeof input.requestId === "string" ? input.requestId : null;
+    const replayKey = requestId ? `v2:${await digest([actor, action, requestId])}` : null;
+    const fingerprint = replayKey ? await digest(input) : null;
+    if (replayKey && Object.hasOwn(state.replays, replayKey)) {
+      const receipt = state.replays[replayKey] as { fingerprint: string; result: unknown };
+      if (receipt.fingerprint !== fingerprint) throw new BiboSpaceError("requestId 已用于不同参数，请使用新的 requestId。", 409);
+      return receipt.result;
+    }
     let outcome: ActionResult;
     if (action === "overview.get") outcome = this.overviewAction(state, allInbox);
     else if (action.startsWith("project.")) outcome = this.projectAction(action, state, input);
     else if (action.startsWith("task.")) outcome = this.taskAction(action, state, input, actor);
     else if (action.startsWith("event.")) outcome = this.eventAction(action, state, input, actor);
     else if (action.startsWith("inbox.")) outcome = this.inboxAction(action, state, allInbox, input, actor);
-    else if (action.startsWith("file.")) outcome = await this.fileAction(action, state, input);
+    else if (action.startsWith("file.")) outcome = fileExecutor
+      ? { result: await fileExecutor(action, input), changed: !["file.list", "file.get"].includes(action) }
+      : await this.fileAction(action, state, input);
     else throw new BiboSpaceError("未知操作。可先查询 help。", 400);
     const { result, changed } = outcome;
     if (changed) {
-      if (requestId) {
-        state.replays[requestId] = result;
+      if (replayKey) {
+        state.replays[replayKey] = { fingerprint, result };
         const keys = Object.keys(state.replays);
-        if (keys.length > 100) delete state.replays[keys[0]!];
+        while (keys.length > 100 || new TextEncoder().encode(JSON.stringify(state.replays)).byteLength > 2 * 1024 * 1024) {
+          const oldest = keys.shift();
+          if (!oldest) break;
+          delete state.replays[oldest];
+        }
       }
       await this.save(state);
     }
@@ -307,6 +332,7 @@ export class BiboSpaceService {
     let changed = false;
     switch (action) {
       case "project.list": result = page(state.projects.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)), input); break;
+      case "project.get": result = find(state.projects, input); break;
       case "project.create": {
         const time = now(); result = { id: id(), name: required(input.name, "项目名称"), createdAt: time, updatedAt: time, version: 1 } satisfies BiboProject;
         state.projects.push(result as BiboProject); changed = true; break;

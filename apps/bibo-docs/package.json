@@ -1,0 +1,16 @@
+{
+  "name": "@nextclaw/bibo-docs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev . --host 127.0.0.1 --port 5190",
+    "build": "vitepress build .",
+    "tsc": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "vitepress": "1.6.4",
+    "typescript": "^5.9.3",
+    "@types/node": "^24.13.3"
+  }
+}

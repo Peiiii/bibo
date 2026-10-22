@@ -18,6 +18,8 @@ import { prepareBiboSessionRun, type BiboSession } from "./utils/bibo-session.ut
 import { prepareBiboRun, type PreparedBiboRun } from "./utils/bibo-run-preparation.utils";
 import { BiboRunService, type BiboActiveRun } from "./services/bibo-run.service";
 import { CloudflareSessionStore } from "./stores/cloudflare-session.store";
+import { BiboIntegrationKeys } from "./services/bibo-integration-keys.service";
+import { integrationApi, integrationManagement } from "./routes/bibo-integrations.route";
 export { BiboModelBudget } from "./bibo-model-gateway.service";
 export { ContainerProxy } from "@cloudflare/sandbox";
 
@@ -77,6 +79,7 @@ export class BiboUserContainer extends DurableObject<Env> {
   private readonly workspace = new BiboWorkspaceStore(this.env.SNAPSHOTS, this.ctx.id.toString());
   private readonly workspaceFiles = new BiboWorkspaceFileService(this.workspace);
   private readonly spaceActions = new BiboSpaceActionService(this.ctx.storage, this.spaceState, this.workspaceFiles);
+  private readonly integrationKeys = new BiboIntegrationKeys(this.ctx.storage);
   private readonly runs = new BiboRunService(this.ctx.storage, (operation) => this.ctx.waitUntil(operation), async (run) => {
     const sessionId = run.sessionId;
     const response = await biboSessionRoute(new Request(`https://bibo.internal/history?id=${encodeURIComponent(sessionId)}`),
@@ -135,6 +138,13 @@ export class BiboUserContainer extends DurableObject<Env> {
   override async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
     const route = url.pathname;
+    if (route === "/integrations" || route.startsWith("/integration-api/")) {
+      const pending = this.spaceQueue.then(() => route === "/integrations"
+        ? integrationManagement(request, this.integrationKeys)
+        : integrationApi(request, this.integrationKeys, this.spaceActions, this.env.SNAPSHOTS, this.maintenance));
+      this.spaceQueue = pending.then(() => undefined, () => undefined);
+      return pending;
+    }
     if (route === "/runs" && request.method === "GET") return json(this.runs.state(url.searchParams.get("sessionId") ?? undefined));
     const subscription = /^\/runs\/([a-zA-Z0-9_-]{1,100})\/events$/.exec(route);
     if (subscription && request.method === "GET") return this.runs.subscribe(subscription[1]);
@@ -174,16 +184,19 @@ export class BiboUserContainer extends DurableObject<Env> {
   private reset = async (): Promise<Response> => {
     if (this.maintenance || this.runs.size) return publicError("Bibo 正在处理任务，请完成后再清空。", 429);
     this.maintenance = true;
-    try {
-      await this.spaceQueue;
-      await this.releaseConversation();
-      const execution = new BiboExecutionService(this.env.BIBO_SANDBOX, this.ctx.id.toString(),
-        new AbortController().signal, this.workspace, this.ctx.storage);
-      await execution.releaseAll();
-      const response = await resetBiboSessions(this.ctx.storage, this.env.SNAPSHOTS, this.ctx.id.toString());
-      this.runs.clear();
-      return response;
-    } finally { this.maintenance = false; }
+    const pending = this.spaceQueue.then(async () => {
+      try {
+        await this.releaseConversation();
+        const execution = new BiboExecutionService(this.env.BIBO_SANDBOX, this.ctx.id.toString(),
+          new AbortController().signal, this.workspace, this.ctx.storage);
+        await execution.releaseAll();
+        const response = await resetBiboSessions(this.ctx.storage, this.env.SNAPSHOTS, this.ctx.id.toString());
+        this.runs.clear();
+        return response;
+      } finally { this.maintenance = false; }
+    });
+    this.spaceQueue = pending.then(() => undefined, () => undefined);
+    return pending;
   };
 
   private persistEdgeRun = (payload: PreparedRun, result: BiboEdgeRunResult, edge: BiboConversationService): Promise<Response> => this.queueSessionChange(async () => {

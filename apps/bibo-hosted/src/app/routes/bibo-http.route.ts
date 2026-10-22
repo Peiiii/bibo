@@ -7,6 +7,8 @@ import { BiboSpaceError } from "@/features/bibo-domain";
 import { BiboWorkspaceFileService } from "@/app/services/bibo-workspace-file.service";
 import { BiboWorkspaceStore } from "@/app/stores/bibo-workspace.store";
 import { parseBiboSpaceRequest } from "@/app/utils/bibo-space-request.utils";
+import { bearerToken, parseIntegrationToken } from "@/app/services/bibo-integration-keys.service";
+import { apiError } from "@/app/utils/bibo-public-api.utils";
 
 async function createSession(env: Env, userId: string): Promise<Response> {
   const unavailable = await checkChatAvailability(env, userId);
@@ -64,6 +66,12 @@ async function userRoute(request: Request, env: Env, url: URL): Promise<Response
   if (!user || !token) return publicError("请先登录。", 401);
   if (path === "/api/assets" || path.startsWith("/api/assets/")) return biboAssetsRoute(request, env.SNAPSHOTS, user.id);
   const container = env.BIBO_USER.getByName(`user:${user.id}`);
+  if (path === "/api/integrations" && ["GET", "POST"].includes(request.method)) {
+    return container.fetch("https://bibo.internal/integrations", {
+      method: request.method, headers: { "content-type": "application/json", "x-bibo-user-id": user.id },
+      ...(request.method === "POST" ? { body: request.body } : {}),
+    });
+  }
   if (path === "/api/workspace/file" && request.method === "GET") {
     return container.fetch(`https://bibo.internal/workspace/file${url.search}`);
   }
@@ -108,6 +116,15 @@ export const biboFetch = async (request: Request, env: Env): Promise<Response> =
     }
     const path = url.pathname;
     if (path.startsWith("/api/")) {
+      if (path.startsWith("/api/v1/")) {
+        const token = bearerToken(request);
+        const parsed = parseIntegrationToken(token);
+        if (!parsed) return apiError("A valid Bibo access token is required.", 401);
+        try {
+          const target = new URL(request.url); target.pathname = path.replace("/api/v1/", "/integration-api/");
+          return await env.BIBO_USER.getByName(`user:${parsed.userId}`).fetch(new Request(target, request));
+        } catch { return apiError("Bibo is temporarily unavailable.", 503); }
+      }
       if (path === "/api/search/exa") return await biboSearchRoute(request, env, (token) => currentUser(token, env));
       if (path === "/api/model/v1/chat/completions") {
         try { return await modelRoute(request, env); }
@@ -125,6 +142,17 @@ export const biboFetch = async (request: Request, env: Env): Promise<Response> =
         logDiagnostic("worker", "request.failed", { ...readTrace(request.headers), ...errorDetails(error), errorCode: "EDGE_REQUEST_FAILED" }, "error");
         return publicError("Bibo 暂时无法连接，请稍后重试。", 503);
       }
+    }
+    if (path === "/docs") return Response.redirect(`${url.origin}/docs/`, 308);
+    if (path.startsWith("/docs/")) {
+      const response = await env.ASSETS.fetch(request.method === "HEAD" ? new Request(request, { method: "GET" }) : request);
+      // The application uses SPA fallback. Missing docs must never silently serve the app shell.
+      if (response.headers.get("content-type")?.includes("text/html")) {
+        const html = await response.text();
+        if (!html.includes('name="generator" content="VitePress')) return new Response("Documentation page not found", { status: 404 });
+        return new Response(request.method === "HEAD" ? null : html, response);
+      }
+      return request.method === "HEAD" ? new Response(null, response) : response;
     }
     return await env.ASSETS.fetch(request);
 };

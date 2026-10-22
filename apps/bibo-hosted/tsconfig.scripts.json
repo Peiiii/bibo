@@ -9,5 +9,5 @@
     "jsx": "react-jsx",
     "types": ["node"]
   },
-  "include": ["src/app/bibo-run-stream.utils.test.ts", "src/app/migration/bibo-edge-export.service.test.ts", "scripts/**/*.ts"]
+  "include": ["src/app/bibo-run-stream.utils.test.ts", "src/app/migration/bibo-edge-export.service.test.ts", "scripts/**/*.ts", "../../scripts/**/*.ts"]
 }

@@ -1,14 +1,25 @@
 # Bibo
 
-**开源 personal agent，内置笔记、文件、任务和日历，按需启动 Linux 沙箱。**
+**面向所有获授权 AI 的个人上下文与资产空间，内置助手帮助你管理和使用。**
 
-[English](README.md) · [在线体验](https://app.bibo.bot) · [官网](https://bibo.bot) · [版本发布](https://github.com/Peiiii/bibo/releases)
+[English](README.md) · [在线体验](https://app.bibo.bot) · [开发者文档](https://app.bibo.bot/docs/) · [官网](https://bibo.bot) · [版本发布](https://github.com/Peiiii/bibo/releases)
 
 ## 独立开发与产品方向
 
 本仓库现为 Bibo 的日常开发主仓，默认分支 `main`。应用、client/UI 和官网在这里直接维护；NextClaw 执行能力继续通过锁定版本的公共包复用。`SOURCE.json` 保存历史导入依据，不再代表持续导出同步。
 
-Bibo 正在探索各类获授权 Agent 都能接入的个人全局上下文与资产空间，内置助手保留，承担管理员角色。开放 API、Skill、CLI 和 Agent 协作仍是待设计方向，不是已上线能力。见[产品方向](docs/VISION.md)、[原始想法与已确认决策](docs/thoughts/2026-10-21-bibo-open-personal-context-hub.thought.md)和[贡献指南](CONTRIBUTING.md)。
+Bibo 的公共 API、CLI、JavaScript SDK 和接入 Skill 让其他工具管理与网页相同的笔记、文件、项目、任务、日程和收件箱。内置助手保留，承担上下文管理员角色。更完整的跨 Agent 通信与编排仍需单独设计。见[产品方向](docs/VISION.md)、[原始想法与已确认决策](docs/thoughts/2026-10-21-bibo-open-personal-context-hub.thought.md)和[贡献指南](CONTRIBUTING.md)。
+
+## 让其他 AI 接入
+
+```sh
+npm install -g @nextclaw/bibo
+bibo auth login
+bibo overview
+bibo skill install --path ~/.codex/skills
+```
+
+需要 Node 22+。先在 [Bibo → 接入与授权](https://app.bibo.bot/integrations)创建具名、有限期的只读或读写令牌，按 CLI 提示安全输入。不要把令牌粘进聊天或源码。也可使用 `@nextclaw/bibo-api` SDK 和版本化 HTTP API。[快速开始](https://app.bibo.bot/docs/guide/quickstart) · [API](https://app.bibo.bot/docs/api/reference) · [CLI](https://app.bibo.bot/docs/cli/reference) · [Skill](skills/bibo-space/SKILL.md)。
 
 开发：`pnpm install --frozen-lockfile` 后运行 `pnpm dev`，在 `http://127.0.0.1:5188/` 打开无需凭据的预览。验证使用 `pnpm typecheck`、`pnpm test`、`pnpm build` 和 `pnpm check:worker`。默认构建/部署为自部署；官方应用使用显式 `build:hosted` / `deploy:hosted`，官网使用 `build:site` / `deploy:site`。详见[应用说明](apps/bibo-hosted/README.md)。
 

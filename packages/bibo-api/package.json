@@ -1,0 +1,41 @@
+{
+  "name": "@nextclaw/bibo-api",
+  "version": "0.1.0",
+  "description": "Bibo public space API client and shared types",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Peiiii/bibo.git",
+    "directory": "packages/bibo-api"
+  },
+  "homepage": "https://app.bibo.bot/docs/",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "tsc": "tsc -p tsconfig.check.json --noEmit",
+    "test": "tsx --test src/*.test.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "tsx": "^4.21.0",
+    "@types/node": "^24.13.3"
+  }
+}

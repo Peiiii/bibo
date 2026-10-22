@@ -14,3 +14,9 @@ dist/
 !apps/bibo-workshop-site/dist/
 !apps/bibo-edge-site/dist/
 !apps/bibo-orbit-site/dist/
+.agents/.cache/
+apps/bibo-docs/.generated/
+apps/bibo-docs/public/
+apps/bibo-docs/.vitepress/cache/
+apps/bibo-docs/.vitepress/dist/
+packages/bibo-cli/skill/

@@ -1,5 +1,6 @@
 import type { BiboChatEvent, BiboClientOptions, BiboFileReadInput, BiboMessage, BiboHistoryPage, BiboRunState, BiboSession, BiboUser } from "../types/bibo-client.types";
 import type { BiboFileDetail } from "../types/bibo-space.types";
+import type { BiboIntegration, BiboScope } from "@nextclaw/bibo-api";
 import { readFileDetail, readRunState, readShowContent } from "../utils/bibo-protocol.utils";
 import { BiboClientError, isRecord, readBiboStream, readCommitted, readMessages, readSession, readUser } from "../utils/bibo-protocol.utils";
 
@@ -39,6 +40,14 @@ export class BiboClient {
     const value = await this.request("auth/me");
     return readUser(isRecord(value) ? value.user : null);
   };
+
+  integrations = async (): Promise<BiboIntegration[]> => {
+    const value = await this.request("integrations") as { integrations: BiboIntegration[] };
+    return value.integrations;
+  };
+  createIntegration = async (input: { name: string; scopes: BiboScope[]; expiresInDays: number }): Promise<{ integration: BiboIntegration; token: string }> =>
+    this.request("integrations", { operation: "create", ...input }) as Promise<{ integration: BiboIntegration; token: string }>;
+  revokeIntegration = async (id: string): Promise<void> => { await this.request("integrations", { operation: "revoke", id }); };
 
   history = async (sessionId?: string): Promise<BiboMessage[]> => {
     return (await this.historyPage(sessionId)).messages;

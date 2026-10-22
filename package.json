@@ -10,19 +10,22 @@
   },
   "scripts": {
     "dev": "pnpm -C apps/bibo-hosted dev",
-    "build": "pnpm -C apps/bibo-hosted build",
-    "typecheck": "pnpm -r tsc",
-    "test": "pnpm -C packages/bibo-client test && pnpm -C packages/personal-agent-ui exec vitest run && pnpm -C apps/bibo-hosted test && pnpm -C apps/bibo-hosted test:self-hosted",
+    "build": "pnpm build:packages && pnpm -C apps/bibo-hosted build && pnpm build:docs",
+    "typecheck": "pnpm build:packages && pnpm -r tsc",
+    "test": "pnpm -C packages/bibo-api test && pnpm -C packages/bibo-cli test && pnpm -C packages/bibo-client test && pnpm -C packages/personal-agent-ui exec vitest run && pnpm -C apps/bibo-hosted test && pnpm -C apps/bibo-hosted test:self-hosted",
     "deploy": "pnpm build && pnpm -C apps/bibo-hosted deploy",
     "dev:worker": "pnpm -C apps/bibo-hosted dev:worker",
     "dev:proxy": "pnpm -C apps/bibo-hosted dev:proxy",
-    "build:hosted": "pnpm -C apps/bibo-hosted build:hosted",
+    "build:hosted": "pnpm build:packages && pnpm -C apps/bibo-hosted build:hosted && pnpm build:docs",
     "build:site": "node apps/bibo-camera-site/site-build.controller.mjs",
     "smoke:client": "pnpm build:hosted && pnpm -C apps/bibo-hosted exec tsx scripts/bibo-product.smoke.ts",
     "check:worker": "pnpm -C apps/bibo-hosted exec wrangler deploy --dry-run",
     "check:hosted": "pnpm -C apps/bibo-hosted exec wrangler deploy --config wrangler.hosted.toml --dry-run",
     "deploy:hosted": "pnpm -C apps/bibo-hosted deploy:hosted",
-    "deploy:site": "pnpm -C apps/bibo-hosted preflight:deploy && pnpm build:site && pnpm -C apps/bibo-hosted exec wrangler deploy --config ../bibo-camera-site/wrangler.toml"
+    "deploy:site": "pnpm -C apps/bibo-hosted preflight:deploy && pnpm build:site && pnpm -C apps/bibo-hosted exec wrangler deploy --config ../bibo-camera-site/wrangler.toml",
+    "build:packages": "pnpm -C packages/bibo-api build && pnpm -C packages/bibo-cli build",
+    "build:docs": "pnpm -C apps/bibo-hosted exec tsx ../../scripts/docs/build-docs.ts",
+    "pack:release": "node scripts/release/pack.mjs"
   },
   "pnpm": {
     "overrides": {

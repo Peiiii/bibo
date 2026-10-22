@@ -137,7 +137,8 @@ test("structured actions validate references, versions, and idempotent create", 
   assert.equal(task.source.sessionId, "session-1");
   assert.equal(task.status, "active");
   assert.equal(task.subtasks.length, 1);
-  assert.deepEqual(await space.execute("task.create", input), task);
+  assert.deepEqual(await space.execute("task.create", input, { kind: "agent", sessionId: "session-1" }), task);
+  await assert.rejects(space.execute("task.create", { ...input, title: "Changed" }, { kind: "agent", sessionId: "session-1" }), { status: 409 });
   const updated = await space.execute("task.update", { id: task.id, version: task.version, status: "active", subtasks: [{ title: "Review", done: false }] }) as { version: number; subtasks: unknown[] };
   assert.equal(updated.subtasks.length, 1);
   await assert.rejects(space.execute("task.update", { id: task.id, version: task.version, status: "done" }), (error: unknown) => error instanceof BiboSpaceError && error.status === 409);
@@ -155,6 +156,23 @@ test("structured actions validate references, versions, and idempotent create", 
   await space.execute("project.delete", { id: project.id, version: renamed.version });
   const detached = await space.execute("task.get", { id: task.id }) as { projectId: string | null };
   assert.equal(detached.projectId, null);
+});
+
+test("receipts isolate actors and actions, canonicalize inputs and cap retained result bytes", async () => {
+  let state: unknown;
+  const space = new BiboSpaceService("/unused", { load: async () => structuredClone(state), save: async (value) => { state = structuredClone(value); } });
+  const first = await space.execute("project.create", { name: "One", requestId: "same" }, { kind: "agent", integrationId: "one" }) as { id: string };
+  assert.deepEqual(await space.execute("project.create", { requestId: "same", name: "One" }, { kind: "agent", integrationId: "one" }), first);
+  const other = await space.execute("project.create", { name: "One", requestId: "same" }, { kind: "agent", integrationId: "two" }) as { id: string };
+  assert.notEqual(other.id, first.id);
+  await assert.rejects(space.execute("unknown.action", { name: "One", requestId: "same" }, { kind: "agent", integrationId: "one" }), { status: 400 });
+  let calls = 0;
+  const file = async () => { calls++; return { content: "x".repeat(200_000) }; };
+  for (let i = 0; i < 15; i++) await space.execute("file.create", { requestId: `file-${i}` }, { kind: "user" }, file);
+  const retained = state as { replays: Record<string, unknown> };
+  assert.ok(Buffer.byteLength(JSON.stringify(retained.replays)) <= 2 * 1024 * 1024);
+  await space.execute("file.create", { requestId: "file-0" }, { kind: "user" }, file);
+  assert.equal(calls, 16, "evicted receipts are not a permanent deduplication guarantee");
 });
 
 test("parallel Agent tool calls keep both structured writes", async (t) => {

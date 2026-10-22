@@ -197,9 +197,8 @@ export class BiboWorkspaceFileService {
   };
 
   executeSpace = async (space: BiboSpaceService, action: string, input: unknown,
-    actor?: { kind: "user" | "agent"; sessionId?: string }): Promise<unknown> => {
-    if (action.startsWith("file.")) return this.execute(action, input);
-    const result = await space.execute(action, input, actor);
+    actor?: { kind: "user" | "agent"; sessionId?: string; integrationId?: string }): Promise<unknown> => {
+    const result = await space.execute(action, input, actor, this.execute);
     if (action !== "overview.get") return result;
     const overview = result as BiboOverview;
     const notes = await this.execute("file.list", { kind: "note", sort: "recent", limit: 3 }) as { items: BiboFile[] };

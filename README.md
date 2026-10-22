@@ -1,14 +1,25 @@
 # Bibo
 
-**An open-source personal agent with built-in notes, files, tasks, a calendar and an on-demand Linux sandbox.**
+**An open personal context and asset space for every authorized AI, with a built-in assistant.**
 
-[中文](README.zh-CN.md) · [Try hosted Bibo](https://app.bibo.bot) · [Website](https://bibo.bot) · [Releases](https://github.com/Peiiii/bibo/releases)
+[中文](README.zh-CN.md) · [Try Bibo](https://app.bibo.bot) · [Developer docs](https://app.bibo.bot/docs/) · [Website](https://bibo.bot) · [Releases](https://github.com/Peiiii/bibo/releases)
 
 ## Independent development and direction
 
 This repository is now Bibo's development source of truth, on `main`. App, client/UI and website changes are maintained here directly. NextClaw's execution capabilities remain pinned public package dependencies; `SOURCE.json` records historical imports rather than an ongoing export workflow.
 
-Bibo is exploring an open personal context and asset space that authorized agents can use across tools. Its built-in assistant remains a context administrator. Open APIs, skills, a CLI and agent collaboration are directions under discussion, not shipped features. See the [product direction](docs/VISION.md), [original idea and confirmed decisions](docs/thoughts/2026-10-21-bibo-open-personal-context-hub.thought.md) and [contribution guide](CONTRIBUTING.md).
+Bibo's public API, CLI, JavaScript SDK and agent Skill let authorized tools manage the same notes, files, projects, tasks, events and inbox as the web app. Its built-in assistant remains a context administrator. General agent messaging and orchestration remain future work. See the [product direction](docs/VISION.md), [original idea and confirmed decisions](docs/thoughts/2026-10-21-bibo-open-personal-context-hub.thought.md) and [contribution guide](CONTRIBUTING.md).
+
+## Connect your AI
+
+```sh
+npm install -g @nextclaw/bibo
+bibo auth login
+bibo overview
+bibo skill install --path ~/.codex/skills
+```
+
+Node 22+. Create a scoped, expiring token in [Bibo → 接入与授权](https://app.bibo.bot/integrations); login uses hidden input. Do not paste tokens into chat or source code. Integrations can also use `@nextclaw/bibo-api` or the versioned HTTP API. [Quickstart](https://app.bibo.bot/docs/guide/quickstart) · [API](https://app.bibo.bot/docs/api/reference) · [CLI](https://app.bibo.bot/docs/cli/reference) · [Skill](skills/bibo-space/SKILL.md).
 
 For development: `pnpm install --frozen-lockfile`, then `pnpm dev` opens a credential-free preview at `http://127.0.0.1:5188/`. Verify with `pnpm typecheck`, `pnpm test`, `pnpm build` and `pnpm check:worker`. Default build/deploy targets self-hosting; official hosting uses explicit `build:hosted` / `deploy:hosted`, and the website uses `build:site` / `deploy:site`. See the [application guide](apps/bibo-hosted/README.md).
 

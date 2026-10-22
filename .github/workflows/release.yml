@@ -1,0 +1,42 @@
+name: Release Bibo NPM
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: bibo-npm-release
+  cancel-in-progress: false
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: npm-production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm -C apps/bibo-hosted test:worker
+      - run: pnpm build:hosted
+      - run: pnpm check:hosted
+      - run: pnpm pack:release
+      - name: Publish SDK then CLI
+        run: node scripts/release/publish.mjs
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bibo-npm-packages
+          path: .local/release/*.tgz
+      - name: Create release receipt
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(node -p "require('./packages/bibo-cli/package.json').version")
+          gh release view "bibo-v$version" >/dev/null 2>&1 || gh release create "bibo-v$version" .local/release/*.tgz --target "$GITHUB_SHA" --title "Bibo API and CLI $version" --notes-file scripts/release/RELEASE.md
