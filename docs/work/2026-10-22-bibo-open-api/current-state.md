@@ -1,6 +1,6 @@
 # 当前执行状态
 
-- 2026-10-23 00:22 Asia/Shanghai；r4；phase=delivery；用户要求重做独立授权页。顶层路由、账号验证独立于工作区加载、独立登录/权限/成功/拒绝/过期页面已实现。本地真实Worker+CLI+浏览器与1440/390/320截图通过，无工作区数据请求；完整tsc、应用回归和5个定向用例通过。自Review无未关闭finding，待冻结main部署与生产复验；AUTH-PAGE仍pending。
+- 2026-10-23 00:24 Asia/Shanghai；r4 delivered；phase=delivery；retrospective_state=completed。独立授权页源fcc55fc已推送，干净冻结main部署Worker 1e1b1deb-15d9-4a7c-baa6-0cea4880f4f3。正式NPM CLI0.2.0+生产浏览器完成登录/授权/轮询/手输/只读403/拒绝/过期恢复/切换账号，无工作区导航或业务请求；1440/390/320截图通过并查看生产成功页。本地完整tsc、应用回归和5个定向用例通过，自Review无未关闭finding；AUTH-PAGE passed。仅网页更新，无NPM、DB、DO或容器发布；用户无需重新安装CLI。
 
 - 2026-10-23 00:01 Asia/Shanghai；flow=standard；phase=delivery；retrospective_state=completed；retrospective_decision=updated-existing-owners。CLI与独立账号已上线，用户无需重置密码或提供验证码；取消额外生产密码重置测试，不再作为交付前提。
 - contract=bibo-open-api-v1 r3；原整体计划追加 r3；方案 docs/designs/2026-10-22-bibo-independent-auth.design.md，设备及账号Design Review passed；生产迁移与发信已验证。

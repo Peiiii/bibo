@@ -112,3 +112,5 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - 设计方向由用户Google参考已明确，采用专注单任务授权、品牌/当前账号/权限/明确同意或拒绝，保留Bibo配色；参考[Google官方设备授权界面](https://developers.google.com/identity/gsi/web/guides/devices)，没有仿冒Google身份或接入其OAuth。按oil-ui方法制作并自查，用户约定单代理优先，没有独立视觉评审，不以虚构评分代替看图。
 - 实际本地Worker+CLI+浏览器覆盖登录回原码、手输短码、只读403、拒绝、显式过期状态及恢复、切换账号；请求监听断言无sessions/history/runs/space/chat请求。截图覆盖登录/确认/成功1440/390/320以及拒绝/过期。证据.local/auth-page-{types,final-types,tests,browser,regression}.log和.local/device-auth-browser/。
 - 完整workspace tsc、应用默认测试、路由及设备store共5个定向用例通过；新烟测脚本tsc通过。git diff --check通过，项目无diff-only maintainability自动入口；自Review检查顶层/尾斜杠路由、登录原码连续性、权限与错误状态、单一身份/设备owner及旧样式删除，没有未关闭finding。实际查看桌面确认/成功和320登录/确认；修正复用登录标题的sr-only clip-path，关闭截图动画保证取稳定画面。
+- 00:24交付：fcc55fc推送main，干净detached checkout从冻结远程main通过两次preflight部署，容器rollout=none；Worker 1e1b1deb-15d9-4a7c-baa6-0cea4880f4f3。正式registry安装CLI0.2.0与生产浏览器全流程通过，证据.local/auth-page-production-{deploy,browser}.log；生产1440/390/320登录/确认/成功及拒绝/过期截图保存device-auth-production，已人工查看生产成功画面。生产测试授权自动撤销。
+- retrospective_decision=updated-existing-owners：本次缺口是把协议可用当成授权体验验收；在原smoke补独立路由、无workspace请求、完成卡片高度与多尺寸稳定截图，不增加平行验收体系。视觉偏好由用户判断，不冒报用户认可；未改变原账号或CLI协议。
