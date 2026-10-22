@@ -44,7 +44,7 @@ export function IntegrationsPage() {
         <Button type="submit" tone="primary" disabled={!accountId || store.busy || store.loading || !name.trim()}>{store.busy ? "正在处理…" : "创建令牌"}</Button>
       </form>
       <div className="bibo-integrations__panel bibo-integrations__quickstart"><h3>三步开始使用</h3>
-        <ol><li>创建令牌，复制并妥善保存。</li><li>在终端安装 CLI：<code>npm install -g @nextclaw/bibo</code></li><li>运行 <code>bibo auth login</code>，按提示粘贴令牌。</li></ol>
+        <ol><li>在终端安装 CLI：<code>npm install -g @nextclaw/bibo</code></li><li>运行 <code>bibo auth login</code>，在自动打开的网页核对设备码并授权，终端会自动完成登录。</li><li>VPS / SSH 使用 <code>bibo auth login --no-browser</code>，在任意设备打开链接或输入短码后授权。</li></ol>
         <p>给 AI 安装 Skill：</p><code>bibo skill install --path ~/.codex/skills</code>
         <a href="https://docs.bibo.bot/guide/quickstart">查看完整使用说明 →</a>
       </div>

@@ -1,4 +1,5 @@
 import { authRoute, cookieToken, currentUser, isPlatformAdmin, sessionUser, json, publicError } from "@/app/bibo-auth.utils";
+import { deviceAuthorizationRoute } from "./bibo-device-authorization.route";
 import { biboSearchRoute } from "@/features/search";
 import { biboAssetsRoute } from "@/features/assets";
 import { checkChatAvailability, modelError, modelRoute } from "@/app/bibo-model-gateway.service";
@@ -116,6 +117,7 @@ export const biboFetch = async (request: Request, env: Env): Promise<Response> =
     }
     const path = url.pathname;
     if (path.startsWith("/api/")) {
+      if (path === "/api/auth/device" || path.startsWith("/api/auth/device/")) return deviceAuthorizationRoute(request, env);
       if (path.startsWith("/api/v1/")) {
         const token = bearerToken(request);
         const parsed = parseIntegrationToken(token);

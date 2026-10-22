@@ -14,4 +14,5 @@ declare namespace Cloudflare {
 	}
 }
 interface Env extends Cloudflare.Env { BIBO_DEEPSEEK_API_KEY: string; BIBO_EXA_API_KEY?: string; BIBO_EDGE_ADMIN_TOKEN?: string;
+  BIBO_DEVICE_AUTH?: DurableObjectNamespace<import("./src/app/services/bibo-device-authorization.service").BiboDeviceAuthorization>;
   BIBO_AUTH_MODE?: "self-hosted"; BIBO_OWNER_EMAIL?: string; BIBO_OWNER_PASSWORD?: string }

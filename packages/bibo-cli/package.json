@@ -1,6 +1,6 @@
 {
   "name": "@nextclaw/bibo",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Bibo CLI — shared personal context for every authorized agent",
   "type": "module",
   "license": "MIT",

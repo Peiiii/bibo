@@ -26,6 +26,8 @@ await context.addCookies([{ name: "bibo_session", value: cookie, domain: "app.bi
 let token = "", readToken = "", cliLoggedIn = false;
 let projectId = "", taskId = "", eventId = "", folderCreated = false;
 const checkpoints: string[] = [];
+const responses: {path:string; status:number}[] = [];
+context.on("page", (page) => page.on("response", (response) => { const path = new URL(response.url()).pathname; if(path.startsWith("/api/")) responses.push({path,status:response.status()}); }));
 const manage = async (input?: unknown) => {
   const response = await fetch(`${origin}/api/integrations`, { headers: { cookie: `bibo_session=${cookie}`, origin, "content-type": "application/json" },
     ...(input ? { method: "POST", body: JSON.stringify(input) } : {}), signal: AbortSignal.timeout(30_000) });
@@ -114,6 +116,11 @@ try {
   await run(["skill", "install", "--path", join(temporary, "skills")]);
   assert.match(await readFile(join(temporary, "skills/bibo-space/SKILL.md"), "utf8"), /name: bibo-space/);
   checkpoints.push("image bytes, read-only denial, token revocation and packaged Skill");
+} catch (error) {
+  const page = context.pages().at(-1);
+  if (page && new URL(page.url()).pathname.startsWith(`/notes/${prefix}/`)) await page.screenshot({ path: new URL("../../../.local/docs-r2-golden-failure.png", import.meta.url).pathname, fullPage: true });
+  console.error(JSON.stringify({ checkpoints, responses, failedPath: page ? new URL(page.url()).pathname : "" }));
+  throw error;
 } finally {
   // Only exact IDs/paths created by this run are eligible for cleanup.
   try {

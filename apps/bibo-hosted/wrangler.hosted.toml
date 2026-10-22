@@ -40,6 +40,14 @@ new_sqlite_classes = ["BiboModelBudget"]
 tag = "v3"
 new_sqlite_classes = ["Sandbox"]
 
+[[durable_objects.bindings]]
+name = "BIBO_DEVICE_AUTH"
+class_name = "BiboDeviceAuthorization"
+
+[[migrations]]
+tag = "v4"
+new_sqlite_classes = ["BiboDeviceAuthorization"]
+
 [[containers]]
 class_name = "Sandbox"
 image = "docker.io/cloudflare/sandbox:0.12.10"

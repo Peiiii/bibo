@@ -33,7 +33,7 @@ class BiboChatOwner {
   failedQuestionInput: { id: string; answer: string } | null = null;
   status = "";
   authFeedback: { kind: "success" | "error"; message: string } | null = null;
-  authMode: "register" | "login" = biboSelfHosted ? "login" : "register";
+  authMode: "register" | "login" = biboSelfHosted || (typeof window !== "undefined" && window.location.pathname === "/authorize") ? "login" : "register";
   following = true;
   menuOpen = false;
   readonly conversation = new BiboConversationManager(biboClient, sessionStorage, {

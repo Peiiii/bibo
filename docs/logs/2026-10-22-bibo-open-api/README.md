@@ -62,10 +62,25 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - r1 DOCS 证据对新要求失效，合同升 r2；原 API 等未变化证据保留。
 
 
-### r2 实现与本地验收（22:22）
+### r2 实现与本地验收（22:20）
 - 应用移除 docs 资源装配，仅保留固定专用域名的308；单元覆盖 GET/HEAD、路径/query及双斜线不改变目标域。文档独立 Worker 无账户/存储绑定。
 - 首页八类能力卡片、功能总览、侧栏三级分组与八类独立指南；操作/参数表由原领域目录按 domain 生成，图片为单独字节端点。API/CLI 参考相互链接。文档搜索/手机目录汉化，操作表自动换行。
 - 完整 tsc 和测试通过（沿原217项）；真实 Worker API 定向1项通过。应用与文档构建/dry-run通过；App dist/public/docs 不存在。SDK/CLI0.1.1 tarball 独立安装通过。
 - 七个文档 HTTP JSON 示例交给实际 BiboSpaceService 执行通过；不将此误称生产HTTP验证。授权浏览器1440/390/320通过；独立文档浏览器爬取19页、八功能代码/结果说明、task.create 搜索、390/320目录跳转、OpenAPI与Skill下载通过；截图已人工查看。
 - 证据：.local/docs-r2-{types,tests,worker,app-build,app-dry,build,dry,pack,examples,navigation}.log，.local/docs-r2-local/。
 - mode=implementation Review：项目没有 diff-only maintainability/lint 入口，git diff --check通过；按用户两条纠正反查全部入口、部署边界、API参数和发布版本。功能知识归手写指南，动作事实归原领域目录，移除应用混装与重复文档冒烟 owner；无无消费者抽象。完整 subjective review 无未关闭 finding。审查适用 r2 当前代码，生产结果待交付验证。
+
+
+## r3 用户连续补充与有效目标
+- 「另外bibo的账号体系能否和nextclaw分开。之前的老用户可以无感迁移一下也可以。可以吗？」
+- 用户截图显示0.1.0 auth login要求手工创建Token/粘贴；「为啥auth login是这样的？没有对其顶级产品的最佳实践吧。。。难用。。不应该支持登录授权吗。。。」
+- 「cli能否自动轮询，这样就算vps等场景也能方便。你觉得呢？有这样的吗？做到最佳实践」「我是说登录的时候」「可以都支持」
+- 「或者另外一种授权码形式也可以？你觉得呢？就是用户在网页输入cli申请的那个码就行了？好像是不是也有这样的？这种感觉体验也还可以？」
+- 「不过默认的方式希望采用用户介入最少最简单的。」
+- 已确认：本机默认自动开预填网页，已有登录只显式同意；远程显示短码/网址并自动轮询，手工Token只用于自动化。参考RFC8628、RFC8252及gh auth login官方文档。
+
+### r3 CLI首批冻结（23:22）
+- 用户确认先发布已验证CLI授权，账号分离独立完成；20分钟作为首批目标，不扩大范围。生产网页登录暂沿原账号，独立库已导入140个身份但未切换。
+- 设备DO只拥有10分钟授权状态，实际PAT复用原key owner；默认开预填网页、VPS手填码均自动轮询，拒绝/过期/slow_down/取消，降权、撤销不复活与秘密不落DO状态均有定向证据。
+- 验证：全workspace tsc、原完整测试与真实Worker通过；CLI HTTP fixture轮询/退避/SIGINT通过；真实本地Worker+浏览器+CLI在1440/390/320通过，截图人工查看。证据.local/auth-{device-boundary-tests,device-cli-tests,final-types,final-tests,final-worker-tests,device-browser-final}.log。
+- mode=implementation Review：项目无diff-only自动维护性脚本，git diff --cached --check通过；逐项检查设备状态、重试/撤销生命周期、Origin、前端账户隔离、endpoint绑定、无回显与新DO追加migration，未关闭finding为0。原密码粘贴分支已删除；手动Token仅stdin保留。发布前只暂存设备功能，账号源文件/绑定/重置UI保留未暂存。

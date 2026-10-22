@@ -4,11 +4,15 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { BiboApi, normalizeBiboEndpoint } from "@nextclaw/bibo-api";
 import { credentials, readConfig, readToken, removeConfig, writeConfig } from "./config.js";
+import { deviceLogin } from "./device-login.js";
 
 const HELP = `Bibo — your shared personal context
 Usage: bibo <command> [operation] [target] [options]
 
-  auth login [--token-stdin]   Create a token in the web app, then log in
+  auth login                 Open browser authorization; automatically wait for approval
+    --no-browser             Show URL and code for SSH/VPS; poll automatically
+    --read-only              Request read-only access
+    --token-stdin            Read an existing token from secure stdin (automation)
   auth status | logout       Inspect identity or revoke this token and sign out
   actions                    Discover the live action catalog
   overview                   Read the space overview
@@ -31,7 +35,7 @@ Writes print their requestId; reuse it with identical input for safe retries.
 Docs: https://docs.bibo.bot/
 `;
 const stringOptions = ["endpoint", "input", "content-file", "title", "name", "content", "path", "kind", "description", "status", "priority", "project-id", "start-at", "due-at", "end-at", "from", "to", "due-before", "due-from", "id", "version", "request-id", "query", "parent-path", "limit", "cursor", "body", "sort", "ancestor-of", "out"];
-const booleanOptions = ["help", "token-stdin", "raw", "local-only", "force", "open", "unread", "unresolved"];
+const booleanOptions = ["help", "token-stdin", "no-browser", "read-only", "raw", "local-only", "force", "open", "unread", "unresolved"];
 const camel = (key: string): string => key.replace(/-([a-z])/g, (_, char: string) => char.toUpperCase());
 type Input = Record<string, unknown>;
 const output = (value: unknown): void => { process.stdout.write(`${JSON.stringify(value, null, 2)}\n`); };
@@ -64,8 +68,7 @@ export async function run(argv: string[]): Promise<void> {
   if (noun === "auth" && verb === "login") {
     const existing = await readConfig();
     const endpoint = normalizeBiboEndpoint(option("endpoint") || process.env.BIBO_ENDPOINT || existing?.endpoint);
-    process.stderr.write(`Create a scoped token at ${endpoint}/integrations\n`);
-    const token = await readToken(Boolean(values["token-stdin"]));
+    const token = values["token-stdin"] ? await readToken() : await deviceLogin({ endpoint, noBrowser: Boolean(values["no-browser"]), readOnly: Boolean(values["read-only"]), name: option("name") });
     const identity = await new BiboApi({ endpoint, token }).me();
     await writeConfig({ endpoint, token }); output({ authenticated: true, endpoint, ...identity }); return;
   }

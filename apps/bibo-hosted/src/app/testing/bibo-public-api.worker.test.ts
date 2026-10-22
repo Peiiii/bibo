@@ -17,7 +17,7 @@ test("actual Worker login, DO authorization, R2 space and revocation work withou
   });
   const worker = new Miniflare({ modules: true, script: built.outputFiles[0]!.text, compatibilityDate: "2026-09-24", compatibilityFlags: ["nodejs_compat"],
     bindings: { BIBO_AUTH_MODE: "self-hosted", BIBO_OWNER_EMAIL: "owner@example.test", BIBO_OWNER_PASSWORD: "test-only-password-123456" },
-    r2Buckets: ["SNAPSHOTS"], durableObjects: { BIBO_USER: { className: "BiboUserContainer", useSQLite: true }, BIBO_MODEL_BUDGET: { className: "BiboModelBudget", useSQLite: true } },
+    r2Buckets: ["SNAPSHOTS"], durableObjects: { BIBO_USER: { className: "BiboUserContainer", useSQLite: true }, BIBO_MODEL_BUDGET: { className: "BiboModelBudget", useSQLite: true }, BIBO_DEVICE_AUTH: { className: "BiboDeviceAuthorization", useSQLite: true } },
   });
   const origin = "https://bibo.test";
   const request = (path: string, init?: Parameters<Miniflare["dispatchFetch"]>[1]) => worker.dispatchFetch(origin + path, init);
@@ -41,5 +41,22 @@ test("actual Worker login, DO authorization, R2 space and revocation work withou
     const revoked = await request("/api/integrations", { method: "POST", headers: { origin, cookie }, body: JSON.stringify({ operation: "revoke", id: key.integration.id }) });
     assert.equal(revoked.status, 200);
     assert.equal((await request("/api/v1/me", { headers })).status, 401);
+    const begin = await request("/api/auth/device/code", { method: "POST", body: JSON.stringify({ client_id: "bibo-cli", scope: "space:read" }) });
+    assert.equal(begin.status, 200);
+    const device = await begin.json() as { device_code: string; user_code: string; verification_uri_complete: string };
+    const code = device.user_code;
+    assert.equal(new URL(device.verification_uri_complete).searchParams.get("user_code"), code.replaceAll("-", ""));
+    assert.equal((await request(`/api/auth/device?user_code=${code}`)).status, 401);
+    assert.equal((await request(`/api/auth/device?user_code=${code}`, { headers: { cookie } })).status, 200);
+    const decision = { user_code: code, approve: true };
+    assert.equal((await request("/api/auth/device/decision", { method: "POST", headers: { cookie }, body: JSON.stringify(decision) })).status, 403);
+    assert.equal((await request("/api/auth/device/decision", { method: "POST", headers: { cookie, origin }, body: JSON.stringify(decision) })).status, 200);
+    const tokenResponse = await request("/api/auth/device/token", { method: "POST", body: JSON.stringify({ client_id: "bibo-cli", device_code: device.device_code, grant_type: "urn:ietf:params:oauth:grant-type:device_code" }) });
+    assert.equal(tokenResponse.status, 200, await tokenResponse.clone().text());
+    const cliToken = (await tokenResponse.json() as { access_token: string }).access_token;
+    const cliHeaders = { authorization: `Bearer ${cliToken}` };
+    assert.equal((await request("/api/v1/me", { headers: cliHeaders })).status, 200);
+    assert.equal((await request("/api/v1/space", { method: "POST", headers: cliHeaders, body: JSON.stringify({ action: "task.create", input: { title: "must not write" } }) })).status, 403);
+    assert.equal((await request("/api/v1/auth/revoke", { method: "POST", headers: cliHeaders })).status, 200);
   } finally { await worker.dispose(); }
 });

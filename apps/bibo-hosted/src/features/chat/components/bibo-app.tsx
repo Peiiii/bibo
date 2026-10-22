@@ -19,6 +19,7 @@ import { useBiboConversation } from "@/features/chat/hooks/use-bibo-conversation
 import { WorkspaceDivider } from "./workspace-divider";
 import { messageTime } from "@/features/chat/utils/chat-message.utils";
 import { IntegrationsPage } from "@/features/integrations/components/integrations-page";
+import { DeviceAuthorizationPage } from "@/features/integrations/components/device-authorization-page";
 
 const suggestions = [
   { icon: MessageCircle, label: "先认识我", text: "我想让你成为我的个人搭档。先问我三个关键问题，了解我最近最在意的目标，然后帮我选一件今天能推进的事。" },
@@ -156,7 +157,7 @@ export function BiboApp() {
   }, [authOpen, mobile, ui.sidebarCollapsed]);
   const collapsedFileTree = space.view === "files" && ui.treeCollapsed,
     fileHeader = (space.view === "files" || space.view === "notes") && (space.tabs.length > 0 || collapsedFileTree) && (space.view !== "notes" || !space.fileBrowserVisible) && (!mobile || !space.fileBrowserVisible || collapsedFileTree);
-  const workspaceTitle = location.pathname === "/integrations" ? "接入与授权" : space.view === "chat" ? store.sessions.find((session) => session.id === store.activeSessionId)?.title ?? "新对话" : navigation.find((item) => item.view === space.view)?.label;
+  const workspaceTitle = location.pathname === "/authorize" ? "CLI 登录授权" : location.pathname === "/integrations" ? "接入与授权" : space.view === "chat" ? store.sessions.find((session) => session.id === store.activeSessionId)?.title ?? "新对话" : navigation.find((item) => item.view === space.view)?.label;
   const workspaceNavigation = <nav className="bibo-primary-nav" aria-label="工作空间">{navigation.map((item) => <NavigationItem key={item.view} label={item.label} selected={space.view === item.view} layout={mobile ? "row" : "icon"} tooltip={!mobile}><Link to={workspaceHref(item.view, store.activeSessionId)} className={`bibo-nav-item${space.view === item.view ? " is-active" : ""}`} aria-label={item.label} aria-current={space.view === item.view ? "page" : undefined} onClick={closeMenu}><item.icon aria-hidden="true" className="bibo-nav-mark" /><span className="bibo-nav-text">{item.label}</span>{item.view === "inbox" && (space.overview?.counts.unread ?? 0) > 0 && <small>{space.overview?.counts.unread}</small>}</Link></NavigationItem>)}</nav>;
   const sidebarContent = <>
       <div className="sidebar-header">
@@ -170,7 +171,7 @@ export function BiboApp() {
         <AccountMenu />
       </nav>}
   </>;
-  return <div ref={shellRef} data-sidebar-motion={sidebarMotion} className={`bibo-shell${space.view === "chat" ? " is-chat" : ""}${space.view === "overview" && location.pathname !== "/integrations" ? " is-overview" : ""}${space.view === "notes" && space.fileBrowserVisible ? " is-notes-collection" : ""}${ui.sidebarCollapsed ? " is-sidebar-collapsed" : ""}${space.workspaceOpen && space.view === "chat" ? " has-workspace" : ""}`}>
+  return <div ref={shellRef} data-sidebar-motion={sidebarMotion} className={`bibo-shell${space.view === "chat" ? " is-chat" : ""}${space.view === "overview" && !["/integrations", "/authorize"].includes(location.pathname) ? " is-overview" : ""}${space.view === "notes" && space.fileBrowserVisible ? " is-notes-collection" : ""}${ui.sidebarCollapsed ? " is-sidebar-collapsed" : ""}${space.workspaceOpen && space.view === "chat" ? " has-workspace" : ""}`}>
     {mobile ? <Sheet open={store.menuOpen && !authOpen} onOpenChange={store.setMenuOpen} title="个人空间" closeLabel="关闭导航" returnFocusRef={menuButtonRef}><aside className="bibo-sidebar is-drawer" aria-label="导航">{sidebarContent}</aside></Sheet> : <aside ref={sidebarRef} className="bibo-sidebar" aria-label="导航"><div className="bibo-navigation-rail" data-ui-surface="frame"><NavigationItem label={ui.sidebarCollapsed ? "展开侧边栏" : "收起侧边栏"} layout="icon"><button type="button" aria-label={ui.sidebarCollapsed ? "展开侧边栏" : "收起侧边栏"} aria-expanded={!ui.sidebarCollapsed} onClick={toggleSidebar}>{ui.sidebarCollapsed ? <PanelLeftOpen aria-hidden="true" /> : <PanelLeftClose aria-hidden="true" />}</button></NavigationItem>{ui.sidebarCollapsed && <RunStatus />}{workspaceNavigation}<div className="bibo-sidebar-spacer" /><AccountMenu compact /></div><div ref={sidebarPanelRef} className="bibo-sidebar-panel" data-ui-surface="sidebar">{sidebarContent}</div></aside>}
     <main ref={mainRef} className="bibo-main" style={{ "--workspace-ratio": `${ui.workspaceRatio * 100}%` } as CSSProperties} data-workspace-motion={workspaceMotion}>
       <header className={`bibo-topbar${fileHeader ? " is-file-header" : ""}${fileHeader && space.view === "notes" ? " is-note-header" : ""}`} data-ui-surface="frame"><div className="bibo-topbar-leading">
@@ -255,7 +256,7 @@ export function SpacePage() {
   const route = readWorkspaceRoute(pathname);
   const view = route.view;
   const selectSession = useBiboChatStore((state) => state.selectSession);
-  return pathname === "/integrations" ? <IntegrationsPage /> : <BiboSpaceView view={view} onOpenSession={selectSession} />;
+  return pathname === "/authorize" ? <DeviceAuthorizationPage /> : pathname === "/integrations" ? <IntegrationsPage /> : <BiboSpaceView view={view} onOpenSession={selectSession} />;
 }
 
 export function NotFoundPage() {

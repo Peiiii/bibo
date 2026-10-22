@@ -5,6 +5,7 @@ import type * as ChatComponents from "@/features/chat";
 const views: BiboView[] = ["overview", "chat", "inbox", "calendar", "tasks", "notes", "files"];
 const routes = [
   { path: "integrations", handle: { view: "overview" as BiboView } },
+  { path: "authorize", handle: { view: "overview" as BiboView } },
   { index: true, handle: { view: "overview" as BiboView } },
   ...views.filter((view) => !["overview", "notes", "files"].includes(view)).map((view) => ({
     path: view === "chat" ? "chat/:sessionId?" : `${view}/:resourceId?`,

@@ -1,4 +1,4 @@
-Bibo 0.1.1 makes developer documentation easier to discover and use.
+Bibo 0.2.0 adds browser and remote device authorization.
 
 The independent documentation site now lives at https://docs.bibo.bot/ with dedicated guides for notes, files, tasks, projects, events, inbox, image assets and space overview. Each guide includes CLI and HTTP examples, operation fields and current limits. CLI help, the bundled Skill and package homepages use the new domain. Existing app documentation links redirect to it.
 
@@ -10,7 +10,8 @@ bibo auth login
 bibo overview
 ```
 
-Create a scoped, expiring access token at https://app.bibo.bot/integrations.
+`bibo auth login` opens a prefilled browser consent page and automatically polls for completion. On VPS/SSH use `bibo auth login --no-browser`: open the link on another device or enter the short code on the authorization page. `--read-only` requests read access. Manual scoped tokens and `--token-stdin` remain available for automation.
+
 
 - Documentation: https://docs.bibo.bot/
 - SDK: `@nextclaw/bibo-api`

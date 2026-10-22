@@ -8,7 +8,9 @@ bibo --help
 ## 身份、能力与概览
 
 ```sh
-bibo auth login                     # 隐藏输入令牌
+bibo auth login                     # 打开浏览器授权，终端自动轮询
+bibo auth login --no-browser         # VPS/SSH：链接 + 短码，自动轮询
+bibo auth login --read-only          # 只申请读取权限
 bibo auth login --token-stdin        # 自动化从安全 stdin 读取
 bibo auth status
 bibo auth logout                    # 服务端撤销 + 删除本地配置

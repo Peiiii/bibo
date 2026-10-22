@@ -5,6 +5,20 @@ import { apiError, apiResult, PublicApiError, readApiObject } from "../utils/bib
 import { BiboSpaceError } from "@/features/bibo-domain";
 import { biboAssetsRoute } from "@/features/assets";
 
+/** Internal-only device grant minting; the public management route never accepts these credentials. */
+export async function deviceIntegrationKey(request: Request, keys: BiboIntegrationKeys): Promise<Response> {
+  try {
+    if (request.method !== "POST") return publicError("Not found", 404);
+    const input = await readApiObject(request, 4096);
+    if (typeof input.id !== "string" || typeof input.secret !== "string" || typeof input.expiresAt !== "number") return publicError("Invalid device grant", 400);
+    return json(await keys.create(request.headers.get("x-bibo-user-id")!, input,
+      { id: input.id, secret: Buffer.from(input.secret, "base64url"), expiresAt: input.expiresAt }));
+  } catch (error) {
+    if (error instanceof PublicApiError) return publicError(error.message, error.status);
+    return publicError("授权操作暂时不可用。", 503);
+  }
+}
+
 export async function integrationManagement(request: Request, keys: BiboIntegrationKeys): Promise<Response> {
   try {
     if (request.method === "GET") return json({ integrations: await keys.list() });

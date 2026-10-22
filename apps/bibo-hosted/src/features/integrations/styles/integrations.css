@@ -28,3 +28,13 @@
 .bibo-integrations__token { box-sizing: border-box; width: 100%; min-height: 110px; resize: vertical; font-family: monospace; overflow-wrap: anywhere; padding: 12px; border: 1px solid var(--ui-line); border-radius: 8px; background: var(--ui-canvas); color: var(--ui-ink); }
 .bibo-integrations__error { margin-top: 20px; padding: 12px; border: 1px solid var(--ui-line); border-radius: 8px; }
 @media (max-width: 760px) { .bibo-integrations__grid { grid-template-columns: 1fr; gap: 16px; } .bibo-integrations__panel { padding: 20px; } .bibo-integrations__intro > a { margin-left: 0; } .bibo-integrations__mark { display: none; } }
+
+.bibo-device-auth { width: min(100%, 640px); margin: 24px auto; padding: 0 24px; }
+.bibo-device-auth h1 { font-size: 26px; margin: 8px 0 20px; }
+.bibo-device-auth p, .bibo-device-auth li { line-height: 1.7; }
+.bibo-device-auth__eyebrow, .bibo-device-auth__hint { color: var(--muted-foreground, #6b7280); font-size: 13px; }
+.bibo-device-auth__code { font: 600 30px/1.5 ui-monospace, monospace; letter-spacing: 3px; padding: 12px; border-radius: 12px; background: var(--muted, #f3f4f6); text-align: center; }
+.bibo-device-auth__permission { display: flex; align-items: center; gap: 8px; margin: 20px 0; }
+.bibo-device-auth__actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+.bibo-device-auth form { display: grid; gap: 12px; margin-top: 24px; }
+@media (max-width: 640px) { .bibo-device-auth { padding: 0 16px; margin: 16px auto; } .bibo-device-auth__code { font-size: 24px; letter-spacing: 2px; } }

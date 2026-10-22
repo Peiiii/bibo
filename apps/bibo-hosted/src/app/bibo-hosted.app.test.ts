@@ -39,6 +39,7 @@ const worker = await import(pathToFileURL(bundlePath).href) as {
   Sandbox: new (ctx: object, env: object) => { mountBucket(bucket: string, path: string, options: { prefix: string }): Promise<void>; onStop(): Promise<void>; destroy(): Promise<void> };
   BiboUserContainer: new (ctx: object, env: object) => { fetch(request: Request): Promise<Response> };
   BiboModelBudget: new (ctx: object, env: object) => { fetch(request: Request): Promise<Response> };
+  BiboDeviceAuthorization: new (ctx: object, env: object) => { fetch(request: Request): Promise<Response>; alarm(): Promise<void> };
   default: { fetch(request: Request, env: object): Promise<Response> };
 };
 
@@ -203,6 +204,38 @@ class PersonalSpaceFixture {
 }
 
 const personalSpace = (initial?: BiboSpaceState) => new PersonalSpaceFixture(initial);
+
+test("device approval requires the secret, respects polling/expiry and cannot restore a revoked key", async (t) => {
+  let clock = Date.now(); t.mock.method(Date, "now", () => clock);
+  const values = new Map<string, unknown>();
+  const storage = { get: async (key: string) => structuredClone(values.get(key)), put: async (key: string, value: unknown) => { values.set(key, structuredClone(value)); }, setAlarm: async () => {}, deleteAll: async () => values.clear() };
+  const account = personalSpace();
+  const device = new worker.BiboDeviceAuthorization({ storage }, { BIBO_USER: { getByName: (name: string) => { assert.equal(name, "user:user-1"); return { fetch: (url: string, init?: RequestInit) => account.ownerFetch(new Request(url, init)) }; } } });
+  const call = (path: string, body: unknown) => device.fetch(new Request(`https://bibo.internal/${path}`, { method: "POST", body: JSON.stringify(body) }));
+  const code = `bibo_dc_v1_ABCD2345.${"s".repeat(43)}`;
+  await call("start", { userCode: "ABCD2345", deviceCode: code, name: "Test CLI", scopes: ["space:read", "space:write"] });
+  assert.ok(!JSON.stringify([...values]).includes(code));
+  assert.equal((await (await call("token", { deviceCode: "wrong" })).json() as { error: string }).error, "invalid_grant");
+  assert.equal((await (await call("token", { deviceCode: code })).json() as { error: string }).error, "authorization_pending");
+  assert.equal((await (await call("token", { deviceCode: code })).json() as { error: string }).error, "slow_down");
+  assert.equal((await call("decide", { userId: "user-1", approve: true, readOnly: true })).status, 200);
+  assert.equal((await call("decide", { userId: "other", approve: true })).status, 403);
+  clock += 10_001;
+  const issued = await (await call("token", { deviceCode: code })).json() as { access_token: string; scope: string };
+  assert.equal(issued.scope, "space:read"); assert.match(issued.access_token, /^bibo_v1_/);
+  assert.ok(!JSON.stringify([...values]).includes(issued.access_token));
+  clock += 10_001;
+  const repeated = await (await call("token", { deviceCode: code })).json() as { access_token: string };
+  assert.equal(repeated.access_token, issued.access_token);
+  const headers = { authorization: `Bearer ${issued.access_token}` };
+  assert.equal((await account.ownerFetch(new Request("https://bibo.internal/integration-api/me", { headers }))).status, 200);
+  assert.equal((await account.ownerFetch(new Request("https://bibo.internal/integration-api/auth/revoke", { method: "POST", headers }))).status, 200);
+  clock += 10_001;
+  assert.equal((await (await call("token", { deviceCode: code })).json() as { error: string }).error, "access_denied");
+  clock += 600_000;
+  assert.equal((await (await call("inspect", {})).json() as { error: string }).error, "expired_token");
+  await device.alarm(); assert.equal(values.size, 0);
+});
 
 test("legacy docs redirect anonymously to the dedicated site with path and query preserved", async () => {
   const env = { ASSETS: { fetch: async () => { throw new Error("Docs must not use app assets"); } } };

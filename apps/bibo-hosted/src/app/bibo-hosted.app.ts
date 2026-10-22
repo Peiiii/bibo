@@ -19,8 +19,9 @@ import { prepareBiboRun, type PreparedBiboRun } from "./utils/bibo-run-preparati
 import { BiboRunService, type BiboActiveRun } from "./services/bibo-run.service";
 import { CloudflareSessionStore } from "./stores/cloudflare-session.store";
 import { BiboIntegrationKeys } from "./services/bibo-integration-keys.service";
-import { integrationApi, integrationManagement } from "./routes/bibo-integrations.route";
+import { deviceIntegrationKey, integrationApi, integrationManagement } from "./routes/bibo-integrations.route";
 export { BiboModelBudget } from "./bibo-model-gateway.service";
+export { BiboDeviceAuthorization } from "./services/bibo-device-authorization.service";
 export { ContainerProxy } from "@cloudflare/sandbox";
 
 /** Cache only within the official Sandbox lifetime; R2 authorization stays upstream. */
@@ -138,8 +139,8 @@ export class BiboUserContainer extends DurableObject<Env> {
   override async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
     const route = url.pathname;
-    if (route === "/integrations" || route.startsWith("/integration-api/")) {
-      const pending = this.spaceQueue.then(() => route === "/integrations"
+    if (route === "/integrations" || route === "/device-key" || route.startsWith("/integration-api/")) {
+      const pending = this.spaceQueue.then(() => route === "/device-key" ? deviceIntegrationKey(request, this.integrationKeys) : route === "/integrations"
         ? integrationManagement(request, this.integrationKeys)
         : integrationApi(request, this.integrationKeys, this.spaceActions, this.env.SNAPSHOTS, this.maintenance));
       this.spaceQueue = pending.then(() => undefined, () => undefined);

@@ -2,8 +2,8 @@
 
 Bibo is a shared personal context and asset space. Its web app, built-in assistant and authorized external tools use the same notes, files, projects, tasks, events and inbox.
 
-1. Sign in at [Bibo](https://app.bibo.bot), open **接入与授权** in the account menu, and create a named read-only or read/write token with an expiry. The token is shown once. Do not paste it in chat, URLs, source code or logs.
-2. Install the CLI (Node 22+) and log in using hidden input:
+1. Sign in at [Bibo](https://app.bibo.bot).
+2. Install the CLI (Node 22+) and authorize in your browser:
 
 ```sh
 npm install -g @nextclaw/bibo
@@ -12,6 +12,8 @@ bibo auth status
 bibo actions
 bibo overview
 ```
+
+Login opens a prefilled consent page. Check the code and permissions, then approve; the CLI polls automatically and saves private credentials. On VPS/SSH, use `bibo auth login --no-browser` and open its link on another device, or enter the short code at https://app.bibo.bot/authorize. Requests expire after 10 minutes. `--read-only` requests read access. No token copying is needed.
 
 3. With write access, create and verify an object:
 

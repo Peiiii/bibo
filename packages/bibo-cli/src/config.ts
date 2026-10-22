@@ -46,33 +46,11 @@ export async function credentials(endpointOption?: string): Promise<Config> {
   return { endpoint, token };
 }
 
-export async function readToken(fromStdin: boolean): Promise<string> {
-  if (fromStdin) {
+export async function readToken(): Promise<string> {
     let token = "";
     for await (const chunk of process.stdin) {
       token += chunk.toString();
       if (token.length > 1024) throw new Error("Access token is too long.");
     }
     return token.trim();
-  }
-  if (!process.stdin.isTTY) throw new Error("Use --token-stdin when piping a token.");
-  process.stderr.write("Paste access token (hidden): ");
-  return new Promise((resolve, reject) => {
-    let value = "";
-    const finish = (error?: Error): void => {
-      process.stdin.setRawMode(false); process.stdin.pause(); process.stdin.off("data", receive);
-      process.stderr.write("\n");
-      if (error) reject(error); else resolve(value.trim());
-    };
-    const receive = (chunk: Buffer): void => {
-      for (const char of chunk.toString()) {
-        if (char === "\u0003") { finish(new Error("Login cancelled.")); return; }
-        if (char === "\r" || char === "\n") { finish(); return; }
-        if (char === "\u007f" || char === "\b") value = value.slice(0, -1);
-        else if (char >= " ") value += char;
-        if (value.length > 1024) { finish(new Error("Access token is too long.")); return; }
-      }
-    };
-    process.stdin.setRawMode(true); process.stdin.resume(); process.stdin.on("data", receive);
-  });
 }
