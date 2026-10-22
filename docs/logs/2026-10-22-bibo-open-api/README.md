@@ -52,5 +52,5 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - 首次生产脚本在关闭动画完成前统计 DOM，误报令牌仍在；原烟测 owner 改为等待控件 detached，TS 和同一真实链路复验通过，产品没有为测试增加固定等待。脚本 finally 已清理失败轮次和成功轮次的全部测试授权。可删除对象已清理；专用测试账户保留一个已处理收件箱回执和 68 字节图片，因为公共 API 尚无对应删除动作。
 - SDK Mac 与 Linux tarball 包内数据、tar 元信息完全一致，仅 gzip OS 标记不同一字节；跨平台本地比较不能替代 CI 同产物 integrity 校验。实际 registry SDK/CLI 均通过 Linux CI 精确 hash 校验。
 - 范围限制已在公开文档说明：全空间级 read/write PAT；文本上限/大文件预览、图片格式与 10 MiB、60 请求/分钟、有限幂等窗口；不开放聊天模型执行、OAuth、Agent 通信或任意二进制上传。没有把长期愿景冒充本批实现。
-- `retrospective_decision: updated-existing-owners`：NPM 接收与可见性区分落实到原 release utility/回归/accepted artifact；Git 传输与仓库身份分离落实到原 deployment preflight/反例测试；弹窗结束状态落实到原 smoke harness。维护者恢复入口追加 CONTRIBUTING；没有为单次事件新增全局提示词或改造共享框架。Qingtian 使用权威安装、check/readiness 通过，8 个开发阶段入口之外未人为复制规则；真实标记响应已在本会话应用，不宣称历史或未来宿主自动加载已验证。
+- `retrospective_decision: updated-existing-owners`：NPM 接收与可见性区分落实到原 release utility/回归/accepted artifact；Git 传输与仓库身份分离落实到原 deployment preflight/反例测试；弹窗结束状态落实到原 smoke harness。维护者恢复入口追加 CONTRIBUTING；没有为单次事件新增全局提示词或改造共享框架。Qingtian 使用权威安装、check/readiness 通过，开发流程入口之外未人为复制规则；真实标记响应已在本会话应用，不宣称历史或未来宿主自动加载已验证。
 - `parent_status=ready-for-completion-check`；原合同全部 Required 已验证，交回 lifecycle 完成最终主线/入口核对。用户主观偏好仍由用户判断，不代指用户已验收。

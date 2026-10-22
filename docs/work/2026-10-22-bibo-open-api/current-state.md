@@ -20,7 +20,7 @@
 - 21:58 生产黄金链路 exit 0：真实网页创建 key→registry CLI 登录→全部领域对象读改及网页读取→幂等/冲突→图片→只读拒绝/撤销→Skill 安装。证据 `.local/production-golden-retry.log`。公开文档桌面手机均通过。
 
 ## 未闭合事项
-- Required 均已闭合；无产品、NPM 或部署遗留。当前未提交仅本任务最终证据文档和烟测退出动画等待修正，收尾提交后保持 main 干净；不修改已发布 tag 或版本。
+- Required 均已闭合；无产品、NPM 或部署遗留。最终证据与烟测等待修正已提交推送 `7da90d5`，工作区已核对干净；不修改已发布 tag 或版本。
 - 本机 Mac tarball 与 Linux registry tarball 的未压缩 tar 完全一致，唯一字节差异是 gzip OS 标记 0x13/0x03；不能用跨 OS 压缩包 hash 冒充内容不同。CI 内仍使用相同 Linux 产物的精确 integrity 校验。
 - 无未关闭方案 finding；后续发现新状态/授权分叉回设计。
 
