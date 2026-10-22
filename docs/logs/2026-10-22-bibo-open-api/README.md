@@ -36,6 +36,10 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 
 应用与文档目标 `https://app.bibo.bot` / `/docs/`，从冻结远程 main 的干净 checkout 发布，保留 `--containers-rollout=none` 和既有所有资源。上线后执行新 `integrations-live.smoke.ts`：真实网页创建 token→全新 registry CLI 登录→空间对象读改与网页一致→权限/冲突/幂等→撤销，并清理精确测试对象。凭据不落日志。
 
+- 发布候选提交 `3a1670c91e7a6b750de09d27aef48aecc0077c7e` 已推送；NPM release run `39788828274`，CI run `39788609358`。NPM_TOKEN 通过 stdin 配置独立仓库环境，未入文件或日志。
+- SSH 22 关闭，切换现有 NextClaw 已验证的 `ssh.github.com:443` 传输后 push 成功。随后官方部署 preflight 因旧地址正则拒绝端口格式，未触发上传。修正原 preflight 的身份 owner：以 URL 解析精确核对 GitHub host/owner/repo/协议，支持 SCP SSH、HTTPS、SSH 443，拒绝仿冒域名、错误仓库、凭据和查询参数；干净 checkout/远程 main 检查不变。手工 planned-path 核对两个小 utility/test 归现有 deployment owner，局部设计与反例 Review 通过。
+- 部署前版本：`15aff649-3b6a-450c-99ac-4f8016c884df`（100%），本机 receipt `.local/bibo-deployments-before.json`，可作为 Worker 回退入口。没有更改 DO 类、迁移或 bucket。
+
 ## 交付汇总与复盘
 
 进行中，尚未交付。

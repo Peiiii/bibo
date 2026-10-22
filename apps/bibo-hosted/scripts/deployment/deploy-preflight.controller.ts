@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process";
+import { isOfficialBiboOrigin } from "./deploy-origin.utils";
 
 const git = (...args: string[]) => execFileSync("git", args, { cwd: process.cwd(), encoding: "utf8" }).trim();
 
@@ -7,7 +8,7 @@ try {
     throw new Error("Bibo deployment requires a clean checkout.");
   }
   const origin = git("remote", "get-url", "origin");
-  if (!/github\.com[:/]Peiiii\/bibo(?:\.git)?$/i.test(origin)) {
+  if (!isOfficialBiboOrigin(origin)) {
     throw new Error("Official Bibo deployment requires the Peiiii/bibo origin repository.");
   }
   const head = git("rev-parse", "HEAD");
