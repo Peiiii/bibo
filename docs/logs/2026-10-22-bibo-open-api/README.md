@@ -129,3 +129,10 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - 生产浏览器真实登录→主题切换/刷新持久化→清空确认取消→PAT表单创建→真实API读取200→详情撤销→原凭据401→旧URL兼容→返回笔记全部通过；1440/390/320截图已实际查看，证据settings-production-browser.log与settings-production/。生产reset请求数0，危险动作失败与重试只由隔离fixture证明；没有清空生产账号、重置密码或要求用户协助。
 - 同一生产版本使用正式registry CLI0.2.0完成默认预填授权、远程手输、自动轮询、拒绝、只读403、凭据0600/无回显、过期恢复和切换账号回归，settings-production-device.log exit0；所有本轮测试授权清理。两个生产脚本均exit0；OS打开器仍以截获调用URL证明，不冒称实际桌面打开验收。
 - retrospective_decision=updated-existing-owners：原设计补统一设置层级及真实实施边界；原store/烟测增加焦点刷新互斥与折叠导航反例，修正关闭动画期间的测试定位，减少默认状态漏检。没有新增全局规则或平行验收系统。收敛原因：五个必需质量维度已具当前证据、无未关闭实质finding；新增未知设置模块/设备元数据/框架将扩大范围，无当前用户收益。用户审美偏好保留给实际使用判断。
+
+### 设置页冗余返回入口纠正（2026-10-23 01:11）
+
+- 用户截图指向左上「返回空间」：全局功能导航一直存在，额外首页Link制造了虚假的层级。源码精确定位BiboApp的settings条件分支；用户截图＋同href首页代码构成直接证据，skip-reproduction，按同入口真实浏览器做修后判定。
+- flow=bugfix，L1单owner局部导航减法；内联修正原设计并skip-design，不新增路由、协议或状态。删除返回控件与ArrowLeft导入，保留全局图标位置；检查设置分类与账号菜单无同类返回入口。404的「返回概览」属于错误恢复，保持原行为。
+- 原integrations.smoke增加设置页无返回链接/按钮断言，并通过真实桌面全局「笔记」及手机快捷「任务」离开设置，代替goto证明导航可用；复用其余设置/凭据生命周期验证。client与scripts tsc、最终hosted构建及1440/390/320浏览器均通过；实际查看最终桌面画面，无返回按钮且全局图标位置一致。证据.local/settings-nav-{types,script-types,build,browser}.log与settings-browser/integrations-1440.png。
+- mode=implementation Review：审查全部源码diff与实际画面，git diff --check通过；无认证、路由、状态、协议改动，无待关闭finding。本仓没有diff-only maintainability入口，采用定向人工复核；不重复无关后端或CLI全量验收。

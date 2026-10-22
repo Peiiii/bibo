@@ -32,6 +32,7 @@
 .is-neutral .bibo-theme-preview { background:#eee; }.is-neutral .bibo-theme-preview > span { background:#f6f6f6; }.is-neutral .bibo-theme-preview > span + span { background:#fff; }.is-neutral .bibo-theme-preview i { background:#dedede; }
 .bibo-theme-label { display:flex; align-items:center; justify-content:space-between; font-size:14px; padding:12px 8px 8px; }
 @media(min-width:761px) {
+  .is-settings .bibo-navigation-rail .bibo-primary-nav { padding-top:50px; }
   .is-settings .bibo-sidebar, .is-settings.is-sidebar-collapsed .bibo-sidebar { width:calc(var(--ui-navigation-rail-width) + var(--ui-sidebar-width) + 8px); }
   .bibo-shell.is-settings .bibo-sidebar-panel { display:flex; visibility:visible; opacity:1; }
   .is-settings .bibo-sidebar-panel > .bibo-sidebar-spacer { flex:0; }

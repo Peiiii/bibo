@@ -74,6 +74,8 @@ try {
       await section(page, "接入与授权");
       if (!production) { await page.getByRole("alert").filter({ hasText: "暂时无法加载授权" }).waitFor(); assert.equal(await page.getByRole("heading", { name: "还没有工具连接到你的空间" }).count(), 0); await page.getByRole("button", { name: "重新加载", exact: true }).click(); await page.getByRole("button", { name: "Bibo CLI", exact: true }).waitFor(); }
       assert.equal(await page.locator(".bibo-session-nav").count(), 0, "Settings never displays recent chats");
+      assert.equal(await page.getByRole("link", { name: "返回空间", exact: true }).count(), 0, "Settings is a peer workspace page, not a nested flow with an extra back action");
+      assert.equal(await page.getByRole("button", { name: "返回空间", exact: true }).count(), 0);
       assert.equal(await page.locator('.bibo-primary-nav a[aria-current="page"]').count(), 0);
       await page.getByRole("button", { name: "创建访问令牌", exact: true }).click();
       const create = page.getByRole("dialog", { name: "创建访问令牌", exact: true });
@@ -110,7 +112,9 @@ try {
         await section(page, "接入与授权"); await page.getByRole("heading", { name: "还没有工具连接到你的空间" }).waitFor();
         await page.screenshot({ animations: "disabled", path: new URL(`empty-${width}.png`, artifacts).pathname, fullPage: true });
       }
-      await page.goto(`${base}/notes`, { waitUntil: "domcontentloaded" }); await page.locator(".bibo-shell:not(.is-settings)").waitFor();
+      if (width > 760) await page.getByRole("navigation", { name: "工作空间" }).getByRole("link", { name: "笔记", exact: true }).click();
+      else await page.getByRole("navigation", { name: "手机快捷导航" }).getByRole("link", { name: "任务", exact: true }).click();
+      await page.locator(".bibo-shell:not(.is-settings)").waitFor();
       if (production) assert.equal(resets, 0, "Production verification never clears space");
       assert.deepEqual(errors, []); console.log(JSON.stringify({ settings: "passed", width, production }));
     } catch (error) { await page.screenshot({ animations: "disabled", path: new URL(`failure-${width}.png`, artifacts).pathname, fullPage: true }).catch(() => undefined); throw error; }

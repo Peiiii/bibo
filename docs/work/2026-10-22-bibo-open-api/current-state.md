@@ -1,5 +1,7 @@
 # 当前执行状态
 
+- 2026-10-23 01:15 Asia/Shanghai；flow=bugfix；phase=delivery；retrospective_state=pending。01:11开始，用户纠正设置页全局导航保留时不应出现「返回空间」。基线b911536、工作区干净；删除冗余入口并保持图标位置，检查原菜单无同类返回入口。client/scripts tsc、最终构建与1440/390/320真实组件导航通过，实际桌面画面已查看，Review无未关闭finding。预计01:21前完成发布；不扩大到授权协议。
+
 - 2026-10-23 01:05 Asia/Shanghai；r5 delivered；flow=standard；phase=delivery；retrospective_state=completed；retrospective_decision=updated-existing-owners。源b398089已推送，CI39819219258 success；干净冻结main部署App327d2993-709b-49d5-8230-db8ca0e01625、docs7d5edd91-2411-43da-bf84-92401708cbd6。生产设置真实PAT创建→读取200→撤销401，两主题与旧URL、1440/390/320画面通过并实际查看；正式CLI0.2.0生产预填/手填/轮询/拒绝/只读/过期/切换账号全部通过。两个生产脚本exit0，测试授权均清理，生产reset请求0。SETTINGS passed；所有Required成立，视觉偏好未冒报用户认可。无NPM/SDK/数据库/容器变更；NextClaw工作区未触及。
 
 - 2026-10-23 00:24 Asia/Shanghai；r4 delivered；phase=delivery；retrospective_state=completed。独立授权页源fcc55fc已推送，干净冻结main部署Worker 1e1b1deb-15d9-4a7c-baa6-0cea4880f4f3。正式NPM CLI0.2.0+生产浏览器完成登录/授权/轮询/手输/只读403/拒绝/过期恢复/切换账号，无工作区导航或业务请求；1440/390/320截图通过并查看生产成功页。本地完整tsc、应用回归和5个定向用例通过，自Review无未关闭finding；AUTH-PAGE passed。仅网页更新，无NPM、DB、DO或容器发布；用户无需重新安装CLI。
