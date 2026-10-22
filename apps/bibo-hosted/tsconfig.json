@@ -37,6 +37,7 @@
     "src/features/search/routes/bibo-search.route.test.ts",
     "worker-configuration.d.ts",
     "src/app/services/bibo-integration-keys.service.test.ts",
-    "src/app/testing/bibo-public-api.worker.test.ts"
+    "src/app/testing/bibo-public-api.worker.test.ts",
+    "src/app/testing/bibo-account.worker.test.ts"
   ]
 }

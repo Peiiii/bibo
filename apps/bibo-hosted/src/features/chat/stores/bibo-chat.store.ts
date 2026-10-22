@@ -33,7 +33,7 @@ class BiboChatOwner {
   failedQuestionInput: { id: string; answer: string } | null = null;
   status = "";
   authFeedback: { kind: "success" | "error"; message: string } | null = null;
-  authMode: "register" | "login" = biboSelfHosted || (typeof window !== "undefined" && window.location.pathname === "/authorize") ? "login" : "register";
+  authMode: "register" | "login" | "reset" = biboSelfHosted || (typeof window !== "undefined" && window.location.pathname === "/authorize") ? "login" : "register";
   following = true;
   menuOpen = false;
   readonly conversation = new BiboConversationManager(biboClient, sessionStorage, {
@@ -82,7 +82,7 @@ class BiboChatOwner {
   ) {}
 
   setDraft = (draft: string): void => this.set((state) => ({ draft, drafts: { ...state.drafts, [state.activeSessionId ?? "new"]: draft } }));
-  setAuthMode = (authMode: "register" | "login"): void => this.set({ authMode, authFeedback: null });
+  setAuthMode = (authMode: "register" | "login" | "reset"): void => this.set({ authMode, authFeedback: null });
   setFollowing = (following: boolean): void => this.set({ following });
   setMenuOpen = (menuOpen: boolean): void => this.set({ menuOpen });
   openQuestion = (id: string): void => {
@@ -234,9 +234,10 @@ class BiboChatOwner {
   sendCode = async (email: string): Promise<void> => {
     this.set({ authFeedback: null });
     try {
-      const result = await biboClient.sendCode(email);
-      if (this.get().authMode === "register" && !this.get().user) this.set({ authFeedback: { kind: "success", message: `验证码已发往 ${result.maskedEmail ?? email}。请检查邮箱。` } });
-    } catch (error) { if (this.get().authMode === "register") this.set({ authFeedback: { kind: "error", message: errorText(error) } }); }
+      const mode = this.get().authMode;
+      const result = await biboClient.sendCode(email, mode === "reset" ? "reset" : undefined);
+      if (this.get().authMode === mode && !this.get().user) this.set({ authFeedback: { kind: "success", message: `若邮箱可用，验证码将发往 ${result.maskedEmail ?? email}。请检查邮箱。` } });
+    } catch (error) { this.set({ authFeedback: { kind: "error", message: errorText(error) } }); }
   };
 
   authenticate = async (email: string, password: string, code: string): Promise<void> => {
@@ -244,7 +245,7 @@ class BiboChatOwner {
     try {
       const user = this.get().authMode === "login"
         ? await biboClient.login(email, password)
-        : await biboClient.register(email, password, code);
+        : this.get().authMode === "reset" ? await biboClient.resetPassword(email, password, code) : await biboClient.register(email, password, code);
       this.set({ user, authFeedback: null });
       await this.bootstrap();
     } catch (error) { this.set({ authFeedback: { kind: "error", message: errorText(error) } }); }

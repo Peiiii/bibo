@@ -84,3 +84,12 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - 设备DO只拥有10分钟授权状态，实际PAT复用原key owner；默认开预填网页、VPS手填码均自动轮询，拒绝/过期/slow_down/取消，降权、撤销不复活与秘密不落DO状态均有定向证据。
 - 验证：全workspace tsc、原完整测试与真实Worker通过；CLI HTTP fixture轮询/退避/SIGINT通过；真实本地Worker+浏览器+CLI在1440/390/320通过，截图人工查看。证据.local/auth-{device-boundary-tests,device-cli-tests,final-types,final-tests,final-worker-tests,device-browser-final}.log。
 - mode=implementation Review：项目无diff-only自动维护性脚本，git diff --cached --check通过；逐项检查设备状态、重试/撤销生命周期、Origin、前端账户隔离、endpoint绑定、无回显与新DO追加migration，未关闭finding为0。原密码粘贴分支已删除；手动Token仅stdin保留。发布前只暂存设备功能，账号源文件/绑定/重置UI保留未暂存。
+
+### CLI首批生产验收与账号切换准备（23:41）
+- NPM0.2.0源8713cd0，[CI39804566123](https://github.com/Peiiii/bibo/actions/runs/39804566123)成功，SDK/CLI已分别接受并验证registry integrity；全新官方registry安装确认0.2.0。
+- 生产发现手工短码被晚到账号bootstrap清空；41b425f修复store保留输入，定向反例与client tsc通过，无未关闭Review finding。Worker f378b7f9-d7d8-4c63-b8cc-aae185ce8358，独立docs 640e7091-dd86-4535-9038-e696a5ccd601。
+- 正式安装包+生产Worker+真实浏览器通过默认预填授权/登录回同码、远程手填码、自动轮询、拒绝、只读写入403、0600配置与无令牌回显，1440/390/320截图已看。证据.local/device-production-login-final.log及device-auth-production/。OS打开器由测试stub截获URL，不把它称为实际桌面打开器验收。测试授权已撤销。
+- 两次前置烟测失败分别为本机浏览器代理/load事件等待、以及上述真实输入竞争；前者调整原smoke使用现有代理和DOM就绪，后者修产品并复验。不改变业务来迁就测试，不隐藏失败证据。
+- 独立账号：D1 bibo-accounts与schema已创建，固定快照140个身份同ID/邮箱审计通过，源DB写入0、verifier文件0。原密码使用原二进制salt PBKDF2格式。NextClaw邮件capability e32bee765已合入远程master并部署c795346e-a907-4945-ba6f-cc59318943e4，原七个WIP不变，mainline reconciliation由retry worker保护WIP继续。
+- 账号验证：完整tsc通过；真实D1覆盖注册/会话/登录、PBKDF2迁移（含原长密码）、OTP重放/竞争/过期、邮件失败、锁定、独立密码重置和会话撤销，原身份测试回归通过；client测试通过。网页重置表单1440/320正常渲染，真实组件→client请求字段和错误反馈由API fixture证明；真实验证码校验由D1测试证明，未冒充生产收件验证。
+- 账号Review：无项目自动维护性入口，diff --check通过；人工完整复核绑定与唯一身份owner、原子OTP消费、密码失败无跨产品回落、旧Cookie限期验证/单次交换/退出墓碑、同userId空间/PAT、独立Secret与私有邮件传输，无未关闭finding。生产切换与连续性/邮件验收待执行。

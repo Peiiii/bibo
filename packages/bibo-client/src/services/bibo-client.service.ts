@@ -125,8 +125,8 @@ export class BiboClient {
     return value.url;
   };
 
-  sendCode = async (email: string): Promise<{ maskedEmail?: string }> => {
-    const value = await this.request("auth/send-code", { email });
+  sendCode = async (email: string, purpose?: "reset"): Promise<{ maskedEmail?: string }> => {
+    const value = await this.request("auth/send-code", { email, ...(purpose ? { purpose } : {}) });
     if (!isRecord(value)) throw new BiboClientError("验证码服务返回了无效的数据。");
     return typeof value.maskedEmail === "string" ? { maskedEmail: value.maskedEmail } : {};
   };
@@ -138,6 +138,11 @@ export class BiboClient {
 
   register = async (email: string, password: string, code: string): Promise<BiboUser> => {
     const value = await this.request("auth/register", { email, password, code });
+    return readUser(isRecord(value) ? value.user : null);
+  };
+
+  resetPassword = async (email: string, password: string, code: string): Promise<BiboUser> => {
+    const value = await this.request("auth/reset-password", { email, password, code });
     return readUser(isRecord(value) ? value.user : null);
   };
 

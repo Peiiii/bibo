@@ -57,3 +57,14 @@ instance_type = "basic"
 [observability]
 enabled = true
 head_sampling_rate = 1
+
+[[d1_databases]]
+binding = "BIBO_AUTH_DB"
+database_name = "bibo-accounts"
+database_id = "9750ac1d-810d-4c69-90e5-02c66c4b049b"
+migrations_dir = "migrations"
+
+[[services]]
+binding = "BIBO_AUTH_MAILER"
+service = "nextclaw-provider-gateway-api"
+entrypoint = "TransactionalEmail"

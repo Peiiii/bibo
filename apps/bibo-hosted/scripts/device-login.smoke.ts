@@ -1,14 +1,17 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { mkdtemp, mkdir, readFile, writeFile, stat, rm, open } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { tmpdir, homedir } from "node:os";
 import { join, resolve, relative } from "node:path";
 import { chromium } from "playwright";
 
 const directory = await mkdtemp(join(tmpdir(), "bibo-device-browser-"));
-const artifacts = new URL("../../../.local/device-auth-browser/", import.meta.url);
+const production = process.env.BIBO_DEVICE_ORIGIN === "https://app.bibo.bot";
+if (process.env.BIBO_DEVICE_ORIGIN && !production) throw new Error("Use the official production origin or the isolated local fixture.");
+const account = production ? JSON.parse(await readFile(join(homedir(), ".config/bibo-hosted/smoke-account.json"), "utf8")) as { email: string; password: string } : { email: "owner@example.com", password: "local-disposable-password-123456" };
+const artifacts = new URL(production ? "../../../.local/device-auth-production/" : "../../../.local/device-auth-browser/", import.meta.url);
 await mkdir(artifacts, { recursive: true });
-const port = String(33000 + process.pid % 10000), origin = `http://127.0.0.1:${port}`;
+const port = String(33000 + process.pid % 10000), origin = production ? "https://app.bibo.bot" : `http://127.0.0.1:${port}`;
 const config = join(directory, "wrangler.toml");
 const source = await readFile("wrangler.toml", "utf8");
 await writeFile(config, source.replace('main = "src/app/bibo-hosted.app.ts"', `main = ${JSON.stringify(resolve("src/app/bibo-hosted.app.ts"))}`)
@@ -18,8 +21,9 @@ await writeFile(config, source.replace('main = "src/app/bibo-hosted.app.ts"', `m
   .replace(/\[\[containers\]\][\s\S]*?(?=\n\[|$)/g, "")
   .replace('BIBO_OWNER_EMAIL = "owner@example.com"', 'BIBO_OWNER_EMAIL = "owner@example.com"\nBIBO_OWNER_PASSWORD = "local-disposable-password-123456"'));
 const workerLog = await open(new URL("worker.log", artifacts), "w");
-const worker = spawn(process.execPath, [resolve("node_modules/wrangler/bin/wrangler.js"), "dev", "--config", config, "--port", port, "--persist-to", join(directory, "state")], { cwd: directory, stdio: ["ignore", workerLog.fd, workerLog.fd] });
-const cli = resolve("../../packages/bibo-cli/dist/bin.js");
+const worker = production ? null : spawn(process.execPath, [resolve("node_modules/wrangler/bin/wrangler.js"), "dev", "--config", config, "--port", port, "--persist-to", join(directory, "state")], { cwd: directory, stdio: ["ignore", workerLog.fd, workerLog.fd] });
+if (production && !process.env.BIBO_LIVE_CLI?.includes("node_modules/@nextclaw/bibo/dist/bin.js")) throw new Error("Production verification requires a freshly registry-installed CLI.");
+const cli = process.env.BIBO_LIVE_CLI ?? resolve("../../packages/bibo-cli/dist/bin.js");
 const bin = join(directory, "bin"), capture = join(directory, "browser-url");
 const children: ReturnType<typeof spawn>[] = [];
 await mkdir(bin);
@@ -39,19 +43,19 @@ const startCli = (name: string, flags: string[] = []) => {
   });
   return { ready, done, child, diagnostics: () => stderr };
 };
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, ...(production && process.env.HTTPS_PROXY ? { proxy: { server: process.env.HTTPS_PROXY } } : {}) });
 try {
-  for (let i = 0; i < 200; i++) {
-    if (worker.exitCode !== null) throw new Error("Local authorization Worker failed to start; see worker.log");
+  for (let i = 0; !production && i < 200; i++) {
+    if (worker?.exitCode !== null) throw new Error("Local authorization Worker failed to start; see worker.log");
     if (await fetch(origin).then((response) => response.ok).catch(() => false)) break;
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   const errors: string[] = []; page.on("pageerror", (error) => errors.push(error.message));
   const first = startCli("Browser test CLI"), start = await first.ready;
-  await page.goto(start.url);
-  await page.locator(".bibo-auth-form-pane").getByLabel("邮箱").fill("owner@example.com");
-  await page.locator(".bibo-auth-form-pane").getByLabel("密码").fill("local-disposable-password-123456");
+  await page.goto(start.url, { waitUntil: "domcontentloaded" });
+  await page.locator(".bibo-auth-form-pane").getByLabel("邮箱").fill(account.email);
+  await page.locator(".bibo-auth-form-pane").getByLabel("密码").fill(account.password);
   await page.locator(".bibo-auth-form-pane form").getByRole("button", { name: "登录", exact: true }).click();
   await page.getByRole("button", { name: "授权读写空间", exact: true }).waitFor();
   let captured = "";
@@ -75,7 +79,7 @@ try {
   assert.ok(!`${firstResult.stderr}${firstResult.stdout}`.includes(credential.token));
   await page.setViewportSize({ width: 1440, height: 1000 });
   const remote = startCli("Remote readonly CLI", ["--no-browser", "--read-only"]), remoteStart = await remote.ready;
-  await page.goto(`${origin}/authorize`);
+  await page.goto(`${origin}/authorize`, { waitUntil: "domcontentloaded" });
   await page.getByLabel("授权码", { exact: true }).fill(remoteStart.code);
   await page.getByRole("button", { name: "继续", exact: true }).click();
   await page.getByRole("button", { name: "授权读取空间", exact: true }).click();
@@ -84,10 +88,20 @@ try {
   const deniedWrite = await fetch(`${origin}/api/v1/space`, { method: "POST", headers: { authorization: `Bearer ${readonly.token}` }, body: JSON.stringify({ action: "task.create", input: { title: "must not write" } }) });
   assert.equal(deniedWrite.status, 403);
   const denied = startCli("Denied CLI", ["--no-browser"]), deniedStart = await denied.ready;
-  await page.goto(deniedStart.url); await page.getByRole("button", { name: "拒绝", exact: true }).click();
+  await page.goto(deniedStart.url, { waitUntil: "domcontentloaded" }); await page.getByRole("button", { name: "拒绝", exact: true }).click();
   await page.getByRole("heading", { name: "已拒绝授权", exact: true }).waitFor();
   assert.notEqual((await denied.done).code, 0);
   await assert.rejects(stat(join(directory, "Denied CLI/bibo/config.json")), { code: "ENOENT" });
   assert.deepEqual(errors, []);
   console.log(JSON.stringify({ defaultBrowser: "passed", remoteManualCode: "passed", denial: "passed", readonly: "passed", privateCredentials: "passed", widths: [1440, 390, 320], artifacts: artifacts.pathname }));
-} finally { for (const child of children) child.kill("SIGTERM"); await browser.close(); worker.kill("SIGTERM"); await workerLog.close(); await rm(directory, { recursive: true, force: true }); }
+} catch (error) {
+  await browser.contexts()[0]?.pages()[0]?.screenshot({ path: new URL("failure.png", artifacts).pathname, fullPage: true }).catch(() => undefined);
+  throw error;
+} finally {
+  for (const child of children) child.kill("SIGTERM");
+  if (production) for (const name of ["Browser test CLI", "Remote readonly CLI"]) {
+    const saved = await readFile(join(directory, name, "bibo/config.json"), "utf8").catch(() => "");
+    if (saved) await fetch(`${origin}/api/v1/auth/revoke`, { method: "POST", headers: { authorization: `Bearer ${(JSON.parse(saved) as { token: string }).token}` }, signal: AbortSignal.timeout(15_000) }).catch(() => undefined);
+  }
+  await browser.close(); worker?.kill("SIGTERM"); await workerLog.close(); await rm(directory, { recursive: true, force: true });
+}

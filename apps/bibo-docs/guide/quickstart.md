@@ -2,7 +2,7 @@
 
 ## 1. 准备 Bibo 账号
 
-打开 [Bibo](https://app.bibo.bot) 注册或登录。
+打开 [Bibo](https://app.bibo.bot) 注册或登录。原有用户继续使用原邮箱和密码，空间内容与已有授权保留；迁移后 Bibo 与 NextClaw 的密码分别管理。
 
 ## 2. 安装并登录
 

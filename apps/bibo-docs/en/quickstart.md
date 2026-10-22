@@ -2,7 +2,7 @@
 
 Bibo is a shared personal context and asset space. Its web app, built-in assistant and authorized external tools use the same notes, files, projects, tasks, events and inbox.
 
-1. Sign in at [Bibo](https://app.bibo.bot).
+1. Sign in at [Bibo](https://app.bibo.bot). Existing users keep their email, password, space and API authorizations. Bibo accounts are independently managed after migration.
 2. Install the CLI (Node 22+) and authorize in your browser:
 
 ```sh

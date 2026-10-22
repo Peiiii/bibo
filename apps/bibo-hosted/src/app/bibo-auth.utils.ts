@@ -1,4 +1,6 @@
 import { selfHostedLogin, selfHostedUser, type SelfHostedAuth } from "./utils/bibo-self-hosted-auth.utils";
+import { BiboAccountService, type BiboAccountEnvironment } from "./services/bibo-account.service";
+import { biboAccountRoute } from "./routes/bibo-account.route";
 
 const PLATFORM = "https://ai-gateway-api.nextclaw.io";
 
@@ -32,15 +34,26 @@ async function platformRequest<T>(path: string, token: string | null, body?: unk
   return { status: response.status, value };
 }
 
-export async function currentUser(token: string | null, env: SelfHostedAuth = {}): Promise<BiboUser | null> {
-  if (env.BIBO_AUTH_MODE === "self-hosted") return selfHostedUser(token, env);
+async function legacyUser(token: string | null): Promise<BiboUser | null> {
   if (!token) return null;
   const { status, value } = await platformRequest<{ user: BiboUser }>("/platform/auth/me", token);
   return status === 200 && value.ok ? value.data?.user ?? null : null;
 }
 
-export async function isPlatformAdmin(token: string | null, env: SelfHostedAuth = {}): Promise<boolean> {
+export async function currentUser(token: string | null, env: SelfHostedAuth & BiboAccountEnvironment = {}): Promise<BiboUser | null> {
+  if (env.BIBO_AUTH_MODE === "self-hosted") return selfHostedUser(token, env);
+  if (env.BIBO_AUTH_DB) {
+    const accounts = new BiboAccountService(env);
+    return await accounts.user(token) ?? (token ? accounts.legacyUser(token, () => legacyUser(token)) : null);
+  }
+  if (!token) return null;
+  const { status, value } = await platformRequest<{ user: BiboUser }>("/platform/auth/me", token);
+  return status === 200 && value.ok ? value.data?.user ?? null : null;
+}
+
+export async function isPlatformAdmin(token: string | null, env: SelfHostedAuth & BiboAccountEnvironment = {}): Promise<boolean> {
   if (env.BIBO_AUTH_MODE === "self-hosted") return false;
+  if (env.BIBO_AUTH_DB) return (await new BiboAccountService(env).user(token))?.role === "admin";
   if (!token) return false;
   const { status, value } = await platformRequest<unknown>("/platform/admin/overview", token);
   return status === 200 && value.ok;
@@ -59,8 +72,9 @@ function verifiedTokenExpiry(token: string): number {
   } catch { return 0; }
 }
 
-export async function sessionUser(token: string | null, env: SelfHostedAuth = {}): Promise<Pick<BiboUser, "id"> | null> {
+export async function sessionUser(token: string | null, env: SelfHostedAuth & BiboAccountEnvironment = {}): Promise<Pick<BiboUser, "id"> | null> {
   if (env.BIBO_AUTH_MODE === "self-hosted") return selfHostedUser(token, env);
+  if (env.BIBO_AUTH_DB) return currentUser(token, env);
   if (!token) return null;
   const entry = await identityCache(token).catch(() => null);
   const cached = await entry?.cache.match(entry.request).catch(() => undefined);
@@ -79,7 +93,7 @@ export async function sessionUser(token: string | null, env: SelfHostedAuth = {}
   return user;
 }
 
-type BiboAuthEnvironment = SelfHostedAuth & {
+type BiboAuthEnvironment = SelfHostedAuth & BiboAccountEnvironment & {
   BIBO_MODEL_BUDGET?: { getByName(name: string): { fetch(input: string, init?: RequestInit): Promise<Response> } };
 };
 
@@ -107,6 +121,7 @@ async function selfHostedAuthRoute(request: Request, path: string, env: BiboAuth
 
 export async function authRoute(request: Request, path: string, env: BiboAuthEnvironment = {}): Promise<Response> {
   if (env.BIBO_AUTH_MODE === "self-hosted") return selfHostedAuthRoute(request, path, env);
+  if (env.BIBO_AUTH_DB) return biboAccountRoute(request, path, env, legacyUser);
   const routeMap: Record<string, string> = {
     "/api/auth/send-code": "/platform/auth/register/send-code",
     "/api/auth/register": "/platform/auth/register/complete",
