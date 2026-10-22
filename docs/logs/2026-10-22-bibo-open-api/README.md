@@ -93,3 +93,10 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - 独立账号：D1 bibo-accounts与schema已创建，固定快照140个身份同ID/邮箱审计通过，源DB写入0、verifier文件0。原密码使用原二进制salt PBKDF2格式。NextClaw邮件capability e32bee765已合入远程master并部署c795346e-a907-4945-ba6f-cc59318943e4，原七个WIP不变，mainline reconciliation由retry worker保护WIP继续。
 - 账号验证：完整tsc通过；真实D1覆盖注册/会话/登录、PBKDF2迁移（含原长密码）、OTP重放/竞争/过期、邮件失败、锁定、独立密码重置和会话撤销，原身份测试回归通过；client测试通过。网页重置表单1440/320正常渲染，真实组件→client请求字段和错误反馈由API fixture证明；真实验证码校验由D1测试证明，未冒充生产收件验证。
 - 账号Review：无项目自动维护性入口，diff --check通过；人工完整复核绑定与唯一身份owner、原子OTP消费、密码失败无跨产品回落、旧Cookie限期验证/单次交换/退出墓碑、同userId空间/PAT、独立Secret与私有邮件传输，无未关闭finding。生产切换与连续性/邮件验收待执行。
+
+### 独立账号上线结果（23:49）
+- 16194f8已推送，CI39807391656 success；Worker abbba208-acd6-41a2-98c5-a78da1c42bc8，docs 2760ac96-f5ad-4715-b0bf-a7c02f2db221。切换时140个源身份同ID审计再次通过，没有修改源数据库。
+- 真实生产旧密码→本地opaque会话、旧JWT→新会话与重放拒绝、原空间/已有PAT与本地退出全部通过（.local/accounts-production-continuity.log中的核心结果）。原运行探针finally使用path删除而实际需id，脚本现已修正；独立清理对应唯一测试笔记和授权通过（accounts-probe-cleanup.log）。不以清理错误否认已通过核心断言，也不隐去原exit1。
+- 正式NPM0.2.0+新独立账号生产浏览器授权回归再次通过，.local/accounts-production-cli-login.log；安装包内Skill包含远程短码流程。七个NextClaw无关WIP哈希核对未变。
+- 真实验证码邮件已抵达专用测试邮箱；发件Bibo、SPF/DKIM通过。Gmail工具主动隐藏OTP，未尝试绕过。生产密码重置/跨产品密码隔离E2E只差用户提供一次测试邮件代码，已请求最小协助；该项未预报通过。真实D1中对应密码重置与会话撤销已验证。
+- 复盘增量已修原owner：晚到账号身份不清空手输码，补定向回归且加入默认测试；生产浏览器使用现有代理/DOM就绪，连续性探针按实际文件动作合同清理。没有新增治理体系或暂停其它已授权交付。
