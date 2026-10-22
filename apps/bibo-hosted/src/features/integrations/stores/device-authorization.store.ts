@@ -20,7 +20,7 @@ export function createDeviceAuthorizationStore(fetcher: typeof fetch = fetch) {
     setCode(code) { set({ code }); }, setReadOnly(readOnly) { set({ readOnly }); },
     async load(rawCode, accountId) {
       const current = ++generation, code = rawCode.replaceAll("-", "").replaceAll(" ", "").toUpperCase();
-      set({ code, info: null, phase: "input", error: "" });
+      set({ ...(code ? { code } : {}), info: null, phase: "input", error: "" });
       if (!code || !accountId) return;
       if (!/^[A-HJ-NP-Z2-9]{8}$/.test(code)) { set({ error: "请输入终端显示的八位授权码。" }); return; }
       set({ phase: "loading" });
