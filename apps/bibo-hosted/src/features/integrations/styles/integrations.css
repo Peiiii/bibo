@@ -1,30 +1,47 @@
-.bibo-integrations { box-sizing: border-box; flex: 1; width: 100%; min-width: 0; min-height: 0; max-width: 1100px; margin: 0 auto; padding: clamp(20px, 4vw, 48px); overflow-y: auto; }
-.bibo-integrations__intro { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
-.bibo-integrations__intro h2 { font-size: clamp(22px, 3vw, 28px); margin: 0 0 8px; letter-spacing: -.03em; }
-.bibo-integrations p { color: var(--ui-muted); line-height: 1.65; margin: 8px 0; }
-.bibo-integrations a { display: inline-flex; align-items: center; gap: 4px; color: var(--ui-ink); text-decoration: underline; text-underline-offset: 4px; }
-.bibo-integrations__intro > a { margin-left: auto; font-size: 14px; white-space: nowrap; }
-.bibo-integrations__mark { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 14px; background: var(--ui-surface); border: 1px solid var(--ui-line); }
-.bibo-integrations__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.bibo-integrations__panel { min-width: 0; padding: 24px; border: 1px solid var(--ui-line); border-radius: 16px; background: var(--ui-surface); }
-.bibo-integrations h3 { margin: 0 0 20px; font-size: 17px; }
-.bibo-integrations label { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; font-size: 14px; font-weight: 500; }
-.bibo-integrations input, .bibo-integrations select { width: 100%; min-width: 0; box-sizing: border-box; padding: 11px 12px; border: 1px solid var(--ui-line); border-radius: 8px; background: var(--ui-canvas); color: var(--ui-ink); font: inherit; }
-.bibo-integrations__hint { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
-.bibo-integrations__hint svg { flex-shrink: 0; margin-top: 3px; }
-.bibo-integrations__quickstart ol { padding-left: 22px; line-height: 1.8; }
-.bibo-integrations__quickstart li { margin-bottom: 16px; }
-.bibo-integrations code { font-size: 12px; padding: 3px 5px; border-radius: 5px; background: var(--ui-canvas); white-space: pre-wrap; overflow-wrap: anywhere; }
-.bibo-integrations__quickstart > code, .bibo-integrations__quickstart li:nth-child(2) code { display: block; margin-top: 8px; padding: 10px 12px; border-radius: 8px; }
-.bibo-integrations__quickstart > a { margin-top: 24px; font-size: 14px; }
-.bibo-integrations__list { margin-top: 32px; }
-.bibo-integrations__list h3 span { color: var(--ui-muted); font-size: 14px; margin-left: 8px; }
-.bibo-integrations__item { display: flex; align-items: center; gap: 14px; padding: 18px 0; border-top: 1px solid var(--ui-line); }
-.bibo-integrations__item > svg { flex-shrink: 0; color: var(--ui-muted); }
-.bibo-integrations__item > div { min-width: 0; flex: 1; }
-.bibo-integrations__item h4 { margin: 0; font-size: 15px; overflow-wrap: anywhere; }
-.bibo-integrations__item h4 span { display: inline-block; margin-left: 8px; font-size: 11px; padding: 2px 6px; border: 1px solid var(--ui-line); border-radius: 5px; color: var(--ui-muted); font-weight: 400; }
-.bibo-integrations__item p { font-size: 12px; margin-bottom: 0; }
-.bibo-integrations__token { box-sizing: border-box; width: 100%; min-height: 110px; resize: vertical; font-family: monospace; overflow-wrap: anywhere; padding: 12px; border: 1px solid var(--ui-line); border-radius: 8px; background: var(--ui-canvas); color: var(--ui-ink); }
-.bibo-integrations__error { margin-top: 20px; padding: 12px; border: 1px solid var(--ui-line); border-radius: 8px; }
-@media (max-width: 760px) { .bibo-integrations__grid { grid-template-columns: 1fr; gap: 16px; } .bibo-integrations__panel { padding: 20px; } .bibo-integrations__intro > a { margin-left: 0; } .bibo-integrations__mark { display: none; } }
+.bibo-integrations { min-width:0; }
+.bibo-integrations-error { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.bibo-integrations-toolbar { display:flex; gap:16px; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.bibo-integrations-toolbar h2 { display:flex; gap:8px; align-items:center; font-size:15px; font-weight:550; margin:0; }
+.bibo-integrations-toolbar h2 span { min-width:20px; padding:2px 5px; font-size:12px; font-weight:400; text-align:center; border-radius:5px; background:var(--ui-selection); color:var(--ui-muted); }
+.bibo-integration-columns, .bibo-integration-row { display:grid; grid-template-columns:minmax(170px,1.4fr) .7fr 1fr 1fr 32px; gap:16px; align-items:center; }
+.bibo-integration-columns { padding:14px 10px 10px; border-top:1px solid var(--ui-line); font-size:12px; color:var(--ui-muted); }
+.bibo-integration-row { padding:20px 10px; border-bottom:1px solid var(--ui-line); font-size:13px; }
+.bibo-integration-row:hover { background:var(--ui-hover); }
+.bibo-integration-identity { display:flex; align-items:center; gap:12px; min-width:0; }
+.bibo-integration-icon { display:grid; place-items:center; flex:none; width:36px; height:36px; background:var(--ui-selection); color:var(--ui-primary); border-radius:8px; }
+.bibo-integration-identity > div { min-width:0; }
+.bibo-integration-name { appearance:none; border:0; background:transparent; color:var(--ui-ink); padding:3px 0; text-align:left; font:inherit; font-size:14px; font-weight:550; cursor:pointer; overflow-wrap:anywhere; }
+.bibo-integration-name:hover { text-decoration:underline; text-underline-offset:3px; }
+.bibo-integration-identity p { color:var(--ui-muted); font-size:12px; margin:5px 0 0; }
+.bibo-integration-scope { display:inline-block; padding:3px 6px; border:1px solid var(--ui-line); border-radius:5px; color:var(--ui-muted); font-size:12px; white-space:nowrap; }
+.bibo-integration-used, .bibo-integration-expiry { color:var(--ui-muted); font-size:12px; line-height:1.6; }
+.bibo-integration-status { display:block; margin-top:5px; font-size:11px; }
+.bibo-integration-status::before { content:""; display:inline-block; width:4px; height:4px; border-radius:50%; background:currentColor; margin:0 5px 2px 0; }
+.bibo-integration-mobile-label { display:none; }
+.bibo-integration-expired { margin-top:16px; color:var(--ui-muted); font-size:13px; }
+.bibo-integration-expired summary { cursor:pointer; padding:8px 0; }
+.bibo-integration-expired summary span { margin-left:4px; }
+.bibo-integrations-guide { display:flex; align-items:flex-start; gap:12px; border-top:1px solid var(--ui-line); padding-top:24px; margin-top:36px; }
+.bibo-integrations-guide > svg { color:var(--ui-muted); flex:none; margin-top:2px; }
+.bibo-integrations-guide h3 { font-size:14px; margin:0 0 7px; font-weight:550; }
+.bibo-integrations-guide p { margin:0; color:var(--ui-muted); font-size:13px; line-height:1.7; }
+.bibo-integrations-guide-links { display:flex; flex-wrap:wrap; gap:16px; margin-top:12px; }
+.bibo-integrations-guide a { display:inline-flex; align-items:center; gap:4px; font-size:13px; color:var(--ui-primary); text-decoration:none; }
+.bibo-integrations-guide a:hover { text-decoration:underline; text-underline-offset:3px; }
+.bibo-integration-form { display:flex; flex-direction:column; gap:20px; }
+.bibo-integration-form-options { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.bibo-integration-trust { display:flex; align-items:flex-start; gap:7px; margin:0; color:var(--ui-muted); font-size:13px; line-height:1.7; }
+.bibo-integration-trust > svg { flex:none; margin-top:2px; }
+.bibo-integrations-token { box-sizing:border-box; width:100%; min-height:110px; resize:vertical; font:13px/1.7 monospace; overflow-wrap:anywhere; padding:12px; border:1px solid var(--ui-line); border-radius:8px; background:var(--ui-canvas); color:var(--ui-ink); margin-bottom:12px; }
+.bibo-integration-details { display:grid; grid-template-columns:90px minmax(0,1fr); gap:16px; font-size:14px; margin:0 0 24px; }
+.bibo-integration-details dt { color:var(--ui-muted); }.bibo-integration-details dd { margin:0; overflow-wrap:anywhere; }
+@media(min-width:761px) and (max-width:1100px) { .bibo-integration-columns, .bibo-integration-row { gap:10px; grid-template-columns:minmax(140px,1.4fr) .7fr .8fr .8fr 32px; }.bibo-integration-identity p { display:none; } }
+@media(max-width:900px) {
+  .bibo-integration-columns { display:none; }
+  .bibo-integration-row { grid-template-columns:minmax(0,1fr) 32px; gap:7px; padding:20px 0; }
+  .bibo-integration-row > :first-child { grid-column:1; grid-row:1; }.bibo-integration-row > :last-child { grid-column:2; grid-row:1; }
+  .bibo-integration-row > :nth-child(2) { grid-column:1; grid-row:2; margin-left:48px; }.bibo-integration-used { grid-column:1; grid-row:3; margin-left:48px; }.bibo-integration-expiry { grid-column:1; grid-row:4; margin-left:48px; }
+  .bibo-integration-mobile-label { display:inline; }.bibo-integration-status { display:inline; margin-left:8px; }.bibo-integration-status::before { display:none; }
+  .bibo-integration-identity p { display:none; }
+}
+@media(max-width:760px) { .bibo-integrations-toolbar { align-items:flex-start; flex-wrap:wrap; gap:18px; }.bibo-integrations-toolbar h2 { font-size:14px; }.bibo-integrations-guide { margin-top:28px; }.bibo-integration-form-options { gap:12px; } }

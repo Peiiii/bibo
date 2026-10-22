@@ -1,10 +1,11 @@
 # Bibo 开放空间验收合同
 
-- contract-id: bibo-open-api-v1；revision: r4；状态：delivered（独立授权页已部署并通过生产验收；其余已发布合同保留）。
+- contract-id: bibo-open-api-v1；revision: r5；状态：in-progress（用户授权统一设置中心实际实现与上线；原r4已交付证据保留）。
 - [原始输入](../../logs/2026-10-22-bibo-open-api/README.md#原始输入与约束)；[设计与黄金验收](../../designs/2026-10-22-bibo-open-api.design.md)；[恢复入口](current-state.md)。
 
 | ID | Required 结果 | 证据与状态 |
 | --- | --- | --- |
+| SETTINGS | 从头像/设置入口进入统一分类；账号、外观持久化、数据危险确认、授权管理实际可用；桌面/手机/主题/返回导航一致；旧/integrations兼容，独立CLI授权不回归 | pending：r5真实实现与发布验收 |
 | API | 外部 Agent 授权访问现有空间对象及图片，统一业务 owner，稳定版本化合同、租户隔离和错误 | passed：单元/真实 Worker/生产对象及图片读写，版本 1174dbc4；隔离、错误、限流和过期由组装/单元证明 |
 | AUTH | 网页创建/列表/撤销、一次性显示、只读/读写/过期/限流；CLI 安全登录和自撤销 | passed：生产网页创建→正式 CLI 登录→只读拒绝→撤销 401；并发 reset/revoke、过期和限流回归通过 |
 | CLI | @nextclaw/bibo 稳定公开发布，常用对象级 CRUD、版本/幂等、机器输出；@nextclaw/bibo-api SDK 可独立使用 | passed：两个包 0.1.0 公开发布；registry 全新安装、bin、SDK import、真实对象读改、冲突、幂等、图片和 Skill 安装通过 |

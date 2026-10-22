@@ -159,7 +159,7 @@ export const biboCopy = {
   busy: "请稍候",
   retryFailed: "重试消息",
   retry: "输入已保留，可重新发送。",
-  resetConfirm: "确认清空 Bibo 的对话和个人空间？这项操作无法撤销。",
+  resetConfirm: "将删除 Bibo 的对话和个人空间内容，并撤销所有接入授权。这项操作无法撤销。",
   resetDone: "个人空间已清空。你可以重新开始。",
   help: "使用说明与数据",
   logout: "退出登录",

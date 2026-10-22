@@ -57,6 +57,6 @@ bibo auth login
 bibo overview
 ```
 
-Node.js 22+。在[接入与授权](https://app.bibo.bot/integrations)创建令牌，按 CLI 提示安全输入。首次接入请阅读[快速开始](./guide/quickstart)。
+Node.js 22+。CLI 会打开网页让你确认授权，终端自动完成登录；可在[设置 → 接入与授权](https://app.bibo.bot/settings/integrations)管理工具。首次接入请阅读[快速开始](./guide/quickstart)。
 
 第一版开放空间对象与图片资产；聊天执行、跨 Agent 消息和任务调度尚未作为公共 API 发布。开放接入始终需要用户授权，个人数据不会因此公开。

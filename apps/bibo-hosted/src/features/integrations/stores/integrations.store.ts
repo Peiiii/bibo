@@ -5,7 +5,8 @@ import type { BiboIntegration, BiboScope } from "@nextclaw/bibo-api";
 type Client = Pick<BiboClient, "integrations" | "createIntegration" | "revokeIntegration">;
 type State = {
   accountId: string | null; items: BiboIntegration[]; loading: boolean; busy: boolean; error: string;
-  load(accountId: string | null): Promise<void>;
+  load(accountId: string | null, refresh?: boolean): Promise<void>;
+  clearError(): void;
   create(input: { name: string; scopes: BiboScope[]; expiresInDays: number }): Promise<string | null>;
   revoke(id: string): Promise<boolean>;
 };
@@ -13,15 +14,17 @@ export function createIntegrationsStore(client: Client) {
   let generation = 0;
   return create<State>((set, get) => ({
     accountId: null, items: [], loading: false, busy: false, error: "",
-    async load(accountId) {
+    clearError() { set({ error: "" }); },
+    async load(accountId, refresh = false) {
+      if (refresh && (get().accountId !== accountId || get().busy || get().loading)) return;
       const current = ++generation;
-      set({ accountId, items: [], loading: Boolean(accountId), busy: false, error: "" });
+      set({ accountId, items: refresh ? get().items : [], loading: Boolean(accountId), busy: false, error: "" });
       if (!accountId) return;
       try { const items = await client.integrations(); if (current === generation) set({ items, loading: false }); }
       catch (error) { if (current === generation) set({ loading: false, error: error instanceof Error ? error.message : "读取授权失败。" }); }
     },
     async create(input) {
-      if (get().busy || !get().accountId) return null;
+      if (get().busy || get().loading || !get().accountId) return null;
       const current = generation;
       set({ busy: true, error: "" });
       try {
@@ -35,7 +38,7 @@ export function createIntegrationsStore(client: Client) {
       }
     },
     async revoke(id) {
-      if (get().busy || !get().accountId) return false;
+      if (get().busy || get().loading || !get().accountId) return false;
       const current = generation; set({ busy: true, error: "" });
       try {
         await client.revokeIntegration(id);

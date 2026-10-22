@@ -24,7 +24,7 @@ bibo auth login --no-browser
 
 在手机或电脑打开终端显示的链接，也可打开 [授权页](https://app.bibo.bot/authorize) 输入短码。确认后远程终端自动完成登录。设备请求 10 分钟过期；`--read-only` 只申请读取权限，网页也可降权。按 Ctrl+C 取消。
 
-人工创建 PAT 仍可在[接入与授权](https://app.bibo.bot/integrations)使用；每个工具使用具名、可撤销、有限期的授权。不要把令牌放进聊天、代码、截图或 URL。
+人工创建 PAT 仍可在[设置 → 接入与授权](https://app.bibo.bot/settings/integrations)使用；每个工具使用具名、可撤销、有限期的授权。不要把令牌放进聊天、代码、截图或 URL。
 
 自动化从安全的标准输入提供令牌：
 

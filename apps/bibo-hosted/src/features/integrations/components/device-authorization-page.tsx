@@ -42,7 +42,7 @@ export function DeviceAuthorizationPage() {
           <p className="bibo-authorization__trust"><ShieldCheck size={16} /><span>仅授权你刚发起的请求。有效期 30 天，可随时撤销。</span></p>
           <div className="bibo-authorization__actions"><Button tone="text" disabled={phase === "saving"} onClick={() => void state.decide(false)}>拒绝</Button><Button tone="primary" disabled={phase === "saving"} onClick={() => void state.decide(true)}>{phase === "saving" ? "正在确认…" : state.readOnly ? "授权读取空间" : "授权读写空间"}</Button></div>
         </>}
-        {phase === "approved" && <><p role="status">CLI 会自动完成登录，你可以关闭此页面。</p><Link className="bibo-authorization__manage" to="/integrations">管理接入与授权</Link></>}
+        {phase === "approved" && <><p role="status">CLI 会自动完成登录，你可以关闭此页面。</p><Link className="bibo-authorization__manage" to="/settings/integrations">管理接入与授权</Link></>}
         {phase === "denied" && <p role="status">此终端未获得访问权限。需要连接时，请在终端重新运行 <code>bibo auth login</code>。</p>}
         {phase === "expired" && <><p role="status">请在终端重新运行 <code>bibo auth login</code>，或输入另一组有效授权码。</p><Button onClick={() => { state.setCode(""); void state.load("", account?.id ?? null); }}>输入其他授权码</Button></>}
         {state.error && phase !== "expired" && <p role="alert" className="bibo-authorization__error">{state.error}</p>}

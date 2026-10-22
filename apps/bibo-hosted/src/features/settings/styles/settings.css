@@ -1,0 +1,55 @@
+.bibo-settings-navigation { flex:1; min-height:0; overflow-y:auto; padding:8px 6px; }
+.bibo-settings-group { color:var(--ui-muted); font-size:12px; margin:24px 10px 10px; }
+.bibo-settings-navigation > div:first-child .bibo-settings-group { margin-top:10px; }
+.bibo-settings-navigation .ui-navigation-item { width:100%; margin-bottom:3px; }
+.bibo-settings-navigation a { display:flex; align-items:center; gap:10px; width:100%; }
+.bibo-settings-navigation svg { width:17px; height:17px; flex:none; }
+.bibo-settings-page { flex:1; min-width:0; min-height:0; overflow-y:auto; color:var(--ui-ink); background:var(--ui-surface); }
+.bibo-settings-content { box-sizing:border-box; width:100%; max-width:1100px; padding:56px 48px 64px; margin:0 auto; }
+.bibo-settings-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:24px; margin-bottom:36px; }
+.bibo-settings-heading h1 { margin:0 0 10px; font-size:26px; font-weight:600; letter-spacing:-.04em; line-height:1.35; }
+.bibo-settings-heading h1:focus { outline:none; }
+.bibo-settings-heading p, .bibo-settings-note { margin:0; font-size:14px; color:var(--ui-muted); line-height:1.65; }
+.bibo-settings-docs { display:inline-flex; align-items:center; gap:4px; flex:none; color:var(--ui-muted); font-size:13px; text-decoration:none; padding-top:8px; }
+.bibo-settings-docs:hover { color:var(--ui-primary); }
+.bibo-settings-section h2 { font-size:15px; font-weight:550; margin:0 0 8px; }
+.bibo-setting-row { display:flex; justify-content:space-between; align-items:center; gap:24px; padding:22px 0; border-bottom:1px solid var(--ui-line); }
+.bibo-setting-row:first-child { padding-top:0; }
+.bibo-setting-row > div { min-width:0; }
+.bibo-setting-row p { margin:0; color:var(--ui-muted); line-height:1.7; font-size:14px; }
+.bibo-settings-email { overflow-wrap:anywhere; }
+.bibo-settings-status { color:var(--ui-muted); font-size:12px; white-space:nowrap; }
+.bibo-setting-row > .ui-button { flex:none; }
+.bibo-setting-danger { margin-bottom:20px; }
+.bibo-theme-options { display:grid; grid-template-columns:repeat(2,minmax(0,220px)); gap:16px; margin:18px 0; }
+.bibo-theme-option { border:1px solid var(--ui-line); border-radius:10px; padding:5px; background:var(--ui-surface); color:var(--ui-ink); cursor:pointer; text-align:left; }
+.bibo-theme-option[aria-pressed="true"] { border-color:var(--ui-primary); box-shadow:0 0 0 1px var(--ui-primary); }
+.bibo-theme-preview { height:110px; border-radius:6px; display:grid; grid-template-columns:27% 1fr; gap:5px; background:#e8ece5; padding:8px; }
+.bibo-theme-preview > span { border-radius:4px; background:#f2f3ee; }
+.bibo-theme-preview > span + span { display:flex; flex-direction:column; justify-content:center; gap:8px; background:#fffefa; padding:20px; }
+.bibo-theme-preview i { display:block; height:5px; border-radius:3px; background:#d3dfce; }
+.bibo-theme-preview i:last-child { width:65%; }
+.is-neutral .bibo-theme-preview { background:#eee; }.is-neutral .bibo-theme-preview > span { background:#f6f6f6; }.is-neutral .bibo-theme-preview > span + span { background:#fff; }.is-neutral .bibo-theme-preview i { background:#dedede; }
+.bibo-theme-label { display:flex; align-items:center; justify-content:space-between; font-size:14px; padding:12px 8px 8px; }
+@media(min-width:761px) {
+  .is-settings .bibo-sidebar, .is-settings.is-sidebar-collapsed .bibo-sidebar { width:calc(var(--ui-navigation-rail-width) + var(--ui-sidebar-width) + 8px); }
+  .bibo-shell.is-settings .bibo-sidebar-panel { display:flex; visibility:visible; opacity:1; }
+  .is-settings .bibo-sidebar-panel > .bibo-sidebar-spacer { flex:0; }
+  .is-settings .sidebar-header { height:68px; padding-left:14px; }
+  .is-settings .bibo-main { grid-template-rows:minmax(0,1fr); }
+  .is-settings .bibo-topbar { display:none; }
+  .is-settings .bibo-main > .bibo-settings-page { grid-row:1; border-radius:0 var(--ui-radius-lg) var(--ui-radius-lg) 0; }
+}
+@media(min-width:761px) and (max-width:1100px) { .bibo-settings-content { padding:40px 28px; } }
+@media(max-width:760px) {
+  .is-settings-drawer .sidebar-header { padding-left:8px; }
+  .is-settings-drawer > .bibo-sidebar-spacer { flex:0; }
+  .bibo-settings-content { padding:26px 20px 40px; }
+  .bibo-settings-heading { margin-bottom:28px; gap:12px; flex-wrap:wrap; }
+  .bibo-settings-heading h1 { font-size:23px; }
+  .bibo-settings-heading p { font-size:13px; }
+  .bibo-settings-docs { font-size:12px; padding:0; }
+  .bibo-setting-row { gap:16px; align-items:flex-start; flex-wrap:wrap; }
+  .bibo-theme-options { gap:12px; }
+  .bibo-theme-preview { height:95px; }.bibo-theme-preview > span + span { padding:12px; }
+}

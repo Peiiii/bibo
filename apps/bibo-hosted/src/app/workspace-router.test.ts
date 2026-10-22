@@ -1,6 +1,17 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { filePathHref, isAuthorizationRoute, readWorkspaceRoute, resourceHref } from "@/app/workspace-router";
+import { filePathHref, isAuthorizationRoute, readSettingsSection, readWorkspaceRoute, resourceHref } from "@/app/workspace-router";
+
+test("settings routes select only existing modules and preserve the legacy integration entry", () => {
+  assert.equal(readSettingsSection("/settings"), "account");
+  assert.equal(readSettingsSection("/integrations/"), "integrations");
+  for (const section of ["account", "appearance", "data", "integrations"] as const) {
+    assert.equal(readSettingsSection(`/settings/${section}/`), section);
+    assert.equal(readWorkspaceRoute(`/settings/${section}`).notFound, false);
+  }
+  for (const path of ["/", "/settings-other", "/settings/fake", "/settings/account/nested"]) assert.equal(readSettingsSection(path), null);
+  assert.equal(readWorkspaceRoute("/settings/fake").notFound, true);
+});
 
 test("dedicated authorization accepts canonical and trailing slash routes only", () => {
   for (const path of ["/authorize", "/authorize/", "/authorize//"]) assert.equal(isAuthorizationRoute(path), true);

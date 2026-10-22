@@ -5,6 +5,7 @@ import type { ComponentType } from "react";
 
 const views: BiboView[] = ["overview", "chat", "inbox", "calendar", "tasks", "notes", "files"];
 const routes = [
+  { path: "settings/:section?", handle: { view: "overview" as BiboView } },
   { path: "integrations", handle: { view: "overview" as BiboView } },
   { path: "authorize", handle: { view: "overview" as BiboView } },
   { index: true, handle: { view: "overview" as BiboView } },
@@ -19,6 +20,15 @@ const routes = [
 let router: ReturnType<typeof createBrowserRouter>;
 
 export const isAuthorizationRoute = (pathname: string): boolean => pathname.replace(/\/+$/, "") === "/authorize";
+
+export type SettingsSection = "account" | "appearance" | "data" | "integrations";
+export function readSettingsSection(pathname: string): SettingsSection | null {
+  const path = pathname.replace(/\/+$/, "");
+  if (path === "/integrations") return "integrations";
+  if (path === "/settings") return "account";
+  const section = path.startsWith("/settings/") ? path.slice(10) : "";
+  return ["account", "appearance", "data", "integrations"].includes(section) ? section as SettingsSection : null;
+}
 
 export function initializeWorkspaceRouter({ BiboApp, ChatPage, SpacePage, NotFoundPage, AuthorizationPage }:
   Pick<typeof ChatComponents, "BiboApp" | "ChatPage" | "SpacePage" | "NotFoundPage"> & { AuthorizationPage: ComponentType }) {
@@ -37,7 +47,7 @@ export function readWorkspaceRoute(pathname = router.state.location.pathname, se
   const handle = match?.route.handle;
   const view = handle?.view ?? "overview";
   let resourceId = match?.params.resourceId ?? null, filePath: string | null = null;
-  let notFound = Boolean(handle && "notFound" in handle);
+  let notFound = Boolean(handle && "notFound" in handle) || (pathname.startsWith("/settings/") && readSettingsSection(pathname) === null);
   if (view === "notes" || view === "files") {
     // File IDs are paths. Decode the original pathname once, preserving literal "%2F" names.
     try {

@@ -3,7 +3,7 @@ import { BiboClient, type BiboChatEvent, type BiboMessage, type BiboQuestion, ty
 import { BiboConversationManager, type BiboSubmission } from "@/features/chat/managers/bibo-conversation.manager";
 import { biboCopy, biboSelfHosted } from "@/shared/configs/bibo-copy.config";
 import { useBiboSpaceStore, workspaceResources } from "@/features/space";
-import { filePathHref, isAuthorizationRoute, navigateConversation, readWorkspaceRoute, replaceConversationContext } from "@/app/workspace-router";
+import { filePathHref, isAuthorizationRoute, navigateConversation, readSettingsSection, readWorkspaceRoute, replaceConversationContext } from "@/app/workspace-router";
 import { identifyMessages, type BiboDisplayMessage } from "@/features/chat/utils/chat-message.utils";
 
 const biboClient = new BiboClient();
@@ -33,7 +33,7 @@ class BiboChatOwner {
   failedQuestionInput: { id: string; answer: string } | null = null;
   status = "";
   authFeedback: { kind: "success" | "error"; message: string } | null = null;
-  authMode: "register" | "login" | "reset" = biboSelfHosted || (typeof window !== "undefined" && isAuthorizationRoute(window.location.pathname)) ? "login" : "register";
+  authMode: "register" | "login" | "reset" = biboSelfHosted || (typeof window !== "undefined" && (isAuthorizationRoute(window.location.pathname) || readSettingsSection(window.location.pathname))) ? "login" : "register";
   following = true;
   menuOpen = false;
   readonly conversation = new BiboConversationManager(biboClient, sessionStorage, {
@@ -266,8 +266,10 @@ class BiboChatOwner {
   };
 
   reset = async (): Promise<boolean> => {
+    const accountId = this.get().user?.id;
     try {
       await biboClient.reset();
+      if (this.get().user?.id !== accountId) return false;
       this.conversation.dispose({ discardInput: true });
       const user = this.get().user;
       this.conversation.bindAccount(user?.id ?? null);
@@ -279,7 +281,7 @@ class BiboChatOwner {
       replaceConversationContext(null);
       await this.conversation.connect();
       return true;
-    } catch (error) { this.set({ status: errorText(error) }); return false; }
+    } catch (error) { if (this.get().user?.id === accountId) this.set({ status: errorText(error) }); return false; }
   };
 
   private onSessionCreated = (session: BiboSession): void => {

@@ -114,3 +114,14 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - 完整workspace tsc、应用默认测试、路由及设备store共5个定向用例通过；新烟测脚本tsc通过。git diff --check通过，项目无diff-only maintainability自动入口；自Review检查顶层/尾斜杠路由、登录原码连续性、权限与错误状态、单一身份/设备owner及旧样式删除，没有未关闭finding。实际查看桌面确认/成功和320登录/确认；修正复用登录标题的sr-only clip-path，关闭截图动画保证取稳定画面。
 - 00:24交付：fcc55fc推送main，干净detached checkout从冻结远程main通过两次preflight部署，容器rollout=none；Worker 1e1b1deb-15d9-4a7c-baa6-0cea4880f4f3。正式registry安装CLI0.2.0与生产浏览器全流程通过，证据.local/auth-page-production-{deploy,browser}.log；生产1440/390/320登录/确认/成功及拒绝/过期截图保存device-auth-production，已人工查看生产成功画面。生产测试授权自动撤销。
 - retrospective_decision=updated-existing-owners：本次缺口是把协议可用当成授权体验验收；在原smoke补独立路由、无workspace请求、完成卡片高度与多尺寸稳定截图，不增加平行验收体系。视觉偏好由用户判断，不冒报用户认可；未改变原账号或CLI协议。
+
+### r5 统一设置中心实际实现（2026-10-23 00:42开始）
+
+- 用户原话要求「不是光画好了，你直接改」「对齐我们的一致产品一致性风格」「不停挑刺……直到……过度设计」。采用已确认的统一设置工作区：设置分类侧栏＋右侧实际模块，授权只是其中一项；由头像/设置图标进入。前面的图片仅作设计方向，不以静态稿冒充交付。
+- 收敛原入口：账号菜单的主题和清空操作迁入真实设置模块，账号页实际邮箱/退出，外观复用持久化theme owner，数据页复用清空owner并明确同时撤销授权。/integrations replace到/settings/integrations，CLI成功链接指向同模块；独立/authorize仍独立。
+- 授权管理删除居中双卡片和常驻PAT表单，改用原工作区/共享控件、列表、详情、创建及撤销确认Dialog和轻量文档入口。来源字段不存在，因此不伪造设备、官方应用或在线状态。
+- 质量检查关闭：①折叠布局遗留visibility/opacity隐藏设置分类，使用准确作用域恢复并保留原折叠偏好；②手机设置菜单只显示设置分类，恢复明确标题，移除聊天运行指示；③全局设置选中/旧链接/未知模块404；④表单错误保留输入、关闭清理错误、有效数量分组与可读时间；⑤刷新与创建/撤销互斥，防秘密丢失和旧列表复活已撤销项；⑥清空异步响应按账号隔离。没有新增设置框架、协议、数据库或容器。
+- 验证：完整pnpm typecheck；应用188测试与路由/store7个定向反例；最终client tsc；hosted及独立docs构建、Worker dry-run；真实组件＋API fixture从头像进入，1440/390/320完成两主题持久化、加载失败、创建失败保留输入、一次性秘密清除、详情/撤销、旧URL、隔离清空失败/重试与返回笔记。默认布局及预先折叠布局均覆盖。证据.local/settings-{final-types,tests,targeted,release-types,release-build,release-browser,worker-dry,docs-build}.log，settings-browser/截图。
+- 独立设备链路真实本地Worker+CLI+浏览器回归通过，.local/settings-device-browser.log。保留未变协议证据，后续仅BiboApp设置布局/CSS修正未影响独立授权路由。
+- mode=implementation Review：本仓无diff-only maintainability或targeted lint入口；git diff --check通过，手工复核全部diff、原输入与两条黄金链路，按正确性/生命周期/秘密/路由/主题/可维护性审查。已删除平行表单与菜单状态，Settings feature仅承载容器和现有模块，共用原store/API。完成最后画面复核后冻结提交；无待新增的架构或功能需求，用户视觉偏好不冒报确认。
+- 最终画面复核完成：实际打开最终1440管理页、390设置分类/创建表单、320管理页/两主题。折叠分类已恢复，手机设置标题与分类明确，标准控件保持一致。最终release-browser三尺寸exit0；7个定向测试包含刷新/撤销竞争反例通过。Review无未关闭finding；剩余为用户审美偏好与无当前需求的设置扩展，不继续增加模块。准备发布App和已更新的使用说明；无NPM/SDK/数据库/容器变更。
