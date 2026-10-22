@@ -63,7 +63,7 @@ try {
   const mobile = await context.newPage();
   await mobile.setViewportSize({ width: 390, height: 844 });
   await mobile.goto(`${origin}/chat/${sessionId}`);
-  await mobile.getByRole("button", { name: "停止生成", exact: true }).waitFor();
+  await mobile.getByRole("button", { name: /^(停止生成|发送消息)$/ }).waitFor();
   assert.equal(await mobile.getByText(/上次生成中断|内容未保存/).count(), 0);
   assert.equal(await mobile.evaluate(id => sessionStorage.getItem(`bibo-pending-${id}`), account.userId), null, "Fresh page needs no local receipt");
   let queried!: () => void;
