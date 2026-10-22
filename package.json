@@ -12,7 +12,7 @@
     "dev": "pnpm -C apps/bibo-hosted dev",
     "build": "pnpm build:packages && pnpm -C apps/bibo-hosted build && pnpm build:docs",
     "typecheck": "pnpm build:packages && pnpm -r tsc",
-    "test": "pnpm -C packages/bibo-api test && pnpm -C packages/bibo-cli test && pnpm -C packages/bibo-client test && pnpm -C packages/personal-agent-ui exec vitest run && pnpm -C apps/bibo-hosted test && pnpm -C apps/bibo-hosted test:self-hosted",
+    "test": "pnpm -C packages/bibo-api test && pnpm -C packages/bibo-cli test && pnpm -C packages/bibo-client test && pnpm -C packages/personal-agent-ui exec vitest run && pnpm -C apps/bibo-hosted test && pnpm -C apps/bibo-hosted test:self-hosted && node --test scripts/release/registry.test.mjs",
     "deploy": "pnpm build && pnpm -C apps/bibo-hosted deploy",
     "dev:worker": "pnpm -C apps/bibo-hosted dev:worker",
     "dev:proxy": "pnpm -C apps/bibo-hosted dev:proxy",

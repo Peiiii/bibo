@@ -39,6 +39,9 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - 发布候选提交 `3a1670c91e7a6b750de09d27aef48aecc0077c7e` 已推送；NPM release run `39788828274`，CI run `39788609358`。NPM_TOKEN 通过 stdin 配置独立仓库环境，未入文件或日志。
 - SSH 22 关闭，切换现有 NextClaw 已验证的 `ssh.github.com:443` 传输后 push 成功。随后官方部署 preflight 因旧地址正则拒绝端口格式，未触发上传。修正原 preflight 的身份 owner：以 URL 解析精确核对 GitHub host/owner/repo/协议，支持 SCP SSH、HTTPS、SSH 443，拒绝仿冒域名、错误仓库、凭据和查询参数；干净 checkout/远程 main 检查不变。手工 planned-path 核对两个小 utility/test 归现有 deployment owner，局部设计与反例 Review 通过。
 - 部署前版本：`15aff649-3b6a-450c-99ac-4f8016c884df`（100%），本机 receipt `.local/bibo-deployments-before.json`，可作为 Worker 回退入口。没有更改 DO 类、迁移或 bucket。
+- 官方应用与文档已从 `b4d82a0` 发布，Worker version `1174dbc4-6ce1-42ae-9a8b-703f3dc73fbb`，保留 containers-rollout=none；线上 `/docs/guide/quickstart` 匿名 200 且确认为 VitePress，不是应用 fallback。
+- NPM run 39788828274 所有验证/打包通过，SDK publish 已返回 `+ @nextclaw/bibo-api@0.1.0`，并明确提示新包正在处理、可能需几分钟。失败点是紧接着的 registry integrity 查询 404，非认证失败；CLI 尚未执行发布。保留该不可变成功 checkpoint，不重复发布 SDK。
+- 发布恢复局部设计/Review：新包接收与公开可见是不同阶段；原 publish owner 在成功返回后只轮询 registry，最长 5 分钟，404 可等待，hash 不同或认证/网络错误立即失败。新增 registry utility/test 归既有 release owner；accepted receipt 与 tarball 无论后续步骤是否失败都上传 artifact，避免丢失已接收状态。SDK 可见且 hash 核对后再继续原流程；不移动或覆盖已发版本。
 
 ## 交付汇总与复盘
 
