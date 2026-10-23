@@ -1,5 +1,7 @@
 # 当前执行状态
 
+- 2026-10-23 08:55 Asia/Shanghai；flow=bugfix；phase=review；retrospective_state=pending。08:49开始，预计09:04前交付。正式补充设计与Review通过，统一全局toggle/折叠owner，删除设置强制展开与header特殊几何。生产修前只读复现确认50px跳变；本地两桌面宽度×两主题×展开/收起×八路由坐标与刷新/inert通过，390/320手机、恢复烟测、完整tsc和构建通过，成对画面已查看，Worker dry-run收尾后发布。仅导航壳，不涉及账号/授权或模型调用。
+
 - 2026-10-23 01:44 Asia/Shanghai；flow=bugfix；phase=delivery；retrospective_state=completed；retrospective_decision=updated-existing-owners；delivered。01:42开始、01:44验证完成，早于01:47预计。源8f15098部署Workerd164f7b2-b656-47a3-8ab7-4e06f217fb66，删除设置rail的50px历史补偿；原设计撤销错误取舍，原smoke增加实际布局判定。scripts tsc、hosted构建、本地三宽settings及生产顶部几何/三宽导航均通过，实际线上画面已查看，Review无finding。仅认证/读取，无路由/账号/授权数据、NPM、DB或容器变化。
 
 - 2026-10-23 01:26 Asia/Shanghai；flow=bugfix；phase=delivery；retrospective_state=completed；retrospective_decision=updated-existing-owners；delivered。01:20开始、01:26线上验证完成，早于01:30预计。源f351a5c部署Worker380158d4-1d4e-472a-a3e8-9e0251dcde51；删除非交互授权行hover与全部全局状态点，保留Composer反馈。完整tsc、构建、桌面/手机运行恢复、本地三宽settings和生产三宽hover/授权操作通过，线上画面已查看，临时授权清理。原UI规范/AGENTS入口/既有烟测已更新，Review无未关闭finding；CI39822502271仍运行，不计入通过证据；live模型脚本仅更新等待条件并经scripts tsc，未执行。无NPM/DB/运行协议或容器变化。

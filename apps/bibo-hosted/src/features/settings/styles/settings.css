@@ -32,13 +32,11 @@
 .is-neutral .bibo-theme-preview { background:#eee; }.is-neutral .bibo-theme-preview > span { background:#f6f6f6; }.is-neutral .bibo-theme-preview > span + span { background:#fff; }.is-neutral .bibo-theme-preview i { background:#dedede; }
 .bibo-theme-label { display:flex; align-items:center; justify-content:space-between; font-size:14px; padding:12px 8px 8px; }
 @media(min-width:761px) {
-  .is-settings .bibo-sidebar, .is-settings.is-sidebar-collapsed .bibo-sidebar { width:calc(var(--ui-navigation-rail-width) + var(--ui-sidebar-width) + 8px); }
-  .bibo-shell.is-settings .bibo-sidebar-panel { display:flex; visibility:visible; opacity:1; }
   .is-settings .bibo-sidebar-panel > .bibo-sidebar-spacer { flex:0; }
-  .is-settings .sidebar-header { height:68px; padding-left:14px; }
   .is-settings .bibo-main { grid-template-rows:minmax(0,1fr); }
   .is-settings .bibo-topbar { display:none; }
   .is-settings .bibo-main > .bibo-settings-page { grid-row:1; border-radius:0 var(--ui-radius-lg) var(--ui-radius-lg) 0; }
+  .is-settings.is-sidebar-collapsed .bibo-main > .bibo-settings-page { border-radius:var(--ui-radius-lg); }
 }
 @media(min-width:761px) and (max-width:1100px) { .bibo-settings-content { padding:40px 28px; } }
 @media(max-width:760px) {

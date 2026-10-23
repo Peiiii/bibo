@@ -156,3 +156,11 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - flow=bugfix，L1；skip-design与skip-reproduction：截图、精确CSS及计算布局直接锁定单owner问题；替代验证为实际渲染测量首个导航链接与rail内容顶边一致。原settings.smoke补断言，scripts tsc、hosted构建、1440/390/320全流程通过，实际查看最终桌面画面确认无顶部空槽；证据.local/settings-inset-{types,build,browser}.log。git diff --check和定向Review无未关闭finding；原设计已同步撤销「保持图标位置」的过时取舍。
 - 01:44交付：源8f15098推送并由干净冻结main部署App Workerd164f7b2-b656-47a3-8ab7-4e06f217fb66，containers-rollout=none。生产只读浏览器检查1440首链接精确位于rail内容顶部、1440/390/320全局导航切换通过，实际查看线上桌面画面；.local/settings-inset-production-{deploy,browser}.log及settings-nav-production/integrations-1440.png。本轮仅认证/读取，无授权或空间数据修改；无NPM/DB/docs站变更。
 - retrospective_state=completed，retrospective_decision=updated-existing-owners：原设计撤销错误的保坐标取舍，原smoke增加控件退场后不残留占位的实际几何判定；不新增全局规则。01:42开始、01:44验证完成，早于01:47预计；Review无未关闭finding，用户视觉偏好未冒报认可。
+
+### 统一导航壳与跨页稳定性（2026-10-23 08:49）
+
+- 用户再次指出切换跳变并要求统筹设计。本轮为flow=bugfix、L2正式设计，原design新增「统一导航壳补充设计」及方案Review，替代此前只改单页padding/按钮的局部取舍；plan=not-required，retrospective_state=pending。质量模型为位置稳定、操作语义、偏好/恢复、键盘/手机可达与唯一owner。
+- reproduce：只读生产从设置点击概览，实际导航控件由9个变10个，入口坐标发生50px偏移（.local/settings-shell-production-before.log，expected failure）。根因链为BiboApp条件隐藏顶部toggle＋settings CSS强制panel宽度/visibility＋不同header尺寸；状态owner本身已有持久化，无需新状态或框架。
+- 统一复用原顶部toggle与WorkspaceUiOwner.sidebarCollapsed，设置只替换sidebarContent；删除强制展开和header几何特殊样式，隐藏panel同时inert，收起时主内容四角完整；不自动展开设置、不用占位补坐标，不增加返回按钮。参考Carbon共享shell/次级导航分工，原设计和UI README维护唯一合同。
+- 验证：完整pnpm typecheck、最终hosted构建、scripts最终tsc通过；原settings smoke新增8模块真实链接往返，对1440/1024、两主题、展开/收起分别比较全局控件、sidebar header、主内容左边界与宽度，刷新恢复/inert/无路由展开动画；390/320原手机全流程通过。原桌面/手机运行恢复smoke通过，证据.local/settings-shell-{types,script-types,build,browser,recovery}.log。基线测试首次曾因tsx evaluate命名helper失败，随后改成纯内联回调；测试种子改为首次写入以免每次刷新覆盖真实偏好，section helper按实际collapsed class而非弹窗退出期间aria-hidden判定。
+- 最终画面已实际查看：经典1440展开的概览/设置、中性1024收起的概览/设置成对比较；顶部按钮、全局图标、标题与内容边界稳定，设置收起形态保持圆角。mode=implementation Review：git diff --check通过；仓库无diff-only maintainability/targeted lint入口，按完整diff复核单一owner、隐藏焦点、路由/刷新与测试合同，无未关闭finding；未扩展账号/协议、未创建新框架或状态。

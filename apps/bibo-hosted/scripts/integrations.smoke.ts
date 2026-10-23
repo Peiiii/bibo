@@ -15,17 +15,60 @@ const artifacts = new URL(production ? "../../../.local/settings-production/" : 
 await mkdir(artifacts, { recursive: true });
 const browser = await chromium.launch({ headless: true, ...(production && process.env.HTTPS_PROXY ? { proxy: { server: process.env.HTTPS_PROXY } } : {}) });
 async function section(page: Page, name: string) {
+  if (page.viewportSize()!.width > 760 && await page.locator(".bibo-shell").evaluate((node) => node.classList.contains("is-sidebar-collapsed"))) await page.getByRole("button", { name: "展开侧边栏", exact: true }).click();
   if (page.viewportSize()!.width <= 760 && await page.locator(".bibo-menu-button").getAttribute("aria-expanded") !== "true") await page.getByRole("button", { name: "打开菜单", exact: true }).click();
   await page.getByRole("navigation", { name: "设置分类" }).waitFor();
   if (name === "外观" && page.viewportSize()!.width === 390) await page.screenshot({ animations: "disabled", path: new URL("settings-menu-390.png", artifacts).pathname });
   await page.getByRole("navigation", { name: "设置分类" }).getByRole("link", { name, exact: true }).click();
   await page.locator("#settings-title").filter({ hasText: name }).waitFor();
 }
+async function checkStableNavigation(page: Page) {
+  const geometry = () => page.locator(".bibo-shell").evaluate((shell) => {
+    return {
+      controls: [...shell.querySelectorAll(".bibo-navigation-rail > .ui-navigation-item, .bibo-navigation-rail .bibo-primary-nav a")].map((node) => {
+        const { x, y, width, height } = node.getBoundingClientRect();
+        return [x, y, width, height].map((value) => Math.round(value * 10) / 10);
+      }),
+      mainLeft: shell.querySelector(".bibo-main")!.getBoundingClientRect().left,
+      sidebarWidth: shell.querySelector(".bibo-sidebar")!.getBoundingClientRect().width,
+      contextHeader: [...shell.querySelectorAll(".bibo-sidebar-panel > .sidebar-header, .bibo-sidebar-panel > .sidebar-header .bibo-brand")].map((node) => {
+        const { x, y, height } = node.getBoundingClientRect();
+        return [x, y, height].map((value) => Math.round(value * 10) / 10);
+      }),
+    };
+  });
+  for (const collapsed of [true, false]) {
+    const shell = page.locator(".bibo-shell");
+    if (await shell.evaluate((node) => node.classList.contains("is-sidebar-collapsed")) !== collapsed) {
+      await page.getByRole("button", { name: collapsed ? "收起侧边栏" : "展开侧边栏", exact: true }).click();
+      await page.locator(`.bibo-shell${collapsed ? ".is-sidebar-collapsed" : ":not(.is-sidebar-collapsed)"}`).waitFor();
+      await page.locator(".bibo-sidebar").evaluate(async (node) => { await Promise.all(node.getAnimations().map((animation) => animation.finished)); });
+    }
+    const expected = await geometry();
+    for (const label of ["概览", "对话", "收件箱", "日程", "任务", "笔记", "文件", "设置"]) {
+      const link = label === "设置" ? page.locator(".bibo-navigation-rail").getByRole("link", { name: label, exact: true }) : page.getByRole("navigation", { name: "工作空间" }).getByRole("link", { name: label, exact: true });
+      await link.click();
+      if (label === "设置") await page.locator("#settings-title").waitFor();
+      else await page.locator(".bibo-shell:not(.is-settings)").waitFor();
+      assert.deepEqual(await geometry(), expected, `${label}: global controls and content edge must stay stable (collapsed=${collapsed})`);
+      assert.equal(await shell.getAttribute("data-sidebar-motion"), "false", "Route navigation must not replay collapse motion");
+      if (["概览", "设置"].includes(label)) {
+        const theme = await page.locator("html").getAttribute("data-bibo-theme");
+        await page.screenshot({ animations: "disabled", path: new URL(`shell-${theme}-${page.viewportSize()!.width}-${collapsed ? "collapsed" : "expanded"}-${label === "设置" ? "settings" : "workspace"}.png`, artifacts).pathname });
+      }
+    }
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.locator("#settings-title").waitFor();
+    assert.equal(await shell.evaluate((node) => node.classList.contains("is-sidebar-collapsed")), collapsed);
+    assert.deepEqual(await geometry(), expected, "Reload restores the same shell geometry");
+    assert.equal(await page.locator(".bibo-sidebar-panel").evaluate((node) => (node as HTMLElement).inert), collapsed);
+  }
+}
 try {
   for (let i = 0; !production && i < 100; i++) { if (await fetch(base).then((r) => r.ok).catch(() => false)) break; await new Promise((r) => setTimeout(r, 100)); }
-  for (const width of production ? [1440] : [1440, 390, 320]) {
+  for (const width of production ? [1440] : [1440, 1024, 390, 320]) {
     const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
-    if (!production) await context.addInitScript(() => localStorage.setItem("bibo-ui-layout", JSON.stringify({ sidebarCollapsed: true })));
+    if (!production) await context.addInitScript(() => { if (!localStorage.getItem("bibo-ui-layout")) localStorage.setItem("bibo-ui-layout", JSON.stringify({ sidebarCollapsed: true })); });
     const page = await context.newPage(), errors: string[] = [], created: string[] = [];
     page.setDefaultTimeout(production ? 30_000 : 12_000);
     page.on("pageerror", (error) => errors.push(error.message));
@@ -63,9 +106,11 @@ try {
         await page.locator("#settings-title").filter({ hasText: "账号" }).waitFor();
         await page.getByRole("dialog").waitFor({ state: "hidden" });
       }
+      if (width > 760) await checkStableNavigation(page);
       await section(page, "外观"); await page.getByRole("button", { name: "简约", exact: true }).click();
       await page.reload({ waitUntil: "domcontentloaded" });
       assert.equal(await page.locator("html").getAttribute("data-bibo-theme"), "neutral");
+      if (width > 760) { await checkStableNavigation(page); await section(page, "外观"); }
       await page.screenshot({ animations: "disabled", path: new URL(`appearance-neutral-${width}.png`, artifacts).pathname, fullPage: true });
       await page.getByRole("button", { name: "Bibo 经典", exact: true }).click();
       await section(page, "数据管理"); await page.getByRole("button", { name: "清空空间", exact: true }).click();
@@ -76,13 +121,6 @@ try {
       assert.equal(await page.locator(".bibo-session-nav").count(), 0, "Settings never displays recent chats");
       assert.equal(await page.getByRole("link", { name: "返回空间", exact: true }).count(), 0, "Settings is a peer workspace page, not a nested flow with an extra back action");
       assert.equal(await page.getByRole("button", { name: "返回空间", exact: true }).count(), 0);
-      if (width > 760) {
-        const navigationTop = await page.locator(".bibo-navigation-rail").evaluate((rail) => {
-          const firstLink = rail.querySelector(".bibo-primary-nav a")!;
-          return firstLink.getBoundingClientRect().top - rail.getBoundingClientRect().top - parseFloat(getComputedStyle(rail).paddingTop);
-        });
-        assert.ok(navigationTop >= -1 && navigationTop <= 1, "Settings navigation starts at the rail's normal inset, with no placeholder for removed controls");
-      }
       assert.equal(await page.locator('.bibo-primary-nav a[aria-current="page"]').count(), 0);
       if (!production) {
         const row = page.getByRole("table", { name: "有效授权", exact: true }).locator(".bibo-integration-row").first();
