@@ -45,6 +45,8 @@ async function checkStableNavigation(page: Page) {
       await page.locator(".bibo-sidebar").evaluate(async (node) => { await Promise.all(node.getAnimations().map((animation) => animation.finished)); });
     }
     const expected = await geometry();
+    const [toggle, home, chat] = expected.controls;
+    assert.equal(home[1] - toggle[1] - toggle[3], chat[1] - home[1] - home[3], "Sidebar toggle and workspace destinations use the same vertical spacing");
     for (const label of ["概览", "对话", "收件箱", "日程", "任务", "笔记", "文件", "设置"]) {
       const link = label === "设置" ? page.locator(".bibo-navigation-rail").getByRole("link", { name: label, exact: true }) : page.getByRole("navigation", { name: "工作空间" }).getByRole("link", { name: label, exact: true });
       await link.click();

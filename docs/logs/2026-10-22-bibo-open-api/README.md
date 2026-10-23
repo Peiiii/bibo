@@ -168,3 +168,9 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - 08:59返工后最终本地验收：完整typecheck、hosted构建、四宽度settings smoke全部通过；原两桌面宽度×两主题×展开/收起×八路由、header/边界、刷新/inert判定均有效。仅全局gear常驻的补正，不改变运行或持久化owner；定向Review无未关闭finding，准备再次冻结发布，之前失败的生产刷新证据保持failed直到同入口复验。
 - 09:02最终生产闭环：源2e4e32b由干净冻结远程main发布Workera8069eff-cffe-4ff4-9ef8-25f59868cca2，containers-rollout=none。原生产失败入口已用同一几何断言复验通过；1440/1024×展开/收起×八模块及实际进入integrations、展开选择/收起、刷新/inert均通过，390/320手机设置抽屉、底部导航及刷新通过，无pageerror；.local/settings-shell-production-browser.log exit0。生产实际截图已查看，包含导航加载期间和内容稳定后的桌面/手机；证据settings-shell-production/与settings-shell-settled.log。生产仅登录与读取，不发送消息、不创建/撤销授权、不清空空间。
 - retrospective_state=completed，retrospective_decision=updated-existing-owners：原设计补完整共享壳模型与账号恢复边界，原UI README补跨页不变量，原settings烟测从单页检查改为完整切换/恢复矩阵；未新增框架、状态或通用检查脚本。09:02验证完成，早于09:04预计；现有CI仍按仓库流程运行，不将未查询结论计入通过证据。无NPM/SDK/DB/独立文档站发布。实质finding已关闭，主观视觉偏好不冒报用户认可。
+
+### 导航图标间距一致性（2026-10-23 09:39）
+
+- 用户截图指出折叠按钮与首页之间留白不同。flow=bugfix、L1，单一CSS owner的局部修正，skip-design；reproduce：原浏览器增加实际间距比较后失败14≠4（.local/settings-spacing-before.log），不是只比较跨页位置就视为视觉一致。
+- 顶部按钮margin与目的地grid gap统一消费--ui-space-1（4px），删除14px分组留白，不改变按钮尺寸、路由或折叠owner；手机原gap=0覆盖保留。原UI README补同一间距合同，原settings smoke增加toggle→首页与首页→对话间距相等的几何断言，覆盖两主题/两桌面宽度/展开收起；原390/320全流程一并通过。
+- 完整pnpm typecheck、最终hosted构建、四宽度浏览器通过；实际查看最终经典1440展开设置画面；git diff --check及轻量Review无未关闭finding。证据.local/settings-spacing-{types,build,browser}.log。retrospective_state=pending，预计09:44前生产验证，不扩展为新导航框架。

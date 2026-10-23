@@ -30,8 +30,8 @@ button, input, textarea, select { @apply [font-family:inherit]; }
 .bibo-shell { @apply flex [height:var(--bibo-viewport-height,_100dvh)] [padding-top:env(safe-area-inset-top)] min-h-0 overflow-hidden [background:var(--ui-canvas)] [color:var(--ui-ink)]; }
 .bibo-sidebar { @apply flex flex-row flex-none min-h-0 [width:calc(var(--ui-navigation-rail-width)_+_var(--ui-sidebar-width)_+_8px)]; }
 .bibo-navigation-rail { @apply flex flex-col items-center flex-none [width:calc(var(--ui-navigation-rail-width)_+_8px)] [padding:6px_6px_12px] [background:var(--ui-hover)]; }
-.bibo-navigation-rail > .ui-navigation-item:first-child { @apply mb-3.5; }
-.bibo-primary-nav { @apply grid gap-1 w-full; }
+.bibo-navigation-rail > .ui-navigation-item:first-child { margin-bottom:var(--ui-space-1); }
+.bibo-primary-nav { @apply grid w-full; gap:var(--ui-space-1); }
 .bibo-navigation-rail .bibo-primary-nav { @apply justify-items-center; }
 .bibo-nav-item small { @apply ml-auto [min-width:17px] px-1 text-xs text-center [border-radius:8px] [background:var(--ui-selection)] [color:var(--ui-ink)]; }
 .bibo-navigation-rail .bibo-nav-text { @apply sr-only; }
