@@ -174,3 +174,5 @@ AI 在授权内选择：PAT、公开 SDK、VitePress `/docs/`、现有账户 UI 
 - 用户截图指出折叠按钮与首页之间留白不同。flow=bugfix、L1，单一CSS owner的局部修正，skip-design；reproduce：原浏览器增加实际间距比较后失败14≠4（.local/settings-spacing-before.log），不是只比较跨页位置就视为视觉一致。
 - 顶部按钮margin与目的地grid gap统一消费--ui-space-1（4px），删除14px分组留白，不改变按钮尺寸、路由或折叠owner；手机原gap=0覆盖保留。原UI README补同一间距合同，原settings smoke增加toggle→首页与首页→对话间距相等的几何断言，覆盖两主题/两桌面宽度/展开收起；原390/320全流程一并通过。
 - 完整pnpm typecheck、最终hosted构建、四宽度浏览器通过；实际查看最终经典1440展开设置画面；git diff --check及轻量Review无未关闭finding。证据.local/settings-spacing-{types,build,browser}.log。retrospective_state=pending，预计09:44前生产验证，不扩展为新导航框架。
+- 09:43交付：源fe95747干净冻结main发布Workerd0c3dff1-aefe-4712-bdff-1704ba2f312e，容器rollout=none。生产同一间距断言及1440/1024展开/收起八路由往返/刷新、390/320抽屉/底部导航均通过，.local/settings-spacing-production-browser.log exit0；实际查看生产局部截图settings-shell-production/rail-spacing-1440.png。仅认证/读取，无业务数据写入或模型调用。
+- retrospective_state=completed，retrospective_decision=updated-existing-owners：原UI规范及原烟测补「控件之间节奏一致」，纠正之前只验证跨页面坐标相同而漏掉同页间距差异的盲区；不新增Skill/规则框架。09:39开始、09:43验证完成，早于09:44预计；无未关闭finding，无NPM/DB/docs站变更。
