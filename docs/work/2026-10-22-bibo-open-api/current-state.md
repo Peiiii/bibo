@@ -1,6 +1,6 @@
 # 当前执行状态
 
-- 2026-10-23 08:55 Asia/Shanghai；flow=bugfix；phase=review；retrospective_state=pending。08:49开始，预计09:04前交付。正式补充设计与Review通过，统一全局toggle/折叠owner，删除设置强制展开与header特殊几何。生产修前只读复现确认50px跳变；本地两桌面宽度×两主题×展开/收起×八路由坐标与刷新/inert通过，390/320手机、恢复烟测、完整tsc和构建通过，成对画面已查看，Worker dry-run收尾后发布。仅导航壳，不涉及账号/授权或模型调用。
+- 2026-10-23 08:59 Asia/Shanghai；flow=bugfix；phase=delivery；retrospective_state=pending。08:49开始，预计09:04前交付。正式设计统一全局toggle/折叠owner，删除设置强制展开与header特殊几何；第一批f9bb130上线后生产复核发现刷新恢复时gear条件卸载，补正为全局入口常驻，原认证遮罩不变。最终完整tsc、hosted构建及1440/1024两主题/两种折叠状态/八路由/header/刷新/inert和390/320手机smoke通过，Review无finding；等待最终冻结发布与原生产失败入口复验。无账号/授权数据或模型调用。
 
 - 2026-10-23 01:44 Asia/Shanghai；flow=bugfix；phase=delivery；retrospective_state=completed；retrospective_decision=updated-existing-owners；delivered。01:42开始、01:44验证完成，早于01:47预计。源8f15098部署Workerd164f7b2-b656-47a3-8ab7-4e06f217fb66，删除设置rail的50px历史补偿；原设计撤销错误取舍，原smoke增加实际布局判定。scripts tsc、hosted构建、本地三宽settings及生产顶部几何/三宽导航均通过，实际线上画面已查看，Review无finding。仅认证/读取，无路由/账号/授权数据、NPM、DB或容器变化。
 
